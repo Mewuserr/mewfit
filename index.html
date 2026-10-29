@@ -179,7 +179,11 @@ body.v-today::before{background:var(--go)}
 
 @media (hover:none){.kbd-hint{display:none}}
 /* account forms keep a comfortable line length on wide screens */
-#acct form,#acct .chips{max-width:460px}
+#acct form,#acct .chips,#acct .gbtn,#acct .or{max-width:460px}
+.gbtn{background:#fff;color:#1f1f1f;border:1px solid #747775;gap:10px}
+.gbtn:hover{border-color:#1f1f1f}
+.or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.86rem}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
 
 /* animated figure */
 .fig{width:100%;height:auto;display:block}
@@ -1045,10 +1049,10 @@ const ui = { learnCat: 'all', planDay: new Date().getDay(), foodQ: '', resetAsk:
    copy dirty and a debounced PUT sends the whole state with the version it was based on; the server
    accepts it only if nobody else wrote since (409 otherwise), and the client merges and retries. */
 const SKEY = 'mewfit.sync';
-const blankSync = () => ({ token: null, user: null, version: 0, dirty: false, rev: 0, at: 0 });
+const blankSync = () => ({ token: null, user: null, google: false, pin: false, version: 0, dirty: false, rev: 0, at: 0 });
 function loadSync() { try { return Object.assign(blankSync(), JSON.parse(localStorage.getItem(SKEY) || '{}')); } catch (e) { return blankSync(); } }
 let SY = loadSync();
-const cloud = { busy: null, timer: 0, offline: false, again: false };
+const cloud = { busy: null, timer: 0, offline: false, again: false, google: false };
 const acctUi = () => ({ mode: 'signup', open: '', err: '', busy: false, name: '' });
 ui.acct = acctUi();
 function saveSync() { try { localStorage.setItem(SKEY, JSON.stringify(SY)); } catch (e) {} }
@@ -1126,6 +1130,7 @@ function cloudSync(keepalive) {
         if (!SY.dirty) {
           const r = await api('/state');
           if (!r.ok) break;
+          if (r.body.username) Object.assign(SY, { user: r.body.username, google: !!r.body.google, pin: !!r.body.pin });
           if (r.body.version !== SY.version || !SY.at) changed = adoptCloud(r.body.data, r.body.version) || changed;
           if (!SY.dirty) { SY.at = Date.now(); break; }
           continue;
@@ -1171,6 +1176,35 @@ async function acctLogout() {
   try { await api('/logout', 'POST', {}); } catch (e) {}
   wipeLocal('ออกจากระบบแล้ว ข้อมูลยังอยู่ในบัญชีครบ');
 }
+function adoptAccount(b) {
+  Object.assign(SY, { token: b.token, user: b.username, google: !!b.google, pin: !!b.pin, version: b.version, at: Date.now() });
+  const remote = b.data;
+  if (!hasData(remote)) SY.dirty = hasData(S);
+  else if (!hasData(S)) { S = normalize(remote); SY.dirty = false; }
+  else { S = mergeState(remote, S); SY.dirty = true; }
+  save(true); saveSync(); ui.acct = acctUi();
+  if (SY.dirty) cloudSync();
+}
+// back from Google: ?gauth=<one-time code> or ?g=<outcome>; read it once, then clean the address bar
+async function googleReturn() {
+  const q = new URLSearchParams(location.search), code = q.get('gauth'), g = q.get('g');
+  if (!code && !g) return;
+  history.replaceState(null, '', location.pathname + location.hash);
+  const msg = { cancel: 'ยกเลิกการเข้าสู่ระบบด้วย Google', expired: 'หมดเวลา ลองกดเข้าสู่ระบบด้วย Google อีกครั้ง', fail: 'เข้าสู่ระบบด้วย Google ไม่สำเร็จ ลองใหม่อีกครั้ง',
+    taken: 'บัญชี Google นี้ผูกกับบัญชี MewFit อื่นอยู่แล้ว', linked: 'เชื่อมบัญชี Google แล้ว ต่อไปกดเข้าสู่ระบบด้วย Google ได้เลย ไม่ต้องจำรหัส', off: 'ยังเปิดใช้ Google ไม่ได้' }[g];
+  if (msg) { if (g === 'linked') { SY.google = true; saveSync(); } toast(msg); render(); return; }
+  try {
+    const r = await api('/auth/redeem', 'POST', { code });
+    if (!r.ok) throw new Error(r.body.error);
+    adoptAccount(r.body);
+    toast('เข้าสู่ระบบด้วย Google แล้ว');
+    location.hash = S.profile ? 'today' : 'start'; render();
+  } catch (e) { toast(e.message); }
+}
+async function googleLink() {
+  try { const r = await api('/auth/google/link', 'POST', {}); if (!r.ok) throw new Error(r.body.error); location.href = r.body.url; }
+  catch (e) { toast(e.message); }
+}
 async function acctSubmit(kind, form) {
   const a = ui.acct, f = new FormData(form), val = k => String(f.get(k) || '').trim();
   const pinOk = v => /^\d{6}$/.test(v);
@@ -1183,34 +1217,28 @@ async function acctSubmit(kind, form) {
   } else if (kind === 'pin') {
     if (!pinOk(val('pin')) || !pinOk(val('newPin'))) a.err = 'รหัสต้องเป็นตัวเลข 6 หลัก';
     else if (val('newPin') !== val('pin2')) a.err = 'รหัสใหม่สองช่องไม่ตรงกัน';
-  } else if (!pinOk(val('pin'))) a.err = 'ใส่รหัส 6 หลักเพื่อยืนยัน';
+  } else if (SY.pin ? !pinOk(val('pin')) : val('confirm') !== 'ลบ') a.err = SY.pin ? 'ใส่รหัส 6 หลักเพื่อยืนยัน' : 'พิมพ์คำว่า ลบ เพื่อยืนยัน';
   if (a.err) { render(); return; }
   a.busy = true; render();
   try {
     if (kind === 'signup') {
       const r = await api('/signup', 'POST', { username: a.name, pin: val('pin'), data: hasData(S) ? S : null });
       if (!r.ok) throw new Error(r.body.error);
-      Object.assign(SY, { token: r.body.token, user: r.body.username, version: r.body.version, dirty: false, at: Date.now() });
+      Object.assign(SY, { token: r.body.token, user: r.body.username, google: false, pin: true, version: r.body.version, dirty: false, at: Date.now() });
       saveSync(); a.open = '';
       toast('สร้างบัญชีแล้ว ข้อมูลจะซิงก์อัตโนมัติ');
     } else if (kind === 'login') {
       const r = await api('/login', 'POST', { username: a.name, pin: val('pin') });
       if (!r.ok) throw new Error(r.body.error);
-      Object.assign(SY, { token: r.body.token, user: r.body.username, version: r.body.version, at: Date.now() });
-      const remote = r.body.data;
-      if (!hasData(remote)) SY.dirty = hasData(S);
-      else if (!hasData(S)) { S = normalize(remote); SY.dirty = false; }
-      else { S = mergeState(remote, S); SY.dirty = true; }
-      save(true); saveSync(); a.open = '';
+      adoptAccount(r.body);
       toast('เข้าสู่ระบบแล้ว');
-      if (SY.dirty) cloudSync();
       if (S.profile) { a.busy = false; location.hash = 'today'; return; }
     } else if (kind === 'pin') {
       const r = await api('/pin', 'POST', { pin: val('pin'), newPin: val('newPin') });
       if (!r.ok) throw new Error(r.body.error);
       a.open = ''; toast('เปลี่ยนรหัสแล้ว เครื่องอื่นต้องเข้าสู่ระบบใหม่');
     } else if (kind === 'delete') {
-      const r = await api('/account/delete', 'POST', { pin: val('pin') });
+      const r = await api('/account/delete', 'POST', SY.pin ? { pin: val('pin') } : { confirm: val('confirm') });
       if (!r.ok) throw new Error(r.body.error);
       a.busy = false; wipeLocal('ลบบัญชีและข้อมูลทั้งหมดแล้ว'); return;
     }
@@ -1218,6 +1246,8 @@ async function acctSubmit(kind, form) {
   a.busy = false; render();
 }
 const pinField = (name, label, ac) => `<label class="f">${label}<input type="password" name="${name}" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="${ac}" required></label>`;
+const GLOGO = '<svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.5l6.7-6.7C35.6 2.4 30.2 0 24 0 14.6 0 6.6 5.4 2.7 13.2l7.8 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.1 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.4c-.5 2.9-2.2 5.3-4.6 6.9l7.4 5.8c4.3-4 6.9-9.9 6.9-17.2z"/><path fill="#FBBC05" d="M10.5 28.7A14.5 14.5 0 0 1 9.5 24c0-1.6.3-3.2.8-4.7l-7.8-6.1A24 24 0 0 0 0 24c0 3.9.9 7.5 2.6 10.8l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.4-5.8c-2.1 1.4-4.8 2.2-8.5 2.2-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg>';
+const googleBtn = (label, act) => cloud.google ? (act ? `<button type="button" class="btn big wide gbtn" data-act="${act}">${GLOGO}<span>${label}</span></button>` : `<a class="btn big wide gbtn" href="/api/auth/google/start">${GLOGO}<span>${label}</span></a>`) : '';
 function acctCard() {
   const a = ui.acct, err = a.err ? `<p class="note" role="alert">${esc(a.err)}</p>` : '';
   const go = (label, cls = 'btn hot big wide') => `<button class="${cls}"${a.busy ? ' disabled' : ''}>${a.busy ? 'กำลังส่ง…' : label}</button>`;
@@ -1225,6 +1255,8 @@ function acctCard() {
     const su = a.mode === 'signup';
     return `<article class="card" id="acct"><h2>บัญชี MewFit</h2>
       <p class="small muted">${SY.user ? `เครื่องนี้ออกจากบัญชี @${esc(SY.user)} แล้ว เข้าสู่ระบบอีกครั้งเพื่อซิงก์ข้อมูลต่อ` : 'ตอนนี้ข้อมูลอยู่แค่ในเครื่องนี้ ล้างเบราว์เซอร์หรือเปลี่ยนเครื่องแล้วจะหาย สร้างบัญชีเพื่อเก็บไว้บนคลาวด์ และเปิดได้หลายเครื่อง'}</p>
+      ${cloud.google ? `${googleBtn('เข้าสู่ระบบด้วย Google')}<p class="small muted">ไม่ต้องจำรหัส ใช้บัญชี Google ที่มีอยู่แล้ว ครั้งแรกจะสร้างบัญชี MewFit ให้เอง ลืมรหัส Google ก็กู้ผ่าน Google ได้</p>
+      <p class="or"><span>หรือใช้ชื่อผู้ใช้ + รหัส 6 หลัก</span></p>` : ''}
       <div class="chips" role="group" aria-label="บัญชี"><button type="button" class="chip" data-act="acct-mode" data-m="signup" aria-pressed="${su}">สร้างบัญชีใหม่</button><button type="button" class="chip" data-act="acct-mode" data-m="login" aria-pressed="${!su}">มีบัญชีแล้ว</button></div>
       <form class="stack" data-acct="${su ? 'signup' : 'login'}" novalidate>
         <label class="f">ชื่อผู้ใช้<input name="username" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="20" required value="${esc(a.name || SY.user || '')}"></label>
@@ -1236,13 +1268,14 @@ function acctCard() {
   }
   const cancel = '<button type="button" class="btn" data-act="acct-open" data-o="">ยกเลิก</button>';
   return `<article class="card" id="acct">
-    <div class="row between"><h2>บัญชี @${esc(SY.user)}</h2><button class="btn sm" data-act="acct-sync">ซิงก์ตอนนี้</button></div>
+    <div class="row between"><h2>บัญชี ${SY.google ? '' : '@'}${esc(SY.user)}</h2><button class="btn sm" data-act="acct-sync">ซิงก์ตอนนี้</button></div>
+    ${SY.google ? '<p class="small"><span class="chip good">เชื่อมกับ Google แล้ว</span> เข้าสู่ระบบด้วย Google ได้ทุกเครื่อง ไม่ต้องจำรหัส</p>' : (cloud.google ? `<div class="note ok stack"><b>กันลืมรหัส: เชื่อมบัญชีนี้กับ Google</b><span class="small">ต่อไปกดเข้าสู่ระบบด้วย Google ได้เลย ข้อมูลเดิมอยู่ครบ</span>${googleBtn('เชื่อมกับ Google', 'acct-glink')}</div>` : '')}
     <p class="small muted" id="acct-status" role="status">${syncLabel()}</p>
     <p class="small muted">ใช้เครื่องอื่นได้: เปิด MewFit แล้วเข้าสู่ระบบด้วยชื่อและรหัสเดียวกัน ข้อมูลจะตรงกันเอง</p>
-    <div class="row"><button class="btn sm" data-act="acct-open" data-o="pin">เปลี่ยนรหัส</button><button class="btn sm" data-act="acct-open" data-o="logout">ออกจากระบบ</button><button class="btn sm danger" data-act="acct-open" data-o="delete">ลบบัญชี</button></div>
+    <div class="row">${SY.pin ? '<button class="btn sm" data-act="acct-open" data-o="pin">เปลี่ยนรหัส</button>' : ''}<button class="btn sm" data-act="acct-open" data-o="logout">ออกจากระบบ</button><button class="btn sm danger" data-act="acct-open" data-o="delete">ลบบัญชี</button></div>
     ${a.open === 'pin' ? `<form class="stack" data-acct="pin" novalidate>${pinField('pin', 'รหัสเดิม', 'current-password')}${pinField('newPin', 'รหัสใหม่ 6 หลัก', 'new-password')}${pinField('pin2', 'รหัสใหม่อีกครั้ง', 'new-password')}${err}<div class="row">${go('เปลี่ยนรหัส', 'btn pri')}${cancel}</div></form>` : ''}
     ${a.open === 'logout' ? `<p>ข้อมูลในเครื่องนี้จะถูกล้าง แต่ยังอยู่ในบัญชีครบ เข้าสู่ระบบอีกครั้งเมื่อไหร่ก็ได้</p>${err}<div class="row"><button class="btn pri" data-act="acct-logout"${a.busy ? ' disabled' : ''}>${a.busy ? 'กำลังส่ง…' : 'ออกจากระบบ'}</button>${cancel}</div>` : ''}
-    ${a.open === 'delete' ? `<form class="stack" data-acct="delete" novalidate><p>ลบบัญชี @${esc(SY.user)} และข้อมูลทั้งหมดบนคลาวด์และในเครื่องนี้ กู้คืนไม่ได้</p>${pinField('pin', 'ใส่รหัสเพื่อยืนยัน', 'current-password')}${err}<div class="row">${go('ลบบัญชีถาวร', 'btn danger')}${cancel}</div></form>` : ''}
+    ${a.open === 'delete' ? `<form class="stack" data-acct="delete" novalidate><p>ลบบัญชี ${esc(SY.user)} และข้อมูลทั้งหมดบนคลาวด์และในเครื่องนี้ กู้คืนไม่ได้</p>${SY.pin ? pinField('pin', 'ใส่รหัสเพื่อยืนยัน', 'current-password') : '<label class="f">พิมพ์คำว่า ลบ เพื่อยืนยัน<input name="confirm" autocomplete="off" required></label>'}${err}<div class="row">${go('ลบบัญชีถาวร', 'btn danger')}${cancel}</div></form>` : ''}
   </article>`;
 }
 const acctNudge = () => !SY.token && S.profile && !S.acctNudgeOff ? `<div class="banner"><span><b>ข้อมูลอยู่แค่ในเครื่องนี้</b> สร้างบัญชีกันข้อมูลหาย และเปิดได้หลายเครื่อง</span><div class="row"><a class="btn pri sm" href="#profile">สร้างบัญชี</a><button class="btn sm ghost" data-act="acct-nudge-off">ไว้ทีหลัง</button></div></div>` : '';
@@ -1687,7 +1720,7 @@ function rProfile() {
   const eqs = Object.keys(EQ).filter(k => p.eq[k]).map(k => EQ[k]).join(' · ') || 'ไม่มีอุปกรณ์';
   const tests = Object.entries(p.baseline || {}).map(([k, i]) => `${{ push: 'วิดพื้น', squat: 'สควอท', plank: 'แพลงก์', pull: 'ดึงข้อ' }[k]} ${TESTS[k].o[i]}`).join(' · ') || 'ยังไม่ได้ทดสอบ';
   $('#v-profile').innerHTML = `
-  <div class="view-head"><h1>${p.name ? 'คุณ' + esc(p.name) : 'โปรไฟล์'}</h1><span class="eyebrow">${SY.token ? 'บัญชี @' + esc(SY.user) + ' · ซิงก์หลายเครื่อง' : 'บันทึกไว้ในเครื่องนี้เท่านั้น'}</span></div>
+  <div class="view-head"><h1>${p.name ? 'คุณ' + esc(p.name) : 'โปรไฟล์'}</h1><span class="eyebrow">${SY.token ? 'บัญชี ' + (SY.google ? '' : '@') + esc(SY.user) + ' · ซิงก์หลายเครื่อง' : 'บันทึกไว้ในเครื่องนี้เท่านั้น'}</span></div>
   <div class="kpis"><div class="kpi"><b>${fmt(c.kcal)}</b><span>kcal ต่อวัน</span></div><div class="kpi"><b>${c.protein} g</b><span>โปรตีน</span></div><div class="kpi"><b>${c.bmi}</b><span>BMI</span></div><div class="kpi"><b>${fmt(c.tdee)}</b><span>เผาผลาญต่อวัน</span></div></div>
   ${acctCard()}
   <article class="card"><h2>ข้อมูลที่ใช้คำนวณ</h2>
@@ -1947,6 +1980,7 @@ document.addEventListener('click', ev => {
     case 'acct-logout': if (!ui.acct.busy) acctLogout(); break;
     case 'acct-login': ui.acct = acctUi(); ui.acct.mode = 'login'; location.hash = 'profile'; break;
     case 'acct-nudge-off': S.acctNudgeOff = true; save(); render(); break;
+    case 'acct-glink': googleLink(); break;
   }
 });
 // keyboard on a computer: Space pauses the interval timer, Escape leaves it
@@ -2129,7 +2163,8 @@ function rLearn() {
 
 
 render();
-cloudSync();
+api('/config').then(r => { if (r.ok && r.body.google !== cloud.google) { cloud.google = !!r.body.google; if (view() === 'profile') refreshView(); } }).catch(() => {});
+googleReturn().finally(() => cloudSync());
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || /^localhost$|^127\./.test(location.hostname))) navigator.serviceWorker.register('sw.js').catch(() => {});
 })();
 </script>

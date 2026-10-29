@@ -98,8 +98,9 @@ async function shot(pg, name) { if (SHOTS) await pg.screenshot({ path: path.join
 
   // wrong pin on a third device shows the server message
   const C = await device(browser);
-  await C.goto(BASE + '/#profile'); await wait(400);
-  await C.click('[data-act="acct-mode"][data-m="login"]'); await wait(200);
+  await C.goto(BASE + '/#profile'); await wait(1200);   // let the Google-config check re-render the card first
+  await C.$eval('[data-act="acct-mode"][data-m="login"]', el => el.scrollIntoView({ block: 'center' }));
+  await C.click('[data-act="acct-mode"][data-m="login"]'); await wait(300);
   await fillAndSubmit(C, { username: user, pin: '000000' });
   await wait(1200);
   ok((await C.$eval('#acct', el => el.textContent)).includes('ไม่ถูกต้อง'), 'wrong pin message shown');

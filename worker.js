@@ -1,4 +1,4 @@
-// MewFit API: accounts (username + 6-digit PIN) and one synced state document per user.
+// MewFit API: accounts (Sign in with Google, or username + 6-digit PIN) and one synced state document per user.
 // Everything outside /api/* is served from static assets.
 
 const PIN_ITER = 20000;               // PBKDF2 rounds; online guessing is stopped by the lockouts below
@@ -9,6 +9,8 @@ const IP_MAX_FAILS = 30;              // wrong PINs per IP per hour, across all 
 const IP_MAX_SIGNUPS = 10;            // new accounts per IP per hour
 const SESSION_MS = 365 * 24 * 60 * 60 * 1000;
 const MAX_STATE = 900 * 1024;         // bytes of JSON per user
+const OAUTH_STATE_MS = 10 * 60 * 1000; // time allowed on Google's screen
+const OAUTH_CODE_MS = 2 * 60 * 1000;   // time for the page to redeem the one-time code
 
 const enc = new TextEncoder();
 
@@ -17,7 +19,7 @@ export default {
     const url = new URL(req.url);
     if (!url.pathname.startsWith('/api/')) return env.ASSETS.fetch(req);
     try {
-      return await route(req, env, url.pathname);
+      return await route(req, env, url);
     } catch (e) {
       if (e instanceof HttpError) return json(e.status, { error: e.message, code: e.code, ...e.extra });
       console.error(e);
@@ -37,8 +39,13 @@ function json(status, body) {
   });
 }
 
-async function route(req, env, path) {
-  const m = req.method;
+async function route(req, env, url) {
+  const m = req.method, path = url.pathname;
+  if (path === '/api/config' && m === 'GET') return json(200, { google: googleOn(env) });
+  if (path === '/api/auth/google/start' && m === 'GET') return googleStart(env, url);
+  if (path === '/api/auth/google/link' && m === 'POST') return googleLink(req, env, url);
+  if (path === '/api/auth/google/callback' && m === 'GET') return googleCallback(env, url);
+  if (path === '/api/auth/redeem' && m === 'POST') return redeem(req, env);
   if (path === '/api/signup' && m === 'POST') return signup(req, env);
   if (path === '/api/login' && m === 'POST') return login(req, env);
   if (path === '/api/state' && m === 'GET') return getState(req, env);
@@ -128,14 +135,17 @@ async function auth(req, env) {
   if (!m) throw new HttpError(401, 'no_session', 'กรุณาเข้าสู่ระบบอีกครั้ง');
   const th = await sha256(m[1]);
   const now = Date.now();
-  const s = await env.DB.prepare('SELECT s.user_id, s.last_seen, u.username FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token_hash = ?').bind(th).first();
+  const s = await env.DB.prepare('SELECT s.user_id, s.last_seen, u.username, u.email, u.google_sub, u.pin_hash FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token_hash = ?').bind(th).first();
   if (!s || now - s.last_seen > SESSION_MS) {
     if (s) await env.DB.prepare('DELETE FROM sessions WHERE token_hash = ?').bind(th).run();
     throw new HttpError(401, 'no_session', 'กรุณาเข้าสู่ระบบอีกครั้ง');
   }
   if (now - s.last_seen > 24 * 60 * 60 * 1000) await env.DB.prepare('UPDATE sessions SET last_seen = ? WHERE token_hash = ?').bind(now, th).run();
-  return { userId: s.user_id, username: s.username, tokenHash: th };
+  return { userId: s.user_id, username: s.username, tokenHash: th, who: who(s) };
 }
+
+// what the page shows and which controls apply: Google accounts have no PIN unless one was set
+const who = u => ({ username: u.email || u.username, google: !!u.google_sub, pin: !!u.pin_hash });
 
 /* ---------- PIN verification with lockouts ---------- */
 async function verifyPin(env, req, user, pin, now) {
@@ -145,7 +155,7 @@ async function verifyPin(env, req, user, pin, now) {
     const sec = Math.ceil((user.locked_until - now) / 1000);
     throw new HttpError(429, 'locked', `ใส่รหัสผิดหลายครั้ง บัญชีถูกล็อกไว้ อีก ${Math.ceil(sec / 60)} นาทีลองใหม่ได้`, { retryAfter: sec });
   }
-  if (sameHex(await hashPin(pin, user.pin_salt), user.pin_hash)) {
+  if (user.pin_hash && sameHex(await hashPin(pin, user.pin_salt), user.pin_hash)) {
     if (user.failed) await env.DB.prepare('UPDATE users SET failed = 0, locked_until = 0 WHERE id = ?').bind(user.id).run();
     return;
   }
@@ -182,7 +192,7 @@ async function signup(req, env) {
   }
   await ipBump(env, ipKey, now);
   const token = await newSession(env, id, now);
-  return json(201, { token, username, version: 1, updatedAt: now });
+  return json(201, { token, username, google: false, pin: true, version: 1, updatedAt: now });
 }
 
 async function login(req, env) {
@@ -191,17 +201,15 @@ async function login(req, env) {
   try { username = normName(b.username); } catch (e) { throw new HttpError(401, 'wrong_pin', 'ชื่อผู้ใช้หรือรหัสไม่ถูกต้อง'); }
   const pin = checkPin(b.pin, false);
   const now = Date.now();
-  const user = await env.DB.prepare('SELECT id, pin_hash, pin_salt, failed, locked_until FROM users WHERE username = ?').bind(username).first();
-  if (!user) {
+  const user = await env.DB.prepare('SELECT id, pin_hash, pin_salt, failed, locked_until, google_sub, email FROM users WHERE username = ?').bind(username).first();
+  if (!user || !user.pin_hash) {
     const ipKey = 'fail:' + clientIp(req);
     if (await ipCount(env, ipKey, now) >= IP_MAX_FAILS) throw new HttpError(429, 'ip_limited', 'ลองผิดหลายครั้งเกินไป รอ 1 ชั่วโมงแล้วลองใหม่', { retryAfter: 3600 });
     await ipBump(env, ipKey, now);
     throw new HttpError(401, 'wrong_pin', 'ชื่อผู้ใช้หรือรหัสไม่ถูกต้อง');
   }
   await verifyPin(env, req, user, pin, now);
-  const token = await newSession(env, user.id, now);
-  const st = await env.DB.prepare('SELECT data, version, updated_at FROM states WHERE user_id = ?').bind(user.id).first();
-  return json(200, { token, username, version: st ? st.version : 0, updatedAt: st ? st.updated_at : 0, data: st ? JSON.parse(st.data) : null });
+  return json(200, await sessionPayload(env, user.id, { ...who(user), username: user.email || username }, now));
 }
 
 function stateText(v, allowNull) {
@@ -212,10 +220,16 @@ function stateText(v, allowNull) {
   return t;
 }
 
+async function sessionPayload(env, userId, w, now) {
+  const token = await newSession(env, userId, now);
+  const st = await env.DB.prepare('SELECT data, version, updated_at FROM states WHERE user_id = ?').bind(userId).first();
+  return { token, ...w, version: st ? st.version : 0, updatedAt: st ? st.updated_at : 0, data: st ? JSON.parse(st.data) : null };
+}
+
 async function getState(req, env) {
   const a = await auth(req, env);
   const st = await env.DB.prepare('SELECT data, version, updated_at FROM states WHERE user_id = ?').bind(a.userId).first();
-  return json(200, { username: a.username, version: st ? st.version : 0, updatedAt: st ? st.updated_at : 0, data: st ? JSON.parse(st.data) : null });
+  return json(200, { ...a.who, version: st ? st.version : 0, updatedAt: st ? st.updated_at : 0, data: st ? JSON.parse(st.data) : null });
 }
 
 async function putState(req, env) {
@@ -249,6 +263,7 @@ async function changePin(req, env) {
   const newPin = checkPin(b.newPin, true);
   const now = Date.now();
   const user = await env.DB.prepare('SELECT id, pin_hash, pin_salt, failed, locked_until FROM users WHERE id = ?').bind(a.userId).first();
+  if (!user.pin_hash) throw new HttpError(400, 'no_pin', 'บัญชีนี้เข้าด้วย Google ไม่มีรหัสให้เปลี่ยน');
   await verifyPin(env, req, user, pin, now);
   const salt = hex(randomBytes(16));
   await env.DB.batch([
@@ -262,14 +277,95 @@ async function changePin(req, env) {
 async function deleteAccount(req, env) {
   const a = await auth(req, env);
   const b = await body(req);
-  const pin = checkPin(b.pin, false);
   const now = Date.now();
   const user = await env.DB.prepare('SELECT id, pin_hash, pin_salt, failed, locked_until FROM users WHERE id = ?').bind(a.userId).first();
-  await verifyPin(env, req, user, pin, now);
+  // a PIN account proves it with the PIN; a Google-only account types the word ลบ
+  if (user.pin_hash) await verifyPin(env, req, user, checkPin(b.pin, false), now);
+  else if (String(b.confirm || '').trim() !== 'ลบ') throw new HttpError(400, 'confirm', 'พิมพ์คำว่า ลบ เพื่อยืนยัน');
   await env.DB.batch([
+    env.DB.prepare('DELETE FROM oauth_codes WHERE user_id = ?').bind(a.userId),
     env.DB.prepare('DELETE FROM sessions WHERE user_id = ?').bind(a.userId),
     env.DB.prepare('DELETE FROM states WHERE user_id = ?').bind(a.userId),
     env.DB.prepare('DELETE FROM users WHERE id = ?').bind(a.userId),
   ]);
   return json(200, { ok: true });
+}
+
+/* ---------- Sign in with Google (authorization-code flow) ---------- */
+const googleOn = env => !!(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET);
+const back = (url, q) => Response.redirect(url.origin + '/?' + q + '#profile', 302);
+
+async function googleUrl(env, url, linkUserId) {
+  const state = b64url(randomBytes(24));
+  const now = Date.now();
+  await env.DB.batch([
+    env.DB.prepare('DELETE FROM oauth_states WHERE created_at < ?').bind(now - OAUTH_STATE_MS),
+    env.DB.prepare('INSERT INTO oauth_states (state, user_id, created_at) VALUES (?, ?, ?)').bind(state, linkUserId, now),
+  ]);
+  const q = new URLSearchParams({ client_id: env.GOOGLE_CLIENT_ID, redirect_uri: url.origin + '/api/auth/google/callback', response_type: 'code', scope: 'openid email profile', state, prompt: 'select_account' });
+  return 'https://accounts.google.com/o/oauth2/v2/auth?' + q;
+}
+
+async function googleStart(env, url) {
+  if (!googleOn(env)) return back(url, 'g=off');
+  return Response.redirect(await googleUrl(env, url, null), 302);
+}
+
+async function googleLink(req, env, url) {
+  const a = await auth(req, env);
+  if (!googleOn(env)) throw new HttpError(503, 'google_off', 'ยังเปิดใช้ Google ไม่ได้');
+  return json(200, { url: await googleUrl(env, url, a.userId) });
+}
+
+async function googleCallback(env, url) {
+  const p = url.searchParams, now = Date.now();
+  if (!googleOn(env)) return back(url, 'g=off');
+  const st = p.get('state') ? await env.DB.prepare('SELECT user_id, created_at FROM oauth_states WHERE state = ?').bind(p.get('state')).first() : null;
+  if (st) await env.DB.prepare('DELETE FROM oauth_states WHERE state = ?').bind(p.get('state')).run();
+  if (!st || now - st.created_at > OAUTH_STATE_MS) return back(url, 'g=expired');
+  if (p.get('error') || !p.get('code')) return back(url, 'g=cancel');
+  const tr = await fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST', headers: { 'content-type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({ code: p.get('code'), client_id: env.GOOGLE_CLIENT_ID, client_secret: env.GOOGLE_CLIENT_SECRET, redirect_uri: url.origin + '/api/auth/google/callback', grant_type: 'authorization_code' }),
+  });
+  const tok = await tr.json().catch(() => ({}));
+  if (!tr.ok || !tok.id_token) return back(url, 'g=fail');
+  // the id_token came straight from Google's token endpoint over TLS, so its payload is trusted after the claim checks
+  let c;
+  try { c = JSON.parse(atob(tok.id_token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))); } catch (e) { return back(url, 'g=fail'); }
+  if (c.aud !== env.GOOGLE_CLIENT_ID || !/^(https:\/\/)?accounts\.google\.com$/.test(c.iss) || !c.sub || c.exp * 1000 < now) return back(url, 'g=fail');
+  const email = c.email_verified ? String(c.email || '').toLowerCase() : null;
+  const owner = await env.DB.prepare('SELECT id FROM users WHERE google_sub = ?').bind(c.sub).first();
+  if (st.user_id) {
+    if (owner && owner.id !== st.user_id) return back(url, 'g=taken');
+    await env.DB.prepare('UPDATE users SET google_sub = ?, email = ? WHERE id = ?').bind(c.sub, email, st.user_id).run();
+    return back(url, 'g=linked');
+  }
+  let id = owner && owner.id;
+  if (!id) {
+    id = crypto.randomUUID();
+    const handle = 'g' + hex(randomBytes(6));   // internal; Google accounts sign in without it
+    await env.DB.batch([
+      env.DB.prepare("INSERT INTO users (id, username, pin_hash, pin_salt, created_at, google_sub, email) VALUES (?, ?, '', '', ?, ?, ?)").bind(id, handle, now, c.sub, email),
+      env.DB.prepare('INSERT INTO states (user_id, data, version, updated_at) VALUES (?, ?, 1, ?)').bind(id, 'null', now),
+    ]);
+  } else if (email) await env.DB.prepare('UPDATE users SET email = ? WHERE id = ?').bind(email, id).run();
+  const code = b64url(randomBytes(24));
+  await env.DB.batch([
+    env.DB.prepare('DELETE FROM oauth_codes WHERE created_at < ?').bind(now - OAUTH_CODE_MS),
+    env.DB.prepare('INSERT INTO oauth_codes (code, user_id, created_at) VALUES (?, ?, ?)').bind(code, id, now),
+  ]);
+  return back(url, 'gauth=' + code);
+}
+
+async function redeem(req, env) {
+  const b = await body(req);
+  const code = String(b.code || '');
+  const now = Date.now();
+  const r = /^[A-Za-z0-9_-]{20,64}$/.test(code) ? await env.DB.prepare('SELECT user_id, created_at FROM oauth_codes WHERE code = ?').bind(code).first() : null;
+  if (r) await env.DB.prepare('DELETE FROM oauth_codes WHERE code = ?').bind(code).run();
+  if (!r || now - r.created_at > OAUTH_CODE_MS) throw new HttpError(400, 'bad_code', 'ลิงก์เข้าสู่ระบบหมดอายุ ลองกดเข้าสู่ระบบด้วย Google อีกครั้ง');
+  const u = await env.DB.prepare('SELECT username, email, google_sub, pin_hash FROM users WHERE id = ?').bind(r.user_id).first();
+  if (!u) throw new HttpError(400, 'bad_code', 'ไม่พบบัญชีนี้แล้ว');
+  return json(200, await sessionPayload(env, r.user_id, who(u), now));
 }

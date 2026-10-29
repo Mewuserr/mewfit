@@ -51,7 +51,8 @@
 }
 [hidden]{display:none!important}
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent;scrollbar-color:var(--line) transparent}
+html{-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent;scrollbar-color:var(--line) transparent;
+  scroll-padding:72px 0 calc(120px + env(safe-area-inset-bottom,0px))}   /* focused fields land clear of the sticky top bar and floating nav */
 body{margin:0;background:var(--bg);color:var(--ink);font:400 15.5px/1.65 var(--fb);caret-color:var(--accent)}
 ::selection{background:var(--accent);color:var(--accent-ink)}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
@@ -234,7 +235,7 @@ button.wd[aria-pressed="true"]{outline:2px solid var(--ink);outline-offset:1px}
 
 /* forms */
 label.f{display:flex;flex-direction:column;gap:5px;font-size:.88rem;font-weight:500;min-width:0}
-input[type=text],input[type=number],input[type=date],input[type=time],input[type=search],select,textarea{
+input:not([type]),input[type=text],input[type=password],input[type=number],input[type=date],input[type=time],input[type=search],select,textarea{
   width:100%;border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:11px 13px;min-height:46px;min-width:0;font-size:16px}
 textarea{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.8rem;min-height:90px;resize:vertical}
 .fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
@@ -492,7 +493,7 @@ function load() {
   } catch (e) {}
   return fresh();
 }
-function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+function save(fromCloud) { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} if (!fromCloud && syncReady) cloudChanged(); }
 const P = () => S.profile || DEMO;
 const isDemo = () => !S.profile;
 
@@ -978,6 +979,217 @@ if (!reduceMotion) requestAnimationFrame(figLoop);
 /* ---------- small UI pieces ---------- */
 const VIEWS = ['start', 'today', 'train', 'moves', 'eat', 'plan', 'progress', 'learn', 'profile'];
 const ui = { learnCat: 'all', planDay: new Date().getDay(), foodQ: '', resetAsk: false, cancelAsk: false, ob: null, stepVal: null, sw: null };
+/* ---------- account + cloud sync ----------
+   Local storage stays the working copy (the app works offline). When signed in, every save marks the
+   copy dirty and a debounced PUT sends the whole state with the version it was based on; the server
+   accepts it only if nobody else wrote since (409 otherwise), and the client merges and retries. */
+const SKEY = 'mewfit.sync';
+const blankSync = () => ({ token: null, user: null, version: 0, dirty: false, rev: 0, at: 0 });
+function loadSync() { try { return Object.assign(blankSync(), JSON.parse(localStorage.getItem(SKEY) || '{}')); } catch (e) { return blankSync(); } }
+let SY = loadSync();
+const cloud = { busy: null, timer: 0, offline: false, again: false };
+const acctUi = () => ({ mode: 'signup', open: '', err: '', busy: false, name: '' });
+ui.acct = acctUi();
+function saveSync() { try { localStorage.setItem(SKEY, JSON.stringify(SY)); } catch (e) {} }
+const hasData = o => !!(o && (o.profile || (o.workouts || []).length || (o.weights || []).length || (o.body || []).length || Object.keys(o.food || {}).length));
+function normalize(o) {
+  const x = Object.assign(fresh(), o || {});
+  if (x.profile) x.profile = Object.assign({}, DEMO, x.profile);
+  if (x.session && !x.session.cur) x.session.cur = { i: 0, s: 0 };
+  return x;
+}
+// union of two copies: records keyed by date (or whole content for workouts), local wins on the same key
+function mergeState(server, local) {
+  const a = normalize(server), b = normalize(local);
+  const union = (x, y, key) => { const m = new Map(); x.forEach(r => m.set(key(r), r)); y.forEach(r => m.set(key(r), r)); return [...m.values()]; };
+  const byDate = f => (p, q) => (f(p) < f(q) ? -1 : f(p) > f(q) ? 1 : 0);
+  const out = Object.assign({}, a, b);
+  out.profile = b.profile || a.profile;
+  out.seenDemo = a.seenDemo || b.seenDemo;
+  out.guideDone = a.guideDone || b.guideDone;
+  out.weights = union(a.weights, b.weights, r => r.d).sort(byDate(r => r.d));
+  out.body = union(a.body, b.body, r => r.d).sort(byDate(r => r.d));
+  out.workouts = union(a.workouts, b.workouts, r => JSON.stringify(r)).sort(byDate(r => r.date));
+  out.food = Object.assign({}, a.food, b.food);
+  out.habits = Object.assign({}, a.habits, b.habits);
+  out.levels = Object.assign({}, a.levels, b.levels);
+  out.session = b.session || a.session;
+  return out;
+}
+async function api(path, method = 'GET', data, keepalive) {
+  const h = {};
+  if (data !== undefined) h['content-type'] = 'application/json';
+  if (SY.token) h.authorization = 'Bearer ' + SY.token;
+  let r;
+  try { r = await fetch('/api' + path, { method, headers: h, body: data === undefined ? undefined : JSON.stringify(data), cache: 'no-store', keepalive: !!keepalive }); }
+  catch (e) { cloud.offline = true; throw new Error('ต่ออินเทอร์เน็ตไม่ได้ ลองใหม่เมื่อมีสัญญาณ'); }
+  cloud.offline = false;
+  let b = {};
+  try { b = await r.json(); } catch (e) {}
+  if (r.status === 401 && SY.token && path !== '/login') lostSession();
+  if (!r.ok && !b.error) b.error = r.status >= 500 ? 'ระบบขัดข้อง ลองใหม่อีกครั้ง' : 'ทำรายการไม่สำเร็จ';
+  return { status: r.status, ok: r.ok, body: b };
+}
+function lostSession() {
+  SY.token = null; saveSync(); ui.acct = acctUi(); ui.acct.mode = 'login';
+  toast('เครื่องนี้ออกจากบัญชีแล้ว เข้าสู่ระบบอีกครั้งเพื่อซิงก์ข้อมูล');
+  refreshView();
+}
+function cloudChanged() {
+  if (!SY.token) return;
+  SY.dirty = true; SY.rev++; saveSync();
+  clearTimeout(cloud.timer); cloud.timer = setTimeout(cloudSync, 1500);
+}
+function refreshView() {
+  const ae = document.activeElement;
+  if (view() === 'start' || (ae && /^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName))) { updateAcctStatus(); return; }
+  render();
+}
+function adoptCloud(data, version) {
+  SY.version = version;
+  if (!hasData(data)) { if (hasData(S)) SY.dirty = true; saveSync(); return false; }
+  const before = JSON.stringify(S);
+  S = SY.dirty ? mergeState(data, S) : normalize(data);
+  save(true); saveSync();
+  return JSON.stringify(S) !== before;
+}
+// one sync pass: pull if clean, push if dirty; resolves when the pass (or the one already running) ends
+function cloudSync(keepalive) {
+  if (!SY.token) return Promise.resolve();
+  if (cloud.busy) { cloud.again = true; return cloud.busy; }
+  clearTimeout(cloud.timer);
+  cloud.busy = (async () => {
+    let changed = false;
+    try {
+      for (let i = 0; i < 4 && SY.token; i++) {
+        if (!SY.dirty) {
+          const r = await api('/state');
+          if (!r.ok) break;
+          if (r.body.version !== SY.version || !SY.at) changed = adoptCloud(r.body.data, r.body.version) || changed;
+          if (!SY.dirty) { SY.at = Date.now(); break; }
+          continue;
+        }
+        const rev = SY.rev;
+        const r = await api('/state', 'PUT', { data: S, baseVersion: SY.version }, keepalive);
+        if (r.ok) {
+          SY.version = r.body.version; SY.at = Date.now();
+          if (SY.rev === rev) SY.dirty = false;
+          saveSync();
+          if (!SY.dirty) break;
+        } else if (r.status === 409) {
+          changed = adoptCloud(r.body.data, r.body.version) || changed;   // dirty, so this merges
+        } else break;
+      }
+    } catch (e) { /* offline: stays dirty, retried on reconnect or next visit */ }
+    saveSync();
+    cloud.busy = null;
+    if (changed) refreshView(); else updateAcctStatus();
+    if (cloud.again) { cloud.again = false; return cloudSync(); }
+  })();
+  return cloud.busy;
+}
+function syncLabel() {
+  if (!SY.token) return '';
+  if (SY.dirty && cloud.offline) return 'ออฟไลน์อยู่ บันทึกไว้ในเครื่องแล้ว จะส่งขึ้นบัญชีเองเมื่อมีเน็ต';
+  if (SY.dirty || cloud.busy) return 'กำลังซิงก์…';
+  if (!SY.at) return 'ซิงก์แล้ว';
+  const t = new Date(SY.at);
+  return `ซิงก์แล้ว ${thDate(iso(t))} ${toHM(t.getHours() * 60 + t.getMinutes())}`;
+}
+function updateAcctStatus() { const el = $('#acct-status'); if (el) el.textContent = syncLabel(); }
+function wipeLocal(msg) {
+  S = fresh(); SY = blankSync(); save(true); saveSync();
+  stopRest(); ui.acct = acctUi(); ui.ob = null; ui.resetAsk = false;
+  location.hash = 'start'; render(); toast(msg);
+}
+async function acctLogout() {
+  const a = ui.acct;
+  a.busy = true; a.err = ''; render();
+  await cloudSync();
+  if (SY.dirty) { a.busy = false; a.err = 'ยังส่งข้อมูลล่าสุดขึ้นบัญชีไม่ได้ ต่ออินเทอร์เน็ตแล้วลองใหม่ ข้อมูลจะได้ไม่หาย'; render(); return; }
+  try { await api('/logout', 'POST', {}); } catch (e) {}
+  wipeLocal('ออกจากระบบแล้ว ข้อมูลยังอยู่ในบัญชีครบ');
+}
+async function acctSubmit(kind, form) {
+  const a = ui.acct, f = new FormData(form), val = k => String(f.get(k) || '').trim();
+  const pinOk = v => /^\d{6}$/.test(v);
+  a.err = '';
+  if (kind === 'signup' || kind === 'login') {
+    a.name = val('username');
+    if (a.name.length < 3) a.err = 'ใส่ชื่อผู้ใช้อย่างน้อย 3 ตัว';
+    else if (!pinOk(val('pin'))) a.err = 'รหัสต้องเป็นตัวเลข 6 หลัก';
+    else if (kind === 'signup' && val('pin') !== val('pin2')) a.err = 'รหัสสองช่องไม่ตรงกัน';
+  } else if (kind === 'pin') {
+    if (!pinOk(val('pin')) || !pinOk(val('newPin'))) a.err = 'รหัสต้องเป็นตัวเลข 6 หลัก';
+    else if (val('newPin') !== val('pin2')) a.err = 'รหัสใหม่สองช่องไม่ตรงกัน';
+  } else if (!pinOk(val('pin'))) a.err = 'ใส่รหัส 6 หลักเพื่อยืนยัน';
+  if (a.err) { render(); return; }
+  a.busy = true; render();
+  try {
+    if (kind === 'signup') {
+      const r = await api('/signup', 'POST', { username: a.name, pin: val('pin'), data: hasData(S) ? S : null });
+      if (!r.ok) throw new Error(r.body.error);
+      Object.assign(SY, { token: r.body.token, user: r.body.username, version: r.body.version, dirty: false, at: Date.now() });
+      saveSync(); a.open = '';
+      toast('สร้างบัญชีแล้ว ข้อมูลจะซิงก์อัตโนมัติ');
+    } else if (kind === 'login') {
+      const r = await api('/login', 'POST', { username: a.name, pin: val('pin') });
+      if (!r.ok) throw new Error(r.body.error);
+      Object.assign(SY, { token: r.body.token, user: r.body.username, version: r.body.version, at: Date.now() });
+      const remote = r.body.data;
+      if (!hasData(remote)) SY.dirty = hasData(S);
+      else if (!hasData(S)) { S = normalize(remote); SY.dirty = false; }
+      else { S = mergeState(remote, S); SY.dirty = true; }
+      save(true); saveSync(); a.open = '';
+      toast('เข้าสู่ระบบแล้ว');
+      if (SY.dirty) cloudSync();
+      if (S.profile) { a.busy = false; location.hash = 'today'; return; }
+    } else if (kind === 'pin') {
+      const r = await api('/pin', 'POST', { pin: val('pin'), newPin: val('newPin') });
+      if (!r.ok) throw new Error(r.body.error);
+      a.open = ''; toast('เปลี่ยนรหัสแล้ว เครื่องอื่นต้องเข้าสู่ระบบใหม่');
+    } else if (kind === 'delete') {
+      const r = await api('/account/delete', 'POST', { pin: val('pin') });
+      if (!r.ok) throw new Error(r.body.error);
+      a.busy = false; wipeLocal('ลบบัญชีและข้อมูลทั้งหมดแล้ว'); return;
+    }
+  } catch (e) { a.err = e.message; }
+  a.busy = false; render();
+}
+const pinField = (name, label, ac) => `<label class="f">${label}<input type="password" name="${name}" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="${ac}" required></label>`;
+function acctCard() {
+  const a = ui.acct, err = a.err ? `<p class="note" role="alert">${esc(a.err)}</p>` : '';
+  const go = (label, cls = 'btn hot big wide') => `<button class="${cls}"${a.busy ? ' disabled' : ''}>${a.busy ? 'กำลังส่ง…' : label}</button>`;
+  if (!SY.token) {
+    const su = a.mode === 'signup';
+    return `<article class="card" id="acct"><h2>บัญชี MewFit</h2>
+      <p class="small muted">${SY.user ? `เครื่องนี้ออกจากบัญชี @${esc(SY.user)} แล้ว เข้าสู่ระบบอีกครั้งเพื่อซิงก์ข้อมูลต่อ` : 'ตอนนี้ข้อมูลอยู่แค่ในเครื่องนี้ ล้างเบราว์เซอร์หรือเปลี่ยนเครื่องแล้วจะหาย สร้างบัญชีเพื่อเก็บไว้บนคลาวด์ และเปิดได้หลายเครื่อง'}</p>
+      <div class="chips" role="group" aria-label="บัญชี"><button type="button" class="chip" data-act="acct-mode" data-m="signup" aria-pressed="${su}">สร้างบัญชีใหม่</button><button type="button" class="chip" data-act="acct-mode" data-m="login" aria-pressed="${!su}">มีบัญชีแล้ว</button></div>
+      <form class="stack" data-acct="${su ? 'signup' : 'login'}" novalidate>
+        <label class="f">ชื่อผู้ใช้<input name="username" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="20" required value="${esc(a.name || SY.user || '')}"></label>
+        ${pinField('pin', 'รหัสตัวเลข 6 หลัก', su ? 'new-password' : 'current-password')}
+        ${su ? pinField('pin2', 'ใส่รหัสอีกครั้ง', 'new-password') : ''}
+        ${err}${go(su ? 'สร้างบัญชี' : 'เข้าสู่ระบบ')}
+        <p class="small muted">${su ? 'ไม่ต้องใช้อีเมล ชื่อผู้ใช้ 3–20 ตัว ลืมรหัสแล้วกู้ไม่ได้ จดไว้ให้ดี' + (hasData(S) ? ' ข้อมูลที่มีในเครื่องนี้จะย้ายขึ้นบัญชีให้เลย' : '') : 'ข้อมูลในเครื่องนี้ (ถ้ามี) จะรวมกับข้อมูลในบัญชี ไม่หายทั้งสองฝั่ง'}</p>
+      </form></article>`;
+  }
+  const cancel = '<button type="button" class="btn" data-act="acct-open" data-o="">ยกเลิก</button>';
+  return `<article class="card" id="acct">
+    <div class="row between"><h2>บัญชี @${esc(SY.user)}</h2><button class="btn sm" data-act="acct-sync">ซิงก์ตอนนี้</button></div>
+    <p class="small muted" id="acct-status" role="status">${syncLabel()}</p>
+    <p class="small muted">ใช้เครื่องอื่นได้: เปิด MewFit แล้วเข้าสู่ระบบด้วยชื่อและรหัสเดียวกัน ข้อมูลจะตรงกันเอง</p>
+    <div class="row"><button class="btn sm" data-act="acct-open" data-o="pin">เปลี่ยนรหัส</button><button class="btn sm" data-act="acct-open" data-o="logout">ออกจากระบบ</button><button class="btn sm danger" data-act="acct-open" data-o="delete">ลบบัญชี</button></div>
+    ${a.open === 'pin' ? `<form class="stack" data-acct="pin" novalidate>${pinField('pin', 'รหัสเดิม', 'current-password')}${pinField('newPin', 'รหัสใหม่ 6 หลัก', 'new-password')}${pinField('pin2', 'รหัสใหม่อีกครั้ง', 'new-password')}${err}<div class="row">${go('เปลี่ยนรหัส', 'btn pri')}${cancel}</div></form>` : ''}
+    ${a.open === 'logout' ? `<p>ข้อมูลในเครื่องนี้จะถูกล้าง แต่ยังอยู่ในบัญชีครบ เข้าสู่ระบบอีกครั้งเมื่อไหร่ก็ได้</p>${err}<div class="row"><button class="btn pri" data-act="acct-logout"${a.busy ? ' disabled' : ''}>${a.busy ? 'กำลังส่ง…' : 'ออกจากระบบ'}</button>${cancel}</div>` : ''}
+    ${a.open === 'delete' ? `<form class="stack" data-acct="delete" novalidate><p>ลบบัญชี @${esc(SY.user)} และข้อมูลทั้งหมดบนคลาวด์และในเครื่องนี้ กู้คืนไม่ได้</p>${pinField('pin', 'ใส่รหัสเพื่อยืนยัน', 'current-password')}${err}<div class="row">${go('ลบบัญชีถาวร', 'btn danger')}${cancel}</div></form>` : ''}
+  </article>`;
+}
+const acctNudge = () => !SY.token && S.profile && !S.acctNudgeOff ? `<div class="banner"><span><b>ข้อมูลอยู่แค่ในเครื่องนี้</b> สร้างบัญชีกันข้อมูลหาย และเปิดได้หลายเครื่อง</span><div class="row"><a class="btn hot sm" href="#profile">สร้างบัญชี</a><button class="btn sm ghost" data-act="acct-nudge-off">ไว้ทีหลัง</button></div></div>` : '';
+var syncReady = true;   // save() may run before this module is reached; it only syncs from here on
+window.addEventListener('online', () => cloudSync());
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') cloudSync(); else if (SY.dirty) cloudSync(true); });
+window.addEventListener('storage', e => { if (e.key === KEY || e.key === SKEY) { S = load(); SY = loadSync(); refreshView(); } });
+document.addEventListener('submit', ev => { const f = ev.target.closest('form[data-acct]'); if (!f) return; ev.preventDefault(); if (!ui.acct.busy) acctSubmit(f.dataset.acct, f); });
 let toastT;
 function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 2800); }
 const demoBanner = () => isDemo() ? `<div class="banner"><span><b>กำลังดูตัวอย่าง</b> ตัวเลขทั้งหมดคำนวณจากผู้ชาย 28 ปี 172 ซม. 75 กก.</span><a class="btn pri sm" href="#start">ตั้งค่าของฉัน 3 นาที</a></div>` : '';
@@ -1013,7 +1225,7 @@ const tool = (act, ic, t, s, href) => href ? `<a class="tool" href="${href}"><sp
 const view = () => {
   const h = location.hash.slice(1);
   let v = VIEWS.includes(h) ? h : (S.profile || S.seenDemo ? 'today' : 'start');
-  if (!S.profile && !S.seenDemo && !['start', 'learn', 'moves'].includes(v)) v = 'start';
+  if (!S.profile && !S.seenDemo && !['start', 'learn', 'moves', 'profile'].includes(v)) v = 'start';   // profile holds the sign-in card for a new phone
   return v;
 };
 function render() {
@@ -1148,7 +1360,7 @@ function rStart() {
         <li><span>ทดสอบวิดพื้น สควอท แพลงก์</span><span>ไม่บังคับ · เลือกท่าแรก</span></li>
         <li><span>เวลาตื่น นอน ทำงาน</span><span>จำเป็น · ตารางชีวิต</span></li>
         <li><span>รอบเอว ชื่อเล่น</span><span>ไม่บังคับ</span></li></ul>
-        <p class="small muted">ข้อมูลเก็บในเครื่องของคุณเท่านั้น ไม่ต้องสมัครสมาชิก ไม่มีใครเห็น</p></div>
+        <p class="small muted">เริ่มได้เลยไม่ต้องสมัคร ข้อมูลอยู่ในเครื่องนี้ อยากใช้หลายเครื่องหรือกันข้อมูลหาย สร้างบัญชีได้ทีหลังในหน้าโปรไฟล์</p>${SY.token ? '' : '<div class="row"><button class="btn sm" data-act="acct-login">มีบัญชีแล้ว เข้าสู่ระบบ</button></div>'}</div>
       <div class="ob-nav"><button class="btn pri big" data-act="ob-next">เริ่มตั้งค่า</button>${S.profile ? '<a class="btn big" href="#today">ยกเลิก</a>' : '<button class="btn big" data-act="ob-demo">ดูตัวอย่างก่อน</button>'}</div></div>`;
     return;
   }
@@ -1272,6 +1484,7 @@ function rToday() {
     <div class="hero-fig">${figSVG(tid ? ANIM[sess.ex[0].id] : 'bridge')}</div>
   </section>
   ${guide}
+  ${acctNudge()}
   <div class="grid g2">
     <article class="card">
       <div class="row between"><h2>วันนี้</h2><a class="btn sm" href="#eat">บันทึกอาหาร</a></div>
@@ -1407,6 +1620,7 @@ function rProfile() {
   if (isDemo()) {
     $('#v-profile').innerHTML = `<div class="view-head"><h1>โปรไฟล์</h1><p class="muted">ยังไม่ได้ตั้งค่า ตอนนี้ตัวเลขทั้งหมดเป็นตัวอย่าง</p></div>
       <section class="hero"><div class="hero-txt"><h2 style="color:var(--hero-fg)">ตั้งค่า 3 นาที ได้แผนของคุณเอง</h2><p>ตอบคำถาม 7 ขั้น: สุขภาพ ร่างกาย เป้าหมาย ชีวิตประจำวัน การฝึก ทดสอบความฟิต และตารางเวลา</p><div class="row"><a class="btn hot big" href="#start">เริ่มตั้งค่า</a></div></div><div class="hero-fig">${figSVG('squat')}</div></section>
+      ${acctCard()}
       ${shareCard()}`;
     return;
   }
@@ -1414,8 +1628,9 @@ function rProfile() {
   const eqs = Object.entries(p.eq).filter(([, v]) => v).map(([k]) => ({ db: 'ดัมเบล', band: 'ยางยืด', bar: 'บาร์โหน' }[k])).join(' ') || 'ไม่มีอุปกรณ์';
   const tests = Object.entries(p.baseline || {}).map(([k, i]) => `${{ push: 'วิดพื้น', squat: 'สควอท', plank: 'แพลงก์', pull: 'ดึงข้อ' }[k]} ${TESTS[k].o[i]}`).join(' · ') || 'ยังไม่ได้ทดสอบ';
   $('#v-profile').innerHTML = `
-  <div class="view-head"><span class="eyebrow">บันทึกไว้ในเครื่องนี้เท่านั้น</span><h1>${p.name ? 'คุณ' + esc(p.name) : 'โปรไฟล์'}</h1></div>
+  <div class="view-head"><span class="eyebrow">${SY.token ? 'บัญชี @' + esc(SY.user) + ' · ซิงก์หลายเครื่อง' : 'บันทึกไว้ในเครื่องนี้เท่านั้น'}</span><h1>${p.name ? 'คุณ' + esc(p.name) : 'โปรไฟล์'}</h1></div>
   <div class="kpis"><div class="kpi"><b>${fmt(c.kcal)}</b><span>kcal ต่อวัน</span></div><div class="kpi"><b>${c.protein} g</b><span>โปรตีน</span></div><div class="kpi"><b>${c.bmi}</b><span>BMI</span></div><div class="kpi"><b>${fmt(c.tdee)}</b><span>เผาผลาญต่อวัน</span></div></div>
+  ${acctCard()}
   <article class="card"><h2>ข้อมูลที่ใช้คำนวณ</h2>
     ${row(2, 'ร่างกาย', `${p.sex === 'm' ? 'ชาย' : 'หญิง'} ${p.age} ปี · ${p.height} ซม. · ${p.weight} กก.`)}
     ${row(3, 'เป้าหมาย', GOALS[p.goal].l)}
@@ -1431,13 +1646,13 @@ function rProfile() {
   </article>
   ${shareCard()}
   <article class="card"><h2>ลบข้อมูล</h2>
-    ${ui.resetAsk ? `<p>ลบโปรไฟล์ บันทึกการฝึก อาหาร และน้ำหนักทั้งหมดในเครื่องนี้ กู้คืนไม่ได้ ยกเว้นคุณคัดลอกข้อมูลสำรองไว้แล้วในหน้าความคืบหน้า</p><div class="row"><button class="btn danger" data-act="reset-yes">ยืนยัน ลบทั้งหมด</button><button class="btn" data-act="reset-no">ยกเลิก</button></div>`
+    ${ui.resetAsk ? `<p>ลบโปรไฟล์ บันทึกการฝึก อาหาร และน้ำหนักทั้งหมด${SY.token ? ' ทั้งในเครื่องนี้และในบัญชี (บัญชียังอยู่ แต่ข้อมูลว่างเปล่า)' : 'ในเครื่องนี้'} กู้คืนไม่ได้ ยกเว้นคุณคัดลอกข้อมูลสำรองไว้แล้วในหน้าความคืบหน้า</p><div class="row"><button class="btn danger" data-act="reset-yes">ยืนยัน ลบทั้งหมด</button><button class="btn" data-act="reset-no">ยกเลิก</button></div>`
       : `<div class="row"><button class="btn danger" data-act="reset-ask">ลบข้อมูลทั้งหมด</button></div>`}
   </article>
   <p class="small muted">MewFit ให้ข้อมูลทั่วไป ไม่ใช่คำแนะนำทางการแพทย์</p>`;
 }
 const shareCard = () => `<article class="card"><h2>ชวนเพื่อนมาฝึก</h2>
-  <p class="muted small">ส่งลิงก์นี้ให้ใครก็ได้ แต่ละคนตอบคำถามตั้งค่าของตัวเอง ข้อมูลแยกกันอยู่ในเครื่องของแต่ละคน ไม่ต้องสมัคร ไม่มีค่าใช้จ่าย</p>
+  <p class="muted small">ส่งลิงก์นี้ให้ใครก็ได้ แต่ละคนตอบคำถามตั้งค่าของตัวเอง และสร้างบัญชีของตัวเองได้ ข้อมูลของแต่ละคนแยกกัน ไม่มีใครเห็นของคนอื่น ไม่มีค่าใช้จ่าย</p>
   <div class="row"><input type="text" id="share-url" readonly value="${APP_URL}" style="flex:1 1 220px" aria-label="ลิงก์ MewFit"><button class="btn pri" data-act="copy-link">คัดลอกลิงก์</button></div>
   <ol class="small" style="margin:0;padding-left:20px;display:grid;gap:4px"><li>เปิดลิงก์ในมือถือ ตอบคำถาม 7 ขั้น ราว 3 นาที</li><li>iPhone: กดปุ่มแชร์ใน Safari แล้วเลือก "เพิ่มไปยังหน้าจอโฮม" · Android: เมนู ⋮ ใน Chrome แล้วเลือก "เพิ่มลงในหน้าจอหลัก"</li><li>เปิดจากไอคอน MewFit ได้เหมือนแอป ใช้ได้แม้ไม่มีเน็ต</li></ol></article>`;
 
@@ -1667,6 +1882,12 @@ document.addEventListener('click', ev => {
     case 'reset-no': ui.resetAsk = false; render(); break;
     case 'reset-yes': S = fresh(); save(); ui.resetAsk = false; ui.ob = null; stopRest(); location.hash = 'start'; render(); toast('ลบข้อมูลทั้งหมดแล้ว'); break;
     case 'modal-close': el.closest('.modal-bg').remove(); break;
+    case 'acct-mode': ui.acct.mode = el.dataset.m; ui.acct.err = ''; render(); break;
+    case 'acct-open': ui.acct.open = ui.acct.open === el.dataset.o ? '' : el.dataset.o; ui.acct.err = ''; render(); break;
+    case 'acct-sync': cloudSync().then(() => { toast(SY.dirty ? 'ยังส่งไม่ได้ ตรวจอินเทอร์เน็ตแล้วลองใหม่' : 'ซิงก์แล้ว'); render(); }); updateAcctStatus(); break;
+    case 'acct-logout': if (!ui.acct.busy) acctLogout(); break;
+    case 'acct-login': ui.acct = acctUi(); ui.acct.mode = 'login'; location.hash = 'profile'; break;
+    case 'acct-nudge-off': S.acctNudgeOff = true; save(); render(); break;
   }
 });
 document.addEventListener('input', ev => {
@@ -1817,7 +2038,7 @@ function rProgress() {
   </article>
   <article class="card">
     <h2>สำรองและย้ายข้อมูล</h2>
-    <p class="small muted">ข้อมูลทั้งหมดเก็บในเบราว์เซอร์เครื่องนี้เท่านั้น ไม่มีใครเห็น จะย้ายเครื่องให้คัดลอกข้อความสำรองไปวางในเครื่องใหม่</p>
+    <p class="small muted">${SY.token ? 'ข้อมูลซิงก์กับบัญชีอยู่แล้ว ส่วนนี้ไว้คัดลอกเก็บเองอีกชุดเผื่อไว้' : 'ข้อมูลเก็บในเบราว์เซอร์เครื่องนี้ ทางที่ง่ายที่สุดคือสร้างบัญชีในหน้าโปรไฟล์ หรือคัดลอกข้อความสำรองไปวางในเครื่องใหม่เอง'}</p>
     <textarea id="backup" readonly aria-label="ข้อมูลสำรอง">${esc(JSON.stringify(S))}</textarea>
     <div class="row"><button class="btn sm" data-act="copy-backup">คัดลอกข้อมูลสำรอง</button></div>
     <label class="f">วางข้อมูลสำรองเพื่อกู้คืน<textarea id="restore" placeholder="วางข้อความที่คัดลอกไว้ที่นี่"></textarea></label>
@@ -1843,7 +2064,8 @@ function rLearn() {
 
 
 render();
-if ('serviceWorker' in navigator && /github\.io$|^localhost$|^127\./.test(location.hostname)) navigator.serviceWorker.register('sw.js').catch(() => {});
+cloudSync();
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || /^localhost$|^127\./.test(location.hostname))) navigator.serviceWorker.register('sw.js').catch(() => {});
 })();
 </script>
 </body>

@@ -4,7 +4,15 @@
   // ล็อกบัญชีไว้ — บัญชี Cloudflare ของ m3wxuser@gmail.com (คนละบัญชีกับ ALTF4/FanQuiz)
   "account_id": "784ec89cbd9ffe6aa24ef5158cea48be",
   "compatibility_date": "2026-09-30",
+  "main": "worker.js",
   "assets": {
-    "directory": "."
-  }
+    "directory": ".",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"]
+  },
+  // บัญชีผู้ใช้ + ข้อมูลที่ซิงก์ · ใช้ `npx wrangler d1 migrations apply mewfit --remote` ก่อน deploy เมื่อมี migration ใหม่
+  "d1_databases": [
+    { "binding": "DB", "database_name": "mewfit", "database_id": "efc71c8d-5694-4b0d-8872-f0abe968baf3", "migrations_dir": "migrations" }
+  ],
+  "observability": { "enabled": true }
 }

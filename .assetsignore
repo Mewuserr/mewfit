@@ -10,3 +10,8 @@ PRODUCT.md
 DESIGN.md
 DESIGN.json
 .impeccable
+worker.js
+migrations
+tests
+package.json
+package-lock.json

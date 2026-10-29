@@ -6,7 +6,7 @@
 <title>MewFit</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="MewFit เทรนเนอร์ส่วนตัวที่บ้าน: ตารางฝึกที่ปรับระดับเอง ท่าเคลื่อนไหวสาธิต แผนอาหารไทยตามแคลอรี่ ตารางชีวิต และความรู้จากงานวิจัย">
-<meta name="theme-color" content="#060A14">
+<meta name="theme-color" content="#0A0718">
 <link rel="manifest" href="manifest.json" data-pages>
 <link rel="icon" href="icon.svg" type="image/svg+xml" data-pages>
 <link rel="icon" href="icon-192.png" type="image/png" sizes="192x192">
@@ -17,22 +17,24 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Kanit:wght@500;600;700;800&family=Sarabun:wght@400;500;600&display=swap">
 <style>
-/* World: a game "system". Every panel is a glowing system window on a night-blue field; cyan is the
-   system's voice (quests, progress, the start action); rank colours (E grey to S gold) mark standing.
-   Chakra Petch sets headings, numbers and HUD labels; Sarabun (a looped Thai face) carries the reading. */
+/* World: a neon arcade RPG. An aurora night (violet, cyan, pink) behind frosted-glass cards; the logo's
+   cyan-violet-pink gradient is the brand and the primary action; each quest and stat owns one colour so the
+   screen reads at a glance. Chakra Petch sets headings, numbers and labels; Sarabun carries the reading. */
 :root{
-  --bg:#060A14; --surface:#0E1628; --sunk:#0B1426; --ink:#E6F0FF; --muted:#A3B3CE; --line:#1F2F4D;
-  --accent:#38BDF8; --accent-ink:#03121F; --accent-soft:#0C2740; --hot:#F472B6; --hot-soft:#3A1430;
-  --go:#38BDF8; --go-ink:#03121F; --ink-on-light:#E6F0FF; --rope:#070C18; --rope-fg:#A3B3CE; --rope-line:#24365A; --rope-track:#13213B;
-  --good:#4ADE80; --warn:#FBBF24; --bad:#F87171; --gold:#FACC15;
-  --hero:#0E1628; --hero-fg:#E6F0FF; --hero-muted:#A3B3CE; --hero-line:rgba(56,189,248,.38);
-  --fig:#E6F0FF; --prop:#3B5378; --figbg:#0A1324;
-  --shadow:0 10px 30px -18px rgba(0,0,0,.9);
-  --sys-line:rgba(56,189,248,.38); --sys-glow:0 0 0 1px rgba(56,189,248,.06),0 0 26px -12px rgba(56,189,248,.6);
+  --bg:#0A0718; --surface:#171134; --sunk:#120C2A; --ink:#F3EEFF; --muted:#B8AED6; --line:#2E2556;
+  --accent:#A78BFA; --accent-ink:#14082E; --accent-soft:#2A1F5C; --hot:#F472B6; --hot-soft:#3D1638;
+  --c-cyan:#22D3EE; --c-violet:#A78BFA; --c-pink:#F472B6; --c-green:#34D399; --c-amber:#FBBF24;
+  --grad:linear-gradient(120deg,#22D3EE 0%,#818CF8 45%,#C084FC 70%,#F472B6 100%);
+  --go:#C4B5FD; --go-ink:#14082E; --ink-on-light:#F3EEFF; --rope:#0F0A24; --rope-fg:#B8AED6; --rope-line:#3A2F6B; --rope-track:#231A47;
+  --good:#34D399; --warn:#FBBF24; --bad:#FB7185; --gold:#FBBF24;
+  --hero:#171134; --hero-fg:#F3EEFF; --hero-muted:#B8AED6; --hero-line:rgba(167,139,250,.35);
+  --fig:#F3EEFF; --prop:#4B3F80; --figbg:rgba(10,7,24,.55);
+  --shadow:0 18px 40px -24px rgba(0,0,0,.9);
+  --glass-bg:rgba(30,22,66,.58); --glass-line:rgba(196,181,253,.16);
   --fd:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;
   --fb:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif;
   --fm:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;
-  --r:8px; --glass:rgba(6,10,20,.84); --card-line:var(--sys-line); color-scheme:dark;
+  --r:20px; --glass:rgba(10,7,24,.78); --card-line:var(--glass-line); color-scheme:dark;
 }
 [hidden]{display:none!important}
 *{box-sizing:border-box}
@@ -390,102 +392,113 @@ body.resting:not(.v-train) main{padding-bottom:calc(180px + env(safe-area-inset-
 .hiit .btn.pri{background:var(--go);color:var(--go-ink);border-color:var(--go)}
 .modal-bg{position:fixed;inset:0;z-index:55;background:rgba(8,10,16,.55);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);display:grid;place-items:center;padding:16px}
 .modal{background:var(--surface);color:var(--ink);border-radius:26px;padding:22px;max-width:460px;width:100%;display:flex;flex-direction:column;gap:12px;max-height:85vh;overflow:auto}
-/* ---------- game skin: system windows, quests, ranks ---------- */
-body{background:radial-gradient(900px 520px at 50% -160px,#10284D 0%,transparent 65%) fixed,var(--bg)}
-h1,h2,h3{letter-spacing:.01em}
-.card,.sys,.tip,.tool,.modal,.hero{position:relative;background:linear-gradient(180deg,rgba(17,30,57,.95),rgba(8,14,28,.95));border:1px solid var(--sys-line);border-radius:var(--r);box-shadow:var(--sys-glow);color:var(--ink)}
-/* corner brackets: the system-window signature */
-.card::after,.sys::after,.hero::after,.modal::after{content:"";position:absolute;inset:-1px;pointer-events:none;border-radius:var(--r);
-  background:linear-gradient(var(--accent),var(--accent)) left top/14px 2px no-repeat,linear-gradient(var(--accent),var(--accent)) left top/2px 14px no-repeat,
-  linear-gradient(var(--accent),var(--accent)) right top/14px 2px no-repeat,linear-gradient(var(--accent),var(--accent)) right top/2px 14px no-repeat,
-  linear-gradient(var(--accent),var(--accent)) left bottom/14px 2px no-repeat,linear-gradient(var(--accent),var(--accent)) left bottom/2px 14px no-repeat,
-  linear-gradient(var(--accent),var(--accent)) right bottom/14px 2px no-repeat,linear-gradient(var(--accent),var(--accent)) right bottom/2px 14px no-repeat}
-.sys{padding:16px 16px 18px;display:flex;flex-direction:column;gap:12px}
-.sys-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:2px 10px;font-family:var(--fd);font-weight:700;font-size:1rem;letter-spacing:.08em;color:var(--accent);border-bottom:1px solid var(--sys-line);padding-bottom:8px}
-.sys-h>span:first-child{white-space:nowrap}
-.sys-h>span:first-child::before{content:"";display:inline-block;width:8px;height:8px;margin-right:8px;background:var(--accent);box-shadow:0 0 10px var(--accent);transform:rotate(45deg) translateY(-1px)}
-.sys-sub{font-family:var(--fb);font-weight:500;font-size:.86rem;letter-spacing:0;color:var(--muted)}
-@media (prefers-reduced-motion:no-preference){.view:not([hidden]) .sys{animation:sys-in .5s cubic-bezier(.16,1,.3,1) both}.view:not([hidden]) .sys+.sys{animation-delay:.08s}}
-@keyframes sys-in{from{opacity:.001;clip-path:inset(0 0 100% 0)}to{opacity:1;clip-path:inset(0 0 0 0)}}
-/* status window */
+/* ---------- arcade skin: aurora, glass cards, rank medal, coloured quests ---------- */
+body{background:
+  radial-gradient(60vmax 45vmax at 0% -5%,rgba(124,58,237,.38),transparent 60%),
+  radial-gradient(50vmax 40vmax at 100% 10%,rgba(34,211,238,.18),transparent 60%),
+  radial-gradient(60vmax 50vmax at 80% 110%,rgba(236,72,153,.22),transparent 60%) fixed,var(--bg)}
+h1,h2,h3{letter-spacing:.005em}
+.card,.sys,.tip,.tool,.modal,.hero{position:relative;background:var(--glass-bg);-webkit-backdrop-filter:blur(16px) saturate(1.3);backdrop-filter:blur(16px) saturate(1.3);
+  border:1px solid var(--glass-line);border-radius:var(--r);box-shadow:var(--shadow);color:var(--ink)}
+/* the two cards that carry the game get the brand gradient as their border */
+.sys.status,.sys.quest,.modal{border:1px solid transparent;background:linear-gradient(rgba(24,17,54,.92),rgba(18,12,42,.92)) padding-box,var(--grad) border-box}
+.sys{padding:18px;display:flex;flex-direction:column;gap:14px}
+.sys-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:2px 10px}
+.sys-h>span:first-child{font-family:var(--fd);font-weight:700;font-size:1.15rem;white-space:nowrap}
+.sys-sub{font-size:.9rem;color:var(--muted)}
+@media (prefers-reduced-motion:no-preference){.view:not([hidden]) .sys{animation:sys-in .55s cubic-bezier(.16,1,.3,1) both}.view:not([hidden]) .sys+.sys{animation-delay:.07s}}
+@keyframes sys-in{from{opacity:.001;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}
+/* status: rank medal whose ring is the XP bar */
 .st-top{display:flex;gap:18px;align-items:center}
-.rank-badge{--sz:64px;flex:none;width:var(--sz);height:var(--sz);margin:6px;display:grid;place-items:center;transform:rotate(45deg);border:2px solid var(--rk);background:color-mix(in srgb,var(--rk) 16%,transparent);box-shadow:0 0 22px -4px var(--rk),inset 0 0 14px -6px var(--rk);border-radius:6px}
-.rank-badge span{transform:rotate(-45deg);font-family:var(--fd);font-weight:700;font-size:calc(var(--sz) * .5);line-height:1;color:var(--rk);text-shadow:0 0 12px var(--rk)}
-.rank-badge.big{--sz:92px;margin:16px auto}
-.st-id{display:flex;flex-direction:column;gap:2px;min-width:0}
-.st-name{font-family:var(--fd);font-size:1.45rem;font-weight:700;line-height:1.15}
-.st-title{font-size:.93rem;color:var(--gold)}
-.st-lv{font-family:var(--fd);font-size:1rem;color:var(--muted)}.st-lv b{color:var(--ink);font-size:1.3rem}
-.xp{height:12px;border:1px solid var(--sys-line);background:#081226;border-radius:3px;overflow:hidden}
-.xp i{display:block;height:100%;background:linear-gradient(90deg,#0EA5E9,#7DD3FC);box-shadow:0 0 12px #38BDF8;transition:width .9s cubic-bezier(.16,1,.3,1)}
+.medal{--p:0;--rk:#fff;flex:none;width:112px;height:112px;border-radius:50%;padding:7px;position:relative;
+  background:conic-gradient(from -90deg,transparent calc(var(--p) * 1%),rgba(255,255,255,.09) 0),conic-gradient(from -90deg,#22D3EE,#818CF8,#C084FC,#F472B6,#22D3EE);
+  filter:drop-shadow(0 6px 18px rgba(168,85,247,.45))}
+.medal-in{width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 50% 35%,#2A1F5C,#120C2A 70%);display:grid;place-items:center;align-content:center;gap:0}
+.medal-in b{font-family:var(--fd);font-weight:700;font-size:2.7rem;line-height:1;color:var(--rk);text-shadow:0 0 18px color-mix(in srgb,var(--rk) 70%,transparent)}
+.medal-in span{font-family:var(--fd);font-size:.7rem;letter-spacing:.18em;color:var(--muted)}
+.medal.big{width:140px;height:140px;margin:6px auto}.medal.big .medal-in b{font-size:3.4rem}
+.st-id{display:flex;flex-direction:column;gap:4px;min-width:0}
+.st-name{font-family:var(--fd);font-size:1.5rem;font-weight:700;line-height:1.15}
+.st-title{align-self:flex-start;font-size:.86rem;font-weight:600;color:#1A0B33;background:var(--grad);border-radius:999px;padding:2px 10px}
+.st-title.none{background:rgba(255,255,255,.08);color:var(--muted);font-weight:500}
+.st-lv{font-family:var(--fd);color:var(--muted)}.st-lv b{font-size:1.35rem;color:var(--ink)}
 .xp-l{display:flex;justify-content:space-between;gap:10px;font-family:var(--fd);font-size:.86rem;color:var(--muted)}
 .stats5{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
-.stats5 div{border:1px solid var(--sys-line);border-radius:4px;padding:6px 4px;text-align:center;background:rgba(56,189,248,.05)}
-.stats5 span{display:block;font-family:var(--fd);font-size:.74rem;letter-spacing:.08em;color:var(--accent)}
+.stats5 div{border-radius:12px;padding:7px 4px 6px;text-align:center;background:color-mix(in srgb,var(--sc) 14%,transparent);border:1px solid color-mix(in srgb,var(--sc) 35%,transparent)}
+.stats5 span{display:block;font-family:var(--fd);font-size:.72rem;font-weight:600;letter-spacing:.08em;color:var(--sc)}
 .stats5 b{font-family:var(--fd);font-size:1.3rem;font-weight:700}
-.stat-rows{display:flex;flex-direction:column;gap:10px}
+.stat-rows{display:flex;flex-direction:column;gap:12px}
 .stat-row{display:grid;grid-template-columns:48px 1fr auto;gap:10px;align-items:center}
-.stat-row .k{font-family:var(--fd);font-weight:700;color:var(--accent);letter-spacing:.06em}
+.stat-row .k{font-family:var(--fd);font-weight:700;color:var(--sc);letter-spacing:.06em}
+.stat-row .bar{background:rgba(255,255,255,.07)}.stat-row .bar i{background:var(--sc);box-shadow:0 0 12px -2px var(--sc)}
 .stat-row .v{font-family:var(--fd);font-weight:700;font-size:1.25rem}
 .stat-row small{grid-column:2 / 4;color:var(--muted);font-size:.86rem;margin-top:-6px}
-/* daily quests */
+/* daily quests: one colour and icon each, logged in place */
 .q-intro{color:var(--muted)}
-.qlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
-.q{display:grid;grid-template-columns:26px 1fr auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px dashed rgba(56,189,248,.18)}
-.q:last-child{border-bottom:0}
-.q-box{width:22px;height:22px;border:2px solid var(--accent);border-radius:4px;display:grid;place-items:center}
-.q-box svg{width:14px;height:14px;stroke:var(--accent-ink);stroke-width:3.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
-.q.done .q-box{background:var(--accent);box-shadow:0 0 12px -2px var(--accent)}
+.q-head{display:flex;align-items:center;gap:12px}
+.q-prog{flex:1;height:8px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}
+.q-prog i{display:block;height:100%;background:var(--grad);border-radius:inherit;transition:width .8s cubic-bezier(.16,1,.3,1)}
+.q-count{font-family:var(--fd);font-weight:700;white-space:nowrap}
+.qlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.q{--qc:var(--accent);display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center;padding:10px 12px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}
+.q-ic{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;background:color-mix(in srgb,var(--qc) 18%,transparent);color:var(--qc)}
+.q-ic svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.q.done{background:color-mix(in srgb,var(--qc) 12%,transparent);border-color:color-mix(in srgb,var(--qc) 40%,transparent)}
+.q.done .q-ic{background:var(--qc);color:#14082E;box-shadow:0 0 18px -4px var(--qc)}
 .q-main{display:flex;flex-direction:column;gap:5px;min-width:0}
-.q-t{font-weight:600}
-.q.done .q-t{color:var(--muted)}
-.q-bar{height:6px;background:#081226;border-radius:3px;overflow:hidden}
-.q-bar i{display:block;height:100%;background:var(--accent);transition:width .6s}
-.q-n{font-family:var(--fd);font-size:.86rem;color:var(--muted)}
-.q-xp{font-family:var(--fd);font-weight:700;color:var(--gold);white-space:nowrap}
-.q.done .q-xp{opacity:.55}
-.q-bonus{border:1px dashed var(--sys-line);border-radius:6px;padding:10px 12px;font-size:.95rem;color:var(--muted)}
-.q-bonus b{color:var(--gold);font-family:var(--fd)}
-.q-bonus.done{border-style:solid;border-color:var(--gold);color:var(--ink);box-shadow:0 0 22px -10px var(--gold)}
+.q-t{font-weight:600;line-height:1.35}
+.q-sub{display:flex;align-items:center;gap:8px;font-family:var(--fd);font-size:.86rem;color:var(--muted)}
+.q-bar{flex:1;height:6px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}
+.q-bar i{display:block;height:100%;background:var(--qc);border-radius:inherit;transition:width .6s}
+.q-side{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.q-xp{font-family:var(--fd);font-weight:700;font-size:.86rem;color:var(--qc);white-space:nowrap}
+.q.done .q-xp{color:var(--muted)}
+.q-ctl{display:flex;gap:6px;align-items:center}
+.q-ctl .btn{min-height:34px;min-width:34px;padding:4px 10px;border-radius:10px}
+.q-ctl input{width:84px;min-height:34px;padding:4px 8px;font-size:16px;text-align:center}
+.q-bonus{border-radius:14px;padding:10px 14px;font-size:.95rem;color:var(--muted);background:rgba(255,255,255,.04)}
+.q-bonus b{font-family:var(--fd);color:var(--gold)}
+.q-bonus.done{color:#14082E;background:var(--grad);font-weight:600}.q-bonus.done b{color:#14082E}
 .titles{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
-.titles li{border:1px solid var(--sys-line);border-radius:6px;padding:10px;display:flex;flex-direction:column;gap:2px}
-.titles li b{font-family:var(--fd);color:var(--gold)}
+.titles li{border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;background:rgba(255,255,255,.05)}
+.titles li b{font-family:var(--fd);background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .titles li span{font-size:.86rem;color:var(--muted)}
-.titles li.locked{opacity:.45;border-style:dashed}.titles li.locked b{color:var(--muted)}
+.titles li.locked{opacity:.5}.titles li.locked b{background:none;color:var(--muted)}
 /* level-up window */
-.lvup{text-align:center;display:flex;flex-direction:column;gap:8px;--rk:var(--accent)}
-.lv-big{font-family:var(--fd);font-weight:700;font-size:2.6rem;letter-spacing:.06em;color:var(--gold);text-shadow:0 0 18px rgba(250,204,21,.7)}
-@media (prefers-reduced-motion:no-preference){.lvup{animation:lv-in .6s cubic-bezier(.16,1,.3,1)}}
+.lvup{text-align:center;display:flex;flex-direction:column;gap:8px}
+.lv-big{font-family:var(--fd);font-weight:700;font-size:2.7rem;letter-spacing:.05em;color:var(--gold);text-shadow:0 0 22px rgba(251,191,36,.65)}
+@media (prefers-reduced-motion:no-preference){.lvup{animation:lv-in .6s cubic-bezier(.16,1,.3,1)}.lvup .medal{animation:spin-in 1s cubic-bezier(.16,1,.3,1)}}
 @keyframes lv-in{from{opacity:.001;transform:scale(.86)}to{opacity:1;transform:none}}
-/* the base components in the HUD palette */
-.hero{border-radius:var(--r);box-shadow:var(--sys-glow)}
-.hero p{background:rgba(56,189,248,.08);color:var(--ink);border:1px solid rgba(56,189,248,.2);font-weight:400}
+@keyframes spin-in{from{transform:rotate(-200deg) scale(.6)}to{transform:none}}
+/* base components in the arcade palette */
+.hero p{background:rgba(255,255,255,.05);color:var(--ink);border:0;font-weight:400}
 .hero .eyebrow,.hero-hi,.hero-sess span{color:var(--muted)}
 .hero h1,.hero h2{color:var(--ink)}
-.hero .btn{border-color:var(--sys-line);color:var(--ink)}
-.hero .btn.hot,.hero .btn.pri,.btn.hot{background:var(--go);border-color:var(--go);color:var(--go-ink);box-shadow:0 0 24px -8px var(--go)}
-.hero .btn.link{color:var(--accent)}
-.hero-fig{background:rgba(56,189,248,.06);--fig:var(--ink);--prop:var(--rope-line)}
 .hero h1{font-size:clamp(2rem,8.5vw,2.8rem);line-height:1.12}
+.hero .btn{border-color:var(--glass-line);color:var(--ink)}
+.btn.hot,.hero .btn.hot,.hero .btn.pri,.btn.pri{background:var(--grad);border:0;color:#14082E;box-shadow:0 8px 22px -10px rgba(192,132,252,.9),inset 0 1px 0 rgba(255,255,255,.45)}
+.btn.hot:hover,.btn.pri:hover{filter:brightness(1.07)}
+.hero .btn.link{color:var(--c-cyan)}
+.hero-fig{background:rgba(255,255,255,.04);--fig:var(--ink);--prop:var(--rope-line)}
 @media (max-width:639px){.hero-fig{background:none}}
-.rounds li{background:rgba(56,189,248,.1);color:var(--ink);border:1px solid var(--sys-line)}
-.rounds b{background:var(--accent);color:var(--accent-ink)}
-.btn{background:rgba(8,16,32,.6);border-color:var(--sys-line);border-radius:6px}
+.rounds li{background:rgba(255,255,255,.06);color:var(--ink);border:1px solid var(--glass-line)}
+.rounds b{background:var(--grad);color:#14082E}
+.btn{background:rgba(255,255,255,.06);border-color:var(--glass-line);border-radius:14px}
 .btn:hover{border-color:var(--accent)}
-.btn.pri{box-shadow:0 0 20px -8px var(--accent)}
-.btn.sm{border-radius:5px}.btn.big{border-radius:8px}
-.chip{border-radius:4px}
-input:not([type]),input[type=text],input[type=password],input[type=number],input[type=date],input[type=time],input[type=search],select,textarea{background:#081226;border-color:var(--sys-line);border-radius:6px}
-.bottom{background:rgba(5,9,18,.94);border:1px solid var(--sys-line);box-shadow:0 0 30px -12px rgba(56,189,248,.5);border-radius:14px}
-.bottom a.mid .ic{border-radius:12px;box-shadow:0 0 0 5px var(--bg),0 0 22px -4px var(--go)}
-.top{border-bottom:1px solid rgba(56,189,248,.15)}
-.wm em{color:var(--accent)}
-.toast{background:#0E1628;color:var(--ink);border:1px solid var(--sys-line);box-shadow:var(--sys-glow)}
-.kpi{border-top-color:var(--sys-line)}
-.tool .t-ic{background:var(--accent-soft)}
-.restbar{background:linear-gradient(90deg,#0B2A4A,#0E1628);color:var(--ink);border:1px solid var(--sys-line)}
-.restbar .btn{color:var(--ink);border-color:var(--sys-line)}
+.chip{border-radius:999px}
+input:not([type]),input[type=text],input[type=password],input[type=number],input[type=date],input[type=time],input[type=search],select,textarea{background:rgba(10,7,24,.55);border-color:var(--glass-line);border-radius:12px}
+.bottom{background:rgba(14,10,32,.82);-webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);border:1px solid var(--glass-line);border-radius:22px;box-shadow:0 16px 40px -16px rgba(0,0,0,.9)}
+.bottom a[aria-current="page"]:not(.mid) svg{color:var(--c-cyan)}
+.bottom a.mid .ic{background:var(--grad);color:#14082E;border-radius:50%;box-shadow:0 0 0 5px var(--bg),0 10px 26px -6px rgba(192,132,252,.9)}
+.top{border-bottom:1px solid rgba(196,181,253,.1)}
+.wm em{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.toast{background:#1E1640;color:var(--ink);border:1px solid var(--glass-line)}
+.kpi{border-top-color:var(--glass-line)}
+.tool .t-ic{background:var(--accent-soft)}.tool .t-ic svg{stroke:var(--c-cyan)}
+.restbar{background:linear-gradient(90deg,#2A1F5C,#1E1640);color:var(--ink);border:1px solid var(--glass-line)}
+.restbar .btn{color:var(--ink);border-color:var(--glass-line)}
 .restbar .grow{color:var(--muted)}
+.wd{background:rgba(255,255,255,.05)}.wd.train{background:var(--accent-soft)}.wd.done{background:var(--grad);color:#14082E}.wd.done span{color:#14082E}.wd.today{border-color:var(--c-cyan)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -1194,19 +1207,33 @@ const TITLES = [
   { n: 'นักล่าระดับ A', d: 'ถึงแรงค์ A (Lv. 35)', ok: c => c.lv >= 35 },
   { n: 'ตำนาน', d: 'ถึงแรงค์ S (Lv. 55)', ok: c => c.lv >= 55 }];
 const STAT_INFO = { STR: 'พลัง: ท่าดัน ดึง หลังแขน หน้าแขน', AGI: 'ความคล่อง: ก้าวเดิน และคาร์ดิโอ', VIT: 'ความทนทานของขา: สควอท ลันจ์ สะโพก น่อง', END: 'ความอึด: แกนกลาง และวันต่อเนื่อง', INT: 'วินัยการกิน: วันที่บันทึกอาหาร และการชั่งน้ำหนัก' };
+const STAT_C = { STR: 'var(--c-pink)', AGI: 'var(--c-cyan)', VIT: 'var(--c-green)', END: 'var(--c-amber)', INT: 'var(--c-violet)' };
+const medal = (g, cls = '') => `<div class="medal ${cls}" style="--p:${Math.round(g.into / g.need * 100)};--rk:${g.rank.c}" role="img" aria-label="แรงค์ ${g.rank.r} ค่าประสบการณ์ ${Math.round(g.into / g.need * 100)} เปอร์เซ็นต์"><div class="medal-in"><b>${g.rank.r}</b><span>RANK</span></div></div>`;
 function statusPanel(g, full) {
-  const p = P(), r = g.rank, nx = RANKS[RANKS.indexOf(r) + 1], pc = Math.round(g.into / g.need * 100);
-  return `<section class="sys status" style="--rk:${r.c}" aria-label="สถานะผู้เล่น">
-    <div class="sys-h"><span>สถานะผู้เล่น</span><span class="sys-sub">${g.streak ? `ต่อเนื่อง ${g.streak} วัน` : 'เริ่มสะสมวันต่อเนื่อง'}</span></div>
-    <div class="st-top"><div class="rank-badge" role="img" aria-label="แรงค์ ${r.r}"><span>${r.r}</span></div>
-      <div class="st-id"><b class="st-name">${esc(p.name || 'ผู้เล่น')}</b><span class="st-title">${g.title ? 'ฉายา: ' + esc(g.title.n) : 'ยังไม่มีฉายา ฝึกครั้งแรกเพื่อรับ'}</span><span class="st-lv">Lv. <b>${g.lv}</b> · แรงค์ ${r.r} ${r.n}</span></div></div>
-    <div class="xp" role="progressbar" aria-label="ค่าประสบการณ์" aria-valuemin="0" aria-valuemax="${g.need}" aria-valuenow="${g.into}"><i style="width:${pc}%"></i></div>
-    <div class="xp-l"><span>${fmt(g.into)} / ${fmt(g.need)} XP ถึง Lv. ${g.lv + 1}</span><span>${nx ? `แรงค์ ${nx.r} ที่ Lv. ${nx.lv}` : 'แรงค์สูงสุดแล้ว'}</span></div>
-    ${full ? `<div class="stat-rows">${Object.keys(STAT_INFO).map(k => `<div class="stat-row"><span class="k">${k}</span>${bar(g.stats[k] - 10, Math.max(20, Math.ceil((g.stats[k] - 9) / 20) * 20))}<span class="v">${g.stats[k]}</span><small>${STAT_INFO[k]}</small></div>`).join('')}</div>`
-      : `<div class="stats5">${Object.keys(STAT_INFO).map(k => `<div><span>${k}</span><b>${g.stats[k]}</b></div>`).join('')}</div>`}
+  const p = P(), r = g.rank, nx = RANKS[RANKS.indexOf(r) + 1];
+  return `<section class="sys status" aria-label="สถานะผู้เล่น">
+    <div class="st-top">${medal(g)}
+      <div class="st-id"><b class="st-name">${esc(p.name || 'ผู้เล่น')}</b><span class="st-lv">Lv. <b>${g.lv}</b> · ${r.n}</span>
+        <span class="st-title ${g.title ? '' : 'none'}">${g.title ? esc(g.title.n) : 'ยังไม่มีฉายา'}</span></div></div>
+    <div class="xp-l"><span>${fmt(g.into)} / ${fmt(g.need)} XP ถึง Lv. ${g.lv + 1}</span><span>${g.streak ? `ต่อเนื่อง ${g.streak} วัน` : nx ? `แรงค์ ${nx.r} ที่ Lv. ${nx.lv}` : 'แรงค์สูงสุด'}</span></div>
+    ${full ? `<div class="stat-rows">${Object.keys(STAT_INFO).map(k => `<div class="stat-row" style="--sc:${STAT_C[k]}"><span class="k">${k}</span>${bar(g.stats[k] - 10, Math.max(20, Math.ceil((g.stats[k] - 9) / 20) * 20))}<span class="v">${g.stats[k]}</span><small>${STAT_INFO[k]}</small></div>`).join('')}</div>
+      <p class="small muted">${nx ? `แรงค์ถัดไป ${nx.r} (${nx.n}) ที่ Lv. ${nx.lv}` : 'ถึงแรงค์สูงสุดแล้ว'}</p>`
+      : `<div class="stats5">${Object.keys(STAT_INFO).map(k => `<div style="--sc:${STAT_C[k]}"><span>${k}</span><b>${g.stats[k]}</b></div>`).join('')}</div>`}
   </section>`;
 }
-const questRow = x => { const pc = x.max > 1 ? clamp(x.v / x.max * 100, 0, 100) : 0; return `<li class="q ${x.done ? 'done' : ''}"><span class="q-box">${x.done ? CHECK : ''}</span><div class="q-main"><span class="q-t">${esc(x.t)}</span>${x.max > 1 && !x.done ? `<div class="q-bar"><i style="width:${pc}%"></i></div><span class="q-n">${fmt(Math.min(x.v, x.max))} / ${fmt(x.max)}</span>` : ''}</div><span class="q-xp">+${x.xp} XP</span></li>`; };
+const QIC = {train: '<path d="M6 7v10M3 9v6M18 7v10M21 9v6M6 12h12"/>', recover: '<path d="M12 21c-4-3-7-6-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4-3 7-7 10z"/>', water: '<path d="M12 3c3.5 4.2 6 7.4 6 10.5A6 6 0 0 1 6 13.5C6 10.4 8.5 7.2 12 3z"/>', protein: '<path d="M14.5 4.5a5 5 0 0 1 0 7.1l-4 4a2.5 2.5 0 1 1-3.5-3.5l4-4a5 5 0 0 1 3.5-3.6z"/><path d="M7 16.5l-2.5 2.5"/>', steps: '<path d="M8 4c1.7 0 2.5 1.6 2.5 3.5S9.6 12 8 12 5.5 9.4 5.5 7.5 6.3 4 8 4zM16 9c1.7 0 2.5 1.6 2.5 3.5S17.6 17 16 17s-2.5-2.6-2.5-4.5S14.3 9 16 9zM6.5 14.5h3M14.5 19.5h3"/>', sleep: '<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>'};
+const QCOL = { train: 'var(--c-amber)', recover: 'var(--c-green)', water: 'var(--c-cyan)', protein: 'var(--c-pink)', steps: 'var(--c-green)', sleep: 'var(--c-violet)' };
+function questRow(x) {
+  const h = habit(iso()), pc = x.max > 1 ? clamp(x.v / x.max * 100, 0, 100) : 0;
+  const ctl = { water: `<div class="q-ctl"><button class="btn" data-act="water" data-n="-1" aria-label="ลดน้ำหนึ่งแก้ว">−</button><button class="btn pri" data-act="water" data-n="1" aria-label="เพิ่มน้ำหนึ่งแก้ว">+1</button></div>`,
+    steps: `<div class="q-ctl"><input type="number" inputmode="numeric" id="h-steps" data-habit="steps" min="0" value="${esc(h.steps)}" placeholder="ก้าว" aria-label="ก้าวเดินวันนี้"></div>`,
+    sleep: `<div class="q-ctl"><input type="number" inputmode="decimal" step="0.5" id="h-sleep" data-habit="sleep" min="0" max="16" value="${esc(h.sleep)}" placeholder="ชม." aria-label="ชั่วโมงนอนเมื่อคืน"></div>`,
+    protein: `<div class="q-ctl"><a class="btn" href="#eat">บันทึก</a></div>`,
+    recover: x.done ? '' : `<div class="q-ctl"><button class="btn" data-act="stretch">เริ่ม</button></div>` }[x.k] || '';
+  const sub = x.max > 1 ? `<div class="q-sub"><div class="q-bar"><i style="width:${pc}%"></i></div><span>${fmt(Math.min(x.v, x.max))}/${fmt(x.max)}</span></div>` : x.done ? '<div class="q-sub"><span>สำเร็จ</span></div>' : '';
+  return `<li class="q ${x.done ? 'done' : ''}" style="--qc:${QCOL[x.k]}"><span class="q-ic"><svg viewBox="0 0 24 24" aria-hidden="true">${x.done ? '<path d="M5 12.5l4.5 4.5L19 7.5"/>' : QIC[x.k]}</svg></span>
+    <div class="q-main"><span class="q-t">${esc(x.t)}</span>${sub}</div><div class="q-side"><span class="q-xp">+${x.xp} XP</span>${ctl}</div></li>`;
+}
 function timeLeftToday() { const n = new Date(), m = 24 * 60 - (n.getHours() * 60 + n.getMinutes()); return `${Math.floor(m / 60)} ชม. ${m % 60} นาที`; }
 // celebrate quests completed since the last look, and level / rank ups
 function questToasts(d, q) {
@@ -1225,7 +1252,7 @@ function checkLevelUp() {
   try { navigator.vibrate && navigator.vibrate([60, 40, 120]); } catch (e) {}
   showModal(`<div class="lvup" style="--rk:${r.c}"><div class="sys-h"><span>แจ้งเตือนจากระบบ</span></div>
     <p class="lv-big">LEVEL UP!</p><p>Lv. ${before} → <b>Lv. ${g.lv}</b></p>
-    ${r.r !== r0.r ? `<div class="rank-badge big" role="img" aria-label="แรงค์ ${r.r}"><span>${r.r}</span></div><p>เลื่อนแรงค์ <b>${r0.r} → ${r.r}</b> · ${r.n}</p>` : ''}
+    ${medal(g, 'big')}${r.r !== r0.r ? `<p>เลื่อนแรงค์ <b>${r0.r} → ${r.r}</b> · ${r.n}</p>` : ''}
     <p class="muted small">ค่าสถานะมาจากการฝึก การกิน และการนอนจริงของคุณ ทำเควสต่อไปเพื่อเลื่อนแรงค์</p>
     <button class="btn hot big wide" data-act="modal-close">รับทราบ</button></div>`, true);
 }
@@ -1829,6 +1856,7 @@ function rToday() {
   ${statusPanel(g, false)}
   <section class="sys quest" aria-label="เควสประจำวัน">
     <div class="sys-h"><span>เควสประจำวัน</span><span class="sys-sub">${DAY_L[dow]} ${thDate(d)} · เหลือ ${timeLeftToday()}</span></div>
+    <div class="q-head"><div class="q-prog" role="progressbar" aria-label="เควสที่ทำแล้ว" aria-valuemin="0" aria-valuemax="${q.length}" aria-valuenow="${qDone}"><i style="width:${Math.round(qDone / q.length * 100)}%"></i></div><span class="q-count">${qDone}/${q.length}</span></div>
     <p class="q-intro">${msg}</p>
     ${tid ? `<ol class="rounds" aria-label="ท่าในภารกิจหลัก">${sess.ex.map((x, i) => `<li><b>${i + 1}</b>${esc(EXM[x.id].n)}</li>`).join('')}</ol>` : ''}
     <ul class="qlist">${q.map(questRow).join('')}</ul>
@@ -1836,26 +1864,6 @@ function rToday() {
     <div class="row hero-go">${btns}</div>
   </section>
   ${guide}
-  <div class="grid g2">
-    <article class="card">
-      <div class="row between"><h2>วันนี้</h2><a class="btn sm" href="#eat">บันทึกอาหาร</a></div>
-      <div class="ringwrap">${ringsSVG([{ v: tot.k, max: c.kcal, c: 'var(--accent)' }, { v: tot.p, max: c.protein, c: 'var(--hot)' }, { v: h.water, max: c.glasses, c: 'var(--good)' }])}
-        <div class="legend">
-          <div><i style="background:var(--accent)"></i><span>แคลอรี่</span><b>${fmt(tot.k)}<small> / ${fmt(c.kcal)}</small></b></div>
-          <div><i style="background:var(--hot)"></i><span>โปรตีน</span><b>${fmt(tot.p)}<small> / ${c.protein} g</small></b></div>
-          <div><i style="background:var(--good)"></i><span>น้ำ</span><b>${h.water}<small> / ${c.glasses} แก้ว</small></b></div>
-        </div></div>
-    </article>
-    <article class="card">
-      <h2>นิสัยประจำวัน</h2>
-      <div class="stack"><span class="small"><b>น้ำ</b> <span class="muted">แก้วละ 250 ml</span></span>
-        <div class="counter"><button class="btn" data-act="water" data-n="-1" aria-label="ลดน้ำหนึ่งแก้ว">−</button><div class="glasses">${Array.from({ length: c.glasses }, (_, i) => `<i class="${i < h.water ? 'on' : ''}"></i>`).join('')}</div><button class="btn pri" data-act="water" data-n="1" aria-label="เพิ่มน้ำหนึ่งแก้ว">+</button></div></div>
-      <div class="fgrid">
-        <label class="f">ก้าวเดิน <span class="muted small">เป้า ${fmt(c.steps)}</span><input type="number" inputmode="numeric" id="h-steps" data-habit="steps" min="0" value="${esc(h.steps)}" placeholder="8500"></label>
-        <label class="f">นอนเมื่อคืน (ชม.) <span class="muted small">เป้า 7–9</span><input type="number" inputmode="decimal" step="0.5" id="h-sleep" data-habit="sleep" min="0" max="16" value="${esc(h.sleep)}" placeholder="7.5"></label>
-      </div>
-    </article>
-  </div>
   ${acctNudge()}
   <article class="card">
     <div class="row between"><h2>สัปดาห์นี้</h2><span class="chip ${wkDone >= wkNeed ? 'good' : 'acc'}">${wkDone}/${wkNeed} ครั้ง · ครบติดกัน ${weekStreak()} สัปดาห์</span></div>

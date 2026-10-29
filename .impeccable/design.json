@@ -1,500 +1,608 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-29T15:00:00+07:00",
+  "generatedAt": "2026-10-29T23:55:00+07:00",
   "title": "Design System: MewFit",
   "extensions": {
     "colorMeta": {
-      "corner-red": {
+      "system-cyan": {
         "role": "primary",
-        "displayName": "Corner Red",
-        "canonical": "#FB4620",
-        "oklch": "oklch(65.5% 0.223 33.2)",
-        "dark": "#FB4620",
-        "cssVar": "--go / --hero",
-        "purpose": "Today's bout, top bar on the today view, raised train button, rest bar, go actions.",
+        "displayName": "System Cyan",
+        "canonical": "#38BDF8",
+        "cssVar": "--accent / --go",
+        "purpose": "The system's voice: quests, progress, selection, focus, start action, corner brackets.",
         "tonalRamp": [
-          "#2E0000",
-          "#590000",
-          "#870000",
-          "#B70F00",
-          "#E93304",
-          "#FF6C4C",
-          "#FF9C7E",
-          "#FFC9AF"
+          "#022331",
+          "#034563",
+          "#066F9E",
+          "#0899D9",
+          "#26B7F7",
+          "#61CBF9",
+          "#9CDEFC",
+          "#D8F2FE"
         ]
       },
-      "corner-red-ink": {
+      "system-cyan-ink": {
         "role": "primary",
-        "displayName": "Corner Red Ink",
-        "canonical": "#170A05",
-        "oklch": "oklch(16.2% 0.026 45.3)",
-        "dark": "#170A05",
-        "cssVar": "--go-ink / --hero-fg",
-        "purpose": "Text and icons on corner-red; the start-bell fill on the hero.",
+        "displayName": "System Cyan Ink",
+        "canonical": "#03121F",
+        "cssVar": "--accent-ink / --go-ink",
+        "purpose": "Text and icons on cyan fills (8.8:1).",
         "tonalRamp": [
-          "#100907",
-          "#2C231E",
-          "#4C3F39",
-          "#6D5D56",
-          "#907E76",
-          "#B2A199",
-          "#D5C5BF",
-          "#F9EBE5"
+          "#041B2F",
+          "#09365D",
+          "#0E5695",
+          "#1477CD",
+          "#3295EB",
+          "#6AB2F1",
+          "#A2CFF6",
+          "#DAECFB"
         ]
       },
-      "corner-red-muted": {
+      "system-cyan-soft": {
         "role": "primary",
-        "displayName": "Corner Red Muted",
-        "canonical": "#3D1608",
-        "oklch": "oklch(25.8% 0.066 39.6)",
-        "dark": "#3D1608",
-        "cssVar": "--hero-muted",
-        "purpose": "Secondary text on corner-red (about 4.6:1).",
-        "tonalRamp": [
-          "#170602",
-          "#371D14",
-          "#5A382D",
-          "#7E5648",
-          "#A57565",
-          "#C6998A",
-          "#E7BFB1",
-          "#FFE6DA"
-        ]
-      },
-      "hero-pill": {
-        "role": "primary",
-        "displayName": "Hero Pill",
-        "canonical": "rgba(255,255,255,0.9)",
-        "dark": "rgba(255,255,255,0.9)",
-        "cssVar": "(literal)",
-        "purpose": "Near-white pill under every piece of small text on the corner-red hero: coach line, round chips.",
-        "tonalRamp": [
-          "#0B0B0B",
-          "#252525",
-          "#424242",
-          "#616161",
-          "#828282",
-          "#A5A5A5",
-          "#C9C9C9",
-          "#EEEEEE"
-        ]
-      },
-      "ink-on-light": {
-        "role": "primary",
-        "displayName": "Ink On Light",
-        "canonical": "#121318",
-        "oklch": "oklch(18.8% 0.010 276.4)",
-        "dark": "#121318",
-        "cssVar": "--ink-on-light",
-        "purpose": "Text on hero pills; fixed across themes.",
-        "tonalRamp": [
-          "#0A0B0E",
-          "#242528",
-          "#414246",
-          "#606167",
-          "#808289",
-          "#A3A5AB",
-          "#C8C9CE",
-          "#EDEEF3"
-        ]
-      },
-      "ember": {
-        "role": "primary",
-        "displayName": "Ember",
-        "canonical": "#C2380F",
-        "oklch": "oklch(54.4% 0.181 35.3)",
-        "dark": "#FF8259",
-        "cssVar": "--hot",
-        "purpose": "Text-safe red for hot chips, feature numerals, figure props, sleep dot, third ring.",
-        "tonalRamp": [
-          "#280000",
-          "#500000",
-          "#7B1500",
-          "#A9310F",
-          "#D84E2B",
-          "#F87C5C",
-          "#FFA78A",
-          "#FFD2B8"
-        ]
-      },
-      "ember-soft": {
-        "role": "primary",
-        "displayName": "Ember Soft",
-        "canonical": "#FFE8DF",
-        "oklch": "oklch(94.7% 0.028 42.7)",
-        "dark": "#3B1A0F",
-        "cssVar": "--hot-soft",
-        "purpose": "Fill behind ember text; notes.",
-        "tonalRamp": [
-          "#110906",
-          "#2D221E",
-          "#4C3E39",
-          "#6E5D56",
-          "#927D75",
-          "#B3A099",
-          "#D6C5BE",
-          "#FAEBE5"
-        ]
-      },
-      "blue-corner": {
-        "role": "secondary",
-        "displayName": "Blue Corner",
-        "canonical": "#2343D8",
-        "oklch": "oklch(47.1% 0.228 266.7)",
-        "dark": "#8FA3FF",
-        "cssVar": "--accent",
-        "purpose": "Selection, progress, data marks, links, focus, primary buttons off-hero.",
-        "tonalRamp": [
-          "#03003F",
-          "#07126D",
-          "#18319E",
-          "#2D51D2",
-          "#4572FF",
-          "#6C9BFF",
-          "#95C3FF",
-          "#C1EBFF"
-        ]
-      },
-      "blue-corner-ink": {
-        "role": "secondary",
-        "displayName": "Blue Corner Ink",
-        "canonical": "#FFFFFF",
-        "oklch": "oklch(100.0% 0.000 89.9)",
-        "dark": "#0B1033",
-        "cssVar": "--accent-ink",
-        "purpose": "Text on blue-corner.",
-        "tonalRamp": [
-          "#0B0B0B",
-          "#252525",
-          "#424242",
-          "#616161",
-          "#828282",
-          "#A5A5A5",
-          "#C9C9C9",
-          "#EEEEEE"
-        ]
-      },
-      "blue-corner-soft": {
-        "role": "secondary",
-        "displayName": "Blue Corner Soft",
-        "canonical": "#E6EBFF",
-        "oklch": "oklch(94.2% 0.028 274.7)",
-        "dark": "#1E2552",
+        "displayName": "System Cyan Soft",
+        "canonical": "#0C2740",
         "cssVar": "--accent-soft",
-        "purpose": "Training days, selected options, banners, list hover.",
+        "purpose": "Training days, selected options, banners, OK notes, list hover, tool icon tiles.",
         "tonalRamp": [
-          "#090B12",
-          "#22242E",
-          "#3E414E",
-          "#5D6070",
-          "#7D8193",
-          "#A0A4B5",
-          "#C5C8D7",
-          "#EBEEFB"
+          "#081A2B",
+          "#103456",
+          "#1A5489",
+          "#2373BD",
+          "#4292DC",
+          "#76B0E5",
+          "#A9CDEF",
+          "#DDEBF9"
         ]
       },
-      "rope": {
-        "role": "neutral",
-        "displayName": "Rope",
-        "canonical": "#15161B",
-        "oklch": "oklch(20.1% 0.010 276.5)",
-        "dark": "#000000",
-        "cssVar": "--rope",
-        "purpose": "Floating nav, rest timer, HIIT screen.",
+      "system-line": {
+        "role": "primary",
+        "displayName": "System Line",
+        "canonical": "rgba(56,189,248,0.38)",
+        "cssVar": "--sys-line / --card-line / --hero-line",
+        "purpose": "1px rim of windows, buttons, inputs, stat cells, title tiles, nav.",
         "tonalRamp": [
-          "#0A0B0E",
-          "#242528",
-          "#414246",
-          "#606166",
-          "#808288",
-          "#A3A5AB",
-          "#C8C9CE",
-          "#EDEEF3"
+          "#022331",
+          "#034563",
+          "#066F9E",
+          "#0899D9",
+          "#26B7F7",
+          "#61CBF9",
+          "#9CDEFC",
+          "#D8F2FE"
         ]
       },
-      "rope-fg": {
-        "role": "neutral",
-        "displayName": "Rope Fg",
-        "canonical": "#B4B8C2",
-        "oklch": "oklch(78.2% 0.015 268.5)",
-        "dark": "#ABAFB9",
-        "cssVar": "--rope-fg",
-        "purpose": "Secondary text and inactive nav labels on rope.",
+      "xp-fill-deep": {
+        "role": "primary",
+        "displayName": "XP Fill Deep",
+        "canonical": "#0EA5E9",
+        "cssVar": "(literal)",
+        "purpose": "Start of the XP bar gradient.",
         "tonalRamp": [
-          "#0A0B0F",
-          "#23252A",
-          "#3F4248",
-          "#5E6169",
-          "#7E828C",
-          "#A1A5AE",
-          "#C6C9D1",
-          "#ECEEF5"
+          "#032230",
+          "#064460",
+          "#096D9A",
+          "#0D96D4",
+          "#2BB5F2",
+          "#65C9F6",
+          "#9FDDF9",
+          "#D9F1FD"
         ]
       },
-      "rope-line": {
-        "role": "neutral",
-        "displayName": "Rope Line",
-        "canonical": "#3A3C44",
-        "oklch": "oklch(35.7% 0.014 274.5)",
-        "dark": "#3A3C44",
-        "cssVar": "--rope-line",
-        "purpose": "Button outlines and figure props on rope.",
+      "xp-fill-light": {
+        "role": "primary",
+        "displayName": "XP Fill Light",
+        "canonical": "#7DD3FC",
+        "cssVar": "(literal)",
+        "purpose": "End of the XP bar gradient.",
         "tonalRamp": [
-          "#0A0B0E",
-          "#242528",
-          "#414246",
-          "#606166",
-          "#808288",
-          "#A3A5AB",
-          "#C8C9CE",
-          "#EDEEF3"
+          "#012232",
+          "#024464",
+          "#046DA0",
+          "#0596DB",
+          "#24B5FA",
+          "#5FC9FB",
+          "#9BDDFD",
+          "#D7F2FE"
         ]
       },
-      "rope-track": {
-        "role": "neutral",
-        "displayName": "Rope Track",
-        "canonical": "#2A2C34",
-        "oklch": "oklch(29.4% 0.015 274.4)",
-        "dark": "#2A2C34",
-        "cssVar": "--rope-track",
-        "purpose": "HIIT progress track on rope.",
+      "reward-gold": {
+        "role": "secondary",
+        "displayName": "Reward Gold",
+        "canonical": "#FACC15",
+        "cssVar": "--gold",
+        "purpose": "+XP, bonus, titles, LEVEL UP; rank S.",
         "tonalRamp": [
-          "#0A0B0E",
-          "#242528",
-          "#414246",
-          "#606166",
-          "#808288",
-          "#A3A5AB",
-          "#C8C9CE",
-          "#EDEEF3"
+          "#322801",
+          "#645002",
+          "#A08003",
+          "#DCB105",
+          "#FACF23",
+          "#FCDC5F",
+          "#FDE99B",
+          "#FEF6D7"
         ]
       },
-      "canvas": {
+      "signal-pink": {
+        "role": "tertiary",
+        "displayName": "Signal Pink",
+        "canonical": "#F472B6",
+        "cssVar": "--hot",
+        "purpose": "Figure props, onboarding feature numerals, hot chips, sleep dot.",
+        "tonalRamp": [
+          "#2F041B",
+          "#5F0735",
+          "#970C55",
+          "#D01075",
+          "#EF2F93",
+          "#F368B1",
+          "#F8A0CE",
+          "#FCD9EB"
+        ]
+      },
+      "signal-pink-soft": {
+        "role": "tertiary",
+        "displayName": "Signal Pink Soft",
+        "canonical": "#3A1430",
+        "cssVar": "--hot-soft",
+        "purpose": "Fill behind pink marks; notes.",
+        "tonalRamp": [
+          "#260D1F",
+          "#4C1A3F",
+          "#792A64",
+          "#A73A8A",
+          "#C558A9",
+          "#D586C0",
+          "#E5B3D8",
+          "#F5E1EF"
+        ]
+      },
+      "rank-e": {
+        "role": "rank",
+        "displayName": "Rank E",
+        "canonical": "#A3B3CE",
+        "cssVar": "RANKS[0].c",
+        "purpose": "Rank E badge (steel).",
+        "tonalRamp": [
+          "#121821",
+          "#232F43",
+          "#394B6A",
+          "#4E6792",
+          "#6D86B1",
+          "#95A7C6",
+          "#BCC8DC",
+          "#E4E9F1"
+        ]
+      },
+      "rank-d": {
+        "role": "rank",
+        "displayName": "Rank D",
+        "canonical": "#4ADE80",
+        "cssVar": "RANKS[1].c",
+        "purpose": "Rank D badge (green).",
+        "tonalRamp": [
+          "#082B15",
+          "#105629",
+          "#198A42",
+          "#23BE5B",
+          "#41DC7A",
+          "#75E69E",
+          "#A9EFC2",
+          "#DCF9E7"
+        ]
+      },
+      "rank-c": {
+        "role": "rank",
+        "displayName": "Rank C",
+        "canonical": "#38BDF8",
+        "cssVar": "RANKS[2].c",
+        "purpose": "Rank C badge (cyan).",
+        "tonalRamp": [
+          "#022331",
+          "#034563",
+          "#066F9E",
+          "#0899D9",
+          "#26B7F7",
+          "#61CBF9",
+          "#9CDEFC",
+          "#D8F2FE"
+        ]
+      },
+      "rank-b": {
+        "role": "rank",
+        "displayName": "Rank B",
+        "canonical": "#A78BFA",
+        "cssVar": "RANKS[3].c",
+        "purpose": "Rank B badge (violet).",
+        "tonalRamp": [
+          "#0E0231",
+          "#1C0462",
+          "#2D079C",
+          "#3D09D7",
+          "#5C28F6",
+          "#8863F8",
+          "#B59DFB",
+          "#E1D8FD"
+        ]
+      },
+      "rank-a": {
+        "role": "rank",
+        "displayName": "Rank A",
+        "canonical": "#FB923C",
+        "cssVar": "RANKS[4].c",
+        "purpose": "Rank A badge (amber-orange).",
+        "tonalRamp": [
+          "#321701",
+          "#642E02",
+          "#A04A03",
+          "#DC6505",
+          "#FA8423",
+          "#FCA65F",
+          "#FDC79B",
+          "#FEE9D7"
+        ]
+      },
+      "rank-s": {
+        "role": "rank",
+        "displayName": "Rank S",
+        "canonical": "#FACC15",
+        "cssVar": "RANKS[5].c",
+        "purpose": "Rank S badge (gold).",
+        "tonalRamp": [
+          "#322801",
+          "#645002",
+          "#A08003",
+          "#DCB105",
+          "#FACF23",
+          "#FCDC5F",
+          "#FDE99B",
+          "#FEF6D7"
+        ]
+      },
+      "night-field": {
         "role": "neutral",
-        "displayName": "Canvas",
-        "canonical": "#F1F2F4",
-        "oklch": "oklch(96.1% 0.003 264.5)",
-        "dark": "#0C0D10",
+        "displayName": "Night Field",
+        "canonical": "#060A14",
         "cssVar": "--bg",
-        "purpose": "Page ground; frosted top bar at 86%.",
+        "purpose": "Page ground, safe-area strip, theme-color.",
         "tonalRamp": [
-          "#0B0B0C",
-          "#252526",
-          "#414243",
-          "#606163",
-          "#818284",
-          "#A4A5A7",
-          "#C8C9CA",
-          "#EEEEF0"
+          "#0C1427",
+          "#18274E",
+          "#263F7E",
+          "#3456AD",
+          "#5275CB",
+          "#819BD9",
+          "#B1C0E7",
+          "#E0E6F6"
+        ]
+      },
+      "night-glow": {
+        "role": "neutral",
+        "displayName": "Night Glow",
+        "canonical": "#10284D",
+        "cssVar": "(literal)",
+        "purpose": "Fixed radial bloom at the top of the field.",
+        "tonalRamp": [
+          "#09162A",
+          "#122C54",
+          "#1C4687",
+          "#2761BA",
+          "#457FD8",
+          "#78A2E3",
+          "#ABC5ED",
+          "#DDE8F8"
+        ]
+      },
+      "window-top": {
+        "role": "neutral",
+        "displayName": "Window Top",
+        "canonical": "#111E39",
+        "cssVar": "(literal, 95%)",
+        "purpose": "Top of the system-window gradient.",
+        "tonalRamp": [
+          "#0C1527",
+          "#17294F",
+          "#25427E",
+          "#345BAD",
+          "#527ACB",
+          "#819EDA",
+          "#B0C2E8",
+          "#E0E7F6"
+        ]
+      },
+      "window-bottom": {
+        "role": "neutral",
+        "displayName": "Window Bottom",
+        "canonical": "#080E1C",
+        "cssVar": "(literal, 95%)",
+        "purpose": "Bottom of the system-window gradient.",
+        "tonalRamp": [
+          "#0B1428",
+          "#17284F",
+          "#243F7F",
+          "#3257AF",
+          "#5076CD",
+          "#809BDB",
+          "#B0C1E8",
+          "#DFE6F6"
         ]
       },
       "surface": {
         "role": "neutral",
         "displayName": "Surface",
-        "canonical": "#FFFFFF",
-        "oklch": "oklch(100.0% 0.000 89.9)",
-        "dark": "#16171C",
-        "cssVar": "--surface",
-        "purpose": "Cards, tiles, inputs, default button, modal.",
+        "canonical": "#0E1628",
+        "cssVar": "--surface / --hero",
+        "purpose": "Base panel colour; toast fill.",
         "tonalRamp": [
-          "#0B0B0B",
-          "#252525",
-          "#424242",
-          "#616161",
-          "#828282",
-          "#A5A5A5",
-          "#C9C9C9",
-          "#EEEEEE"
+          "#0D1526",
+          "#1A2A4C",
+          "#2A4279",
+          "#3A5BA6",
+          "#597AC5",
+          "#869ED5",
+          "#B3C3E5",
+          "#E1E7F4"
         ]
       },
       "sunk": {
         "role": "neutral",
         "displayName": "Sunk",
-        "canonical": "#EBECEF",
-        "oklch": "oklch(94.3% 0.004 271.4)",
-        "dark": "#1E2026",
+        "canonical": "#0B1426",
         "cssVar": "--sunk",
-        "purpose": "Recessed tiles, chip fill, bar tracks.",
+        "purpose": "Chips, week days, target tiles, bar tracks.",
         "tonalRamp": [
-          "#0B0B0C",
-          "#242526",
-          "#414244",
-          "#606163",
-          "#818285",
-          "#A4A5A7",
-          "#C8C9CB",
-          "#EEEEF0"
+          "#0B1528",
+          "#172A4F",
+          "#25437F",
+          "#325CAE",
+          "#517ACD",
+          "#809EDA",
+          "#B0C3E8",
+          "#DFE7F6"
+        ]
+      },
+      "well": {
+        "role": "neutral",
+        "displayName": "Well",
+        "canonical": "#081226",
+        "cssVar": "(literal)",
+        "purpose": "XP and quest tracks; input fields.",
+        "tonalRamp": [
+          "#09142A",
+          "#122854",
+          "#1C4087",
+          "#2758B9",
+          "#4676D8",
+          "#789CE3",
+          "#ABC1ED",
+          "#DDE6F8"
+        ]
+      },
+      "rope": {
+        "role": "neutral",
+        "displayName": "Rope",
+        "canonical": "#070C18",
+        "cssVar": "--rope",
+        "purpose": "Rest timer card and HIIT overlay.",
+        "tonalRamp": [
+          "#0C1427",
+          "#17274F",
+          "#253F7E",
+          "#3357AE",
+          "#5175CC",
+          "#819BDA",
+          "#B0C0E8",
+          "#DFE6F6"
+        ]
+      },
+      "rope-line": {
+        "role": "neutral",
+        "displayName": "Rope Line",
+        "canonical": "#24365A",
+        "cssVar": "--rope-line",
+        "purpose": "Button outlines and figure props on rope.",
+        "tonalRamp": [
+          "#0F1624",
+          "#1D2C49",
+          "#2F4675",
+          "#4060A0",
+          "#5F7FBF",
+          "#8AA2D0",
+          "#B6C5E2",
+          "#E2E8F3"
+        ]
+      },
+      "rope-track": {
+        "role": "neutral",
+        "displayName": "Rope Track",
+        "canonical": "#13213B",
+        "cssVar": "--rope-track",
+        "purpose": "HIIT progress track.",
+        "tonalRamp": [
+          "#0C1627",
+          "#192B4D",
+          "#28457B",
+          "#375FAA",
+          "#557EC8",
+          "#84A1D7",
+          "#B2C4E6",
+          "#E0E7F5"
         ]
       },
       "ink": {
         "role": "neutral",
         "displayName": "Ink",
-        "canonical": "#121318",
-        "oklch": "oklch(18.8% 0.010 276.4)",
-        "dark": "#F2F3F6",
+        "canonical": "#E6F0FF",
         "cssVar": "--ink / --fig",
-        "purpose": "Text; toast fill.",
+        "purpose": "Text; figure strokes.",
         "tonalRamp": [
-          "#0A0B0E",
-          "#242528",
-          "#414246",
-          "#606167",
-          "#808289",
-          "#A3A5AB",
-          "#C8C9CE",
-          "#EDEEF3"
+          "#001433",
+          "#002966",
+          "#0041A3",
+          "#005AE0",
+          "#1F78FF",
+          "#5C9DFF",
+          "#99C2FF",
+          "#D6E7FF"
         ]
       },
       "muted": {
         "role": "neutral",
         "displayName": "Muted",
-        "canonical": "#454952",
-        "oklch": "oklch(40.5% 0.016 266.5)",
-        "dark": "#BEC2CC",
-        "cssVar": "--muted",
-        "purpose": "Secondary text; at least 7.5:1 on its ground.",
+        "canonical": "#A3B3CE",
+        "cssVar": "--muted / --rope-fg / --hero-muted",
+        "purpose": "Secondary text; 7.8:1 or better on windows.",
         "tonalRamp": [
-          "#090B0F",
-          "#23252B",
-          "#3F4249",
-          "#5D616A",
-          "#7E828D",
-          "#A1A5AF",
-          "#C5C9D2",
-          "#EBEEF6"
+          "#121821",
+          "#232F43",
+          "#394B6A",
+          "#4E6792",
+          "#6D86B1",
+          "#95A7C6",
+          "#BCC8DC",
+          "#E4E9F1"
+        ]
+      },
+      "white": {
+        "role": "neutral",
+        "displayName": "White",
+        "canonical": "#FFFFFF",
+        "cssVar": "#fff (literal)",
+        "purpose": "Active nav label; text on rope (rest timer, HIIT).",
+        "tonalRamp": [
+          "#1A1A1A",
+          "#333333",
+          "#525252",
+          "#707070",
+          "#8F8F8F",
+          "#ADADAD",
+          "#CCCCCC",
+          "#EBEBEB"
         ]
       },
       "line": {
         "role": "neutral",
         "displayName": "Line",
-        "canonical": "#E0E2E7",
-        "oklch": "oklch(91.3% 0.007 268.5)",
-        "dark": "#2A2C34",
+        "canonical": "#1F2F4D",
         "cssVar": "--line",
-        "purpose": "Hairlines, input strokes, default button border.",
+        "purpose": "Hairlines between rows and table cells.",
         "tonalRamp": [
-          "#0A0B0D",
-          "#242527",
-          "#414245",
-          "#606165",
-          "#808287",
-          "#A3A5A9",
-          "#C7C9CD",
-          "#EDEEF2"
+          "#0F1624",
+          "#1D2C49",
+          "#2F4774",
+          "#4062A0",
+          "#5F80BF",
+          "#8BA3D0",
+          "#B6C5E2",
+          "#E2E8F3"
         ]
       },
       "good": {
         "role": "semantic",
         "displayName": "Good",
-        "canonical": "#11774A",
-        "oklch": "oklch(50.4% 0.113 157.6)",
-        "dark": "#4FCB8E",
+        "canonical": "#4ADE80",
         "cssVar": "--good",
         "purpose": "Done sets, food, water, verdicts.",
         "tonalRamp": [
-          "#001202",
-          "#002F16",
-          "#024F2F",
-          "#20724A",
-          "#3D9667",
-          "#6CB88D",
-          "#99DBB3",
-          "#C6FEDC"
+          "#082B15",
+          "#105629",
+          "#198A42",
+          "#23BE5B",
+          "#41DC7A",
+          "#75E69E",
+          "#A9EFC2",
+          "#DCF9E7"
         ]
       },
       "warn": {
         "role": "semantic",
         "displayName": "Warn",
-        "canonical": "#975A00",
-        "oklch": "oklch(52.5% 0.117 65.8)",
-        "dark": "#EAAA4A",
+        "canonical": "#FBBF24",
         "cssVar": "--warn",
-        "purpose": "Over-target bars, caution lines.",
+        "purpose": "Over-target bars, caution lines, demo chip.",
         "tonalRamp": [
-          "#1C0300",
-          "#3D1B00",
-          "#623600",
-          "#89530D",
-          "#B1722A",
-          "#D1985C",
-          "#F2BE8A",
-          "#FFE5B9"
+          "#322401",
+          "#644902",
+          "#A07403",
+          "#DCA004",
+          "#FBBF23",
+          "#FCD05F",
+          "#FDE29B",
+          "#FEF3D7"
         ]
       },
       "bad": {
         "role": "semantic",
         "displayName": "Bad",
-        "canonical": "#BE2E39",
-        "oklch": "oklch(53.1% 0.180 22.1)",
-        "dark": "#F2737C",
+        "canonical": "#F87171",
         "cssVar": "--bad",
         "purpose": "Danger button, myth prefix.",
         "tonalRamp": [
-          "#280000",
-          "#500006",
-          "#7C101D",
-          "#A92D35",
-          "#D84A4F",
-          "#F87877",
-          "#FFA3A0",
-          "#FFCFCB"
+          "#310202",
+          "#610505",
+          "#9C0808",
+          "#D60B0B",
+          "#F42929",
+          "#F76363",
+          "#FA9E9E",
+          "#FDD8D8"
         ]
       },
       "figure-prop": {
         "role": "neutral",
         "displayName": "Figure Prop",
-        "canonical": "#BDBFC6",
-        "oklch": "oklch(80.5% 0.010 273.3)",
-        "dark": "#464953",
+        "canonical": "#3B5378",
         "cssVar": "--prop",
         "purpose": "Stick-figure props and ground line.",
         "tonalRamp": [
-          "#0A0B0E",
-          "#242528",
-          "#404246",
-          "#5F6166",
-          "#808288",
-          "#A3A5AB",
-          "#C7C9CE",
-          "#EDEEF3"
+          "#111822",
+          "#222F44",
+          "#364C6D",
+          "#4A6896",
+          "#6987B5",
+          "#92A7C9",
+          "#BBC8DD",
+          "#E4E9F2"
         ]
       },
       "figure-bg": {
         "role": "neutral",
         "displayName": "Figure Bg",
-        "canonical": "#F6F7F8",
-        "oklch": "oklch(97.6% 0.002 247.8)",
-        "dark": "#111216",
+        "canonical": "#0A1324",
         "cssVar": "--figbg",
         "purpose": "Panel behind figure demos.",
         "tonalRamp": [
-          "#0B0B0B",
-          "#252526",
-          "#414243",
-          "#606162",
-          "#818283",
-          "#A4A5A6",
-          "#C8C9CA",
-          "#EEEEEF"
+          "#0B1528",
+          "#162A50",
+          "#234380",
+          "#315DB0",
+          "#4F7BCE",
+          "#7F9FDC",
+          "#AFC3E9",
+          "#DFE7F6"
         ]
       }
     },
     "typographyMeta": {
       "display": {
         "displayName": "Display",
-        "purpose": "Session or day name inside the corner-red hero."
-      },
-      "greeting": {
-        "displayName": "Greeting",
-        "purpose": "Greeting, name and date line above the hero display."
+        "purpose": "Session name in the training-day hero."
       },
       "headline": {
         "displayName": "Headline",
-        "purpose": "Page h1 on every other view."
+        "purpose": "Page h1."
       },
       "headline-onboarding": {
-        "displayName": "Onboarding Headline",
+        "displayName": "Headline Onboarding",
         "purpose": "Onboarding step h1."
+      },
+      "level-up": {
+        "displayName": "Level Up",
+        "purpose": "LEVEL UP! headline in gold with glow."
+      },
+      "status-name": {
+        "displayName": "Status Name",
+        "purpose": "Player name in the status window."
       },
       "wordmark": {
         "displayName": "Wordmark",
@@ -502,23 +610,35 @@
       },
       "title": {
         "displayName": "Title",
-        "purpose": "Card and section h2."
+        "purpose": "Card h2."
       },
       "title-player": {
         "displayName": "Title Player",
         "purpose": "Move name in the workout player."
       },
       "title-hiit": {
-        "displayName": "Title HIIT",
-        "purpose": "Move name on the full-screen HIIT overlay."
+        "displayName": "Title Hiit",
+        "purpose": "Move name on the HIIT overlay."
       },
       "title-sm": {
-        "displayName": "Title Small",
-        "purpose": "h3, option titles, button labels."
+        "displayName": "Title Sm",
+        "purpose": "h3, option titles, buttons."
+      },
+      "window-header": {
+        "displayName": "Window Header",
+        "purpose": "Cyan title row of every system window."
+      },
+      "hud-label": {
+        "displayName": "Hud Label",
+        "purpose": "XP captions, quest counts, +XP."
+      },
+      "stat-key": {
+        "displayName": "Stat Key",
+        "purpose": "Three-letter Latin stat codes only (STR AGI VIT END INT)."
       },
       "button-start": {
-        "displayName": "Start Slab",
-        "purpose": "Label of the full-width start button on the hero."
+        "displayName": "Button Start",
+        "purpose": "Full-width start button label."
       },
       "body": {
         "displayName": "Body",
@@ -526,98 +646,131 @@
       },
       "small": {
         "displayName": "Small",
-        "purpose": "Small text and the eyebrow subline under headings."
+        "purpose": "Small text and sublines under headings."
       },
       "label": {
         "displayName": "Label",
-        "purpose": "Chips, small buttons, tile captions, table heads; never uppercase."
+        "purpose": "Chips, small buttons, captions, table heads."
       },
       "label-nav": {
-        "displayName": "Nav Label",
+        "displayName": "Label Nav",
         "purpose": "Floating nav labels."
       },
       "mono-data": {
-        "displayName": "Data",
-        "purpose": "Backup/restore JSON textarea only."
+        "displayName": "Mono Data",
+        "purpose": "Backup JSON textarea and recovery codes."
       },
       "numeral": {
         "displayName": "Numeral",
-        "purpose": "Metric values, legends, times; Kanit tabular."
+        "purpose": "Metric values, legends, times."
+      },
+      "numeral-stat": {
+        "displayName": "Numeral Stat",
+        "purpose": "Stat values in the status window."
       },
       "numeral-restbar": {
-        "displayName": "Rest Bar Numeral",
-        "purpose": "Countdown in the floating corner-red rest bar."
+        "displayName": "Numeral Restbar",
+        "purpose": "Countdown in the floating rest bar."
       },
       "numeral-kpi": {
-        "displayName": "KPI Numeral",
-        "purpose": "Ruled stat row values."
+        "displayName": "Numeral Kpi",
+        "purpose": "Ruled KPI row values."
       },
       "numeral-live": {
-        "displayName": "Live Numeral",
+        "displayName": "Numeral Live",
         "purpose": "Rep stepper."
       },
       "numeral-timer": {
-        "displayName": "Timer",
-        "purpose": "Rest timer countdown on rope."
+        "displayName": "Numeral Timer",
+        "purpose": "Rest timer countdown."
       },
       "numeral-clock": {
-        "displayName": "Clock",
-        "purpose": "Full-screen HIIT interval clock."
+        "displayName": "Numeral Clock",
+        "purpose": "Full-screen HIIT clock."
       }
     },
     "shadows": [
       {
-        "name": "ambient",
-        "value": "0 1px 2px rgba(18,19,24,.05), 0 10px 26px -14px rgba(18,19,24,.18)",
-        "darkValue": "0 10px 28px -16px rgba(0,0,0,.9)",
-        "purpose": "Cards, tool tiles, tips, active top tab."
+        "name": "window-glow",
+        "value": "0 0 0 1px rgba(56,189,248,.06), 0 0 26px -12px rgba(56,189,248,.6)",
+        "purpose": "Every card, window, tip, tool tile, modal, hero, toast."
       },
       {
-        "name": "hero-lift",
-        "value": "0 16px 32px -22px rgba(18,19,24,.35)",
-        "purpose": "Inset corner-red hero; removed when full-bleed."
+        "name": "action-glow",
+        "value": "0 0 24px -8px #38BDF8",
+        "purpose": "Start and go buttons; primary buttons use 0 0 20px -8px."
       },
       {
-        "name": "floating-rope",
-        "value": "0 14px 34px -14px rgba(0,0,0,.55)",
-        "purpose": "Bottom nav bar."
+        "name": "nav-glow",
+        "value": "0 0 30px -12px rgba(56,189,248,.5)",
+        "purpose": "Floating nav bar."
       },
       {
-        "name": "rest-bar",
-        "value": "0 14px 30px -14px rgba(0,0,0,.5)",
-        "purpose": "Floating rest bar above the nav."
+        "name": "nav-go",
+        "value": "0 0 0 5px var(--bg), 0 0 22px -4px #38BDF8",
+        "purpose": "Raised train button, cut out of the bar."
       },
       {
-        "name": "raised-go",
-        "value": "0 0 0 5px var(--bg), 0 10px 18px -10px rgba(0,0,0,.45)",
-        "purpose": "Centre train button, cut out of the rope bar."
+        "name": "rank-glow",
+        "value": "0 0 22px -4px var(--rk), inset 0 0 14px -6px var(--rk)",
+        "purpose": "Rank badge; letter text-shadow 0 0 12px var(--rk)."
+      },
+      {
+        "name": "reward-glow",
+        "value": "0 0 22px -10px #FACC15",
+        "purpose": "Completed quest bonus strip; LEVEL UP text-shadow 0 0 18px rgba(250,204,21,.7)."
+      },
+      {
+        "name": "tick-glow",
+        "value": "0 0 12px -2px #38BDF8",
+        "purpose": "Checked quest box; window-header diamond 0 0 10px; XP fill 0 0 12px."
+      },
+      {
+        "name": "base-drop",
+        "value": "0 10px 30px -18px rgba(0,0,0,.9)",
+        "purpose": "Active desktop tab only."
       }
     ],
     "motion": [
       {
+        "name": "sys-scan-in",
+        "value": "500ms cubic-bezier(.16,1,.3,1), clip-path inset(0 0 100% 0) to inset(0), opacity .001 to 1; second window +80ms",
+        "purpose": "The one authored motion: system windows scan in as a view opens. Off under reduced motion."
+      },
+      {
         "name": "view-in",
-        "value": "320ms cubic-bezier(.16,1,.3,1), opacity .001→1, translateY 6px→0",
+        "value": "320ms cubic-bezier(.16,1,.3,1), translateY 6px to 0 with fade",
         "purpose": "View entrance."
       },
       {
-        "name": "press",
-        "value": "scale(.97) over 120ms",
-        "purpose": "Button press."
+        "name": "level-up-in",
+        "value": "600ms cubic-bezier(.16,1,.3,1), scale .86 to 1 with fade",
+        "purpose": "Level-up window entrance."
       },
       {
-        "name": "press-raised",
-        "value": "scale(.94) over 150ms",
-        "purpose": "Raised train button press."
+        "name": "xp-fill",
+        "value": "width 900ms cubic-bezier(.16,1,.3,1)",
+        "purpose": "XP bar fill."
       },
       {
-        "name": "toast",
-        "value": "250ms, translateY 20px→0 with fade",
-        "purpose": "Toast in/out."
+        "name": "quest-fill",
+        "value": "width 600ms",
+        "purpose": "Quest progress bar fill."
       },
       {
         "name": "bar-fill",
         "value": "width 300ms",
-        "purpose": "Progress bar fill."
+        "purpose": "Metric progress bars."
+      },
+      {
+        "name": "press",
+        "value": "scale(.97) over 120ms; raised nav button scale(.94) over 150ms",
+        "purpose": "Button press."
+      },
+      {
+        "name": "toast",
+        "value": "250ms, translateY 20px to 0 with fade",
+        "purpose": "Toast in/out."
       },
       {
         "name": "reduced-motion",
@@ -642,15 +795,59 @@
         "purpose": "Card grids 2/3-up, tips 2-up."
       },
       {
+        "name": "player-split",
+        "value": "760px",
+        "purpose": "Workout player figure column."
+      },
+      {
         "name": "desktop",
         "value": "880px",
         "purpose": "Top pill tabs replace the floating nav."
       }
     ],
     "themes": {
-      "light": "default",
-      "dark": "prefers-color-scheme: dark unless data-theme=light; or data-theme=dark. Corner-red, its ink and muted, hero-pill, ink-on-light, rope-line and rope-track do not change."
+      "dark": "Only scheme. color-scheme: dark; no light mode, no prefers-color-scheme or data-theme switch."
     },
+    "field": {
+      "value": "radial-gradient(900px 520px at 50% -160px, #10284D 0%, transparent 65%) fixed, #060A14",
+      "purpose": "Page ground with the night-glow bloom."
+    },
+    "cornerBrackets": {
+      "value": "::after at inset -1px; eight #38BDF8 linear-gradient strokes, 14px x 2px and 2px x 14px, two per corner",
+      "appliesTo": "cards, system windows, hero, modal"
+    },
+    "rankLadder": [
+      {
+        "rank": "E",
+        "fromLevel": 1,
+        "color": "#A3B3CE"
+      },
+      {
+        "rank": "D",
+        "fromLevel": 5,
+        "color": "#4ADE80"
+      },
+      {
+        "rank": "C",
+        "fromLevel": 10,
+        "color": "#38BDF8"
+      },
+      {
+        "rank": "B",
+        "fromLevel": 20,
+        "color": "#A78BFA"
+      },
+      {
+        "rank": "A",
+        "fromLevel": 35,
+        "color": "#FB923C"
+      },
+      {
+        "rank": "S",
+        "fromLevel": 55,
+        "color": "#FACC15"
+      }
+    ],
     "identityAssets": {
       "files": [
         "icon-192.png",
@@ -660,148 +857,151 @@
         "icon.svg"
       ],
       "concept": "A kettlebell whose handle forms a cat's ears, front view, off-white on orange-red #FB4620.",
-      "provenance": "Generated with ChatGPT image generation on 2026-10-29 at the owner's request, then resized into each size locally. icon.svg wraps the PNG in a 64x64 viewBox clipped to 15px radius.",
-      "usage": "icon-192.png renders as the 72px onboarding mark; manifest icons and apple-touch-icon for install."
+      "provenance": "Generated with ChatGPT image generation on 2026-10-29 at the owner's request (replaced a leaping-cat mark rejected as too close to Puma), then resized into each size locally. icon.svg wraps the PNG in a 64x64 viewBox clipped to 15px radius.",
+      "usage": "34px top-bar mark and 72px onboarding mark; manifest icons and apple-touch-icon for install. Stays orange in the HUD world; not a palette token."
     }
   },
   "components": [
     {
+      "name": "System Window",
+      "kind": "card",
+      "refersTo": "system-window",
+      "description": "Signature: every panel. Gradient fill, cyan rim and glow, corner brackets, cyan header with diamond; scans in on view open.",
+      "html": "<section class=\"ds-sys ds-scan\"><div class=\"ds-sys-h\"><span>เควสประจำวัน</span><span class=\"ds-sys-sub\">พฤหัส 29 ต.ค. · เหลือ 6 ชม. 12 นาที</span></div><p class=\"ds-sys-p\">วันนี้เน้นท่าช้าๆ คุมจังหวะ</p></section>",
+      "css": ".ds-sys{position:relative;background:linear-gradient(180deg,rgba(17,30,57,.95),rgba(8,14,28,.95));border:1px solid rgba(56,189,248,.38);border-radius:8px;box-shadow:0 0 0 1px rgba(56,189,248,.06),0 0 26px -12px rgba(56,189,248,.6);color:#E6F0FF;font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif;padding:16px 16px 18px;display:flex;flex-direction:column;gap:12px}.ds-sys::after{content:\"\";position:absolute;inset:-1px;pointer-events:none;border-radius:8px;background:linear-gradient(#38BDF8,#38BDF8) left top/14px 2px no-repeat,linear-gradient(#38BDF8,#38BDF8) left top/2px 14px no-repeat,linear-gradient(#38BDF8,#38BDF8) right top/14px 2px no-repeat,linear-gradient(#38BDF8,#38BDF8) right top/2px 14px no-repeat,linear-gradient(#38BDF8,#38BDF8) left bottom/14px 2px no-repeat,linear-gradient(#38BDF8,#38BDF8) left bottom/2px 14px no-repeat,linear-gradient(#38BDF8,#38BDF8) right bottom/14px 2px no-repeat,linear-gradient(#38BDF8,#38BDF8) right bottom/2px 14px no-repeat}.ds-sys-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:2px 10px;font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-weight:700;font-size:1rem;letter-spacing:.08em;color:#38BDF8;border-bottom:1px solid rgba(56,189,248,.38);padding-bottom:8px}.ds-sys-h>span:first-child{white-space:nowrap}.ds-sys-h>span:first-child::before{content:\"\";display:inline-block;width:8px;height:8px;margin-right:8px;background:#38BDF8;box-shadow:0 0 10px #38BDF8;transform:rotate(45deg) translateY(-1px)}.ds-sys-sub{font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif;font-weight:500;font-size:.86rem;letter-spacing:0;color:#A3B3CE}.ds-sys-p{margin:0;color:#A3B3CE}.ds-scan{animation:ds-sys-in .5s cubic-bezier(.16,1,.3,1) both}@keyframes ds-sys-in{from{opacity:.001;clip-path:inset(0 0 100% 0)}to{opacity:1;clip-path:inset(0 0 0 0)}}@media (prefers-reduced-motion:reduce){.ds-scan{animation:none}}"
+    },
+    {
+      "name": "Status Window",
+      "kind": "custom",
+      "refersTo": "rank-badge",
+      "description": "Signature: rank badge, name, gold title, level, XP bar, five stats. Rank colour via --rk.",
+      "html": "<section class=\"ds-sys\" style=\"--rk:#38BDF8\"><div class=\"ds-sys-h\"><span>สถานะผู้เล่น</span><span class=\"ds-sys-sub\">ต่อเนื่อง 6 วัน</span></div><div class=\"ds-st-top\"><div class=\"ds-rank\" role=\"img\" aria-label=\"แรงค์ C\"><span>C</span></div><div class=\"ds-st-id\"><b class=\"ds-st-name\">มิว</b><span class=\"ds-st-title\">ฉายา: วินัยเหล็ก</span><span class=\"ds-st-lv\">Lv. <b>12</b> · แรงค์ C นักล่ามีฝีมือ</span></div></div><div class=\"ds-xp\" role=\"progressbar\" aria-valuenow=\"62\" aria-valuemin=\"0\" aria-valuemax=\"100\"><i style=\"width:62%\"></i></div><div class=\"ds-xp-l\"><span>620 / 1,020 XP ถึง Lv. 13</span><span>แรงค์ B ที่ Lv. 20</span></div><div class=\"ds-stats5\"><div><span>STR</span><b>24</b></div><div><span>AGI</span><b>18</b></div><div><span>VIT</span><b>21</b></div><div><span>END</span><b>27</b></div><div><span>INT</span><b>15</b></div></div></section>",
+      "css": ".ds-sys{position:relative;background:linear-gradient(180deg,rgba(17,30,57,.95),rgba(8,14,28,.95));border:1px solid rgba(56,189,248,.38);border-radius:8px;box-shadow:0 0 0 1px rgba(56,189,248,.06),0 0 26px -12px rgba(56,189,248,.6);color:#E6F0FF;font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif;padding:16px 16px 18px;display:flex;flex-direction:column;gap:12px}.ds-sys::after{content:\"\";position:absolute;inset:-1px;pointer-events:none;border-radius:8px;background:linear-gradient(#38BDF8,#38BDF8) left top/14px 2px no-repeat,linear-gradient(#38BDF8,#38BDF8) left top/2px 14px no-repeat,linear-gradient(#38BDF8,#38BDF8) right top/14px 2px no-repeat,linear-gradient(#38BDF8,#38BDF8) right top/2px 14px no-repeat,linear-gradient(#38BDF8,#38BDF8) left bottom/14px 2px no-repeat,linear-gradient(#38BDF8,#38BDF8) left bottom/2px 14px no-repeat,linear-gradient(#38BDF8,#38BDF8) right bottom/14px 2px no-repeat,linear-gradient(#38BDF8,#38BDF8) right bottom/2px 14px no-repeat}.ds-sys-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:2px 10px;font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-weight:700;font-size:1rem;letter-spacing:.08em;color:#38BDF8;border-bottom:1px solid rgba(56,189,248,.38);padding-bottom:8px}.ds-sys-h>span:first-child{white-space:nowrap}.ds-sys-h>span:first-child::before{content:\"\";display:inline-block;width:8px;height:8px;margin-right:8px;background:#38BDF8;box-shadow:0 0 10px #38BDF8;transform:rotate(45deg) translateY(-1px)}.ds-sys-sub{font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif;font-weight:500;font-size:.86rem;letter-spacing:0;color:#A3B3CE}.ds-rank{--sz:64px;flex:none;width:var(--sz);height:var(--sz);margin:6px;display:grid;place-items:center;transform:rotate(45deg);border:2px solid var(--rk);background:color-mix(in srgb,var(--rk) 16%,transparent);box-shadow:0 0 22px -4px var(--rk),inset 0 0 14px -6px var(--rk);border-radius:6px}.ds-rank span{transform:rotate(-45deg);font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-weight:700;font-size:calc(var(--sz) * .5);line-height:1;color:var(--rk);text-shadow:0 0 12px var(--rk)}.ds-st-top{display:flex;gap:18px;align-items:center}.ds-st-id{display:flex;flex-direction:column;gap:2px;min-width:0}.ds-st-name{font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-size:1.45rem;font-weight:700;line-height:1.15}.ds-st-title{font-size:.93rem;color:#FACC15}.ds-st-lv{font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;color:#A3B3CE}.ds-st-lv b{color:#E6F0FF;font-size:1.3rem}.ds-xp{height:12px;border:1px solid rgba(56,189,248,.38);background:#081226;border-radius:3px;overflow:hidden}.ds-xp i{display:block;height:100%;background:linear-gradient(90deg,#0EA5E9,#7DD3FC);box-shadow:0 0 12px #38BDF8;transition:width .9s cubic-bezier(.16,1,.3,1)}.ds-xp-l{display:flex;justify-content:space-between;gap:10px;font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-size:.86rem;color:#A3B3CE}.ds-stats5{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.ds-stats5 div{border:1px solid rgba(56,189,248,.38);border-radius:4px;padding:6px 4px;text-align:center;background:rgba(56,189,248,.05)}.ds-stats5 span{display:block;font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-size:.74rem;letter-spacing:.08em;color:#38BDF8}.ds-stats5 b{font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-size:1.3rem;font-weight:700;font-variant-numeric:tabular-nums}"
+    },
+    {
+      "name": "Daily Quest List",
+      "kind": "custom",
+      "refersTo": "quest-row",
+      "description": "Signature: check box, quest text, progress, gold +XP; bonus strip below.",
+      "html": "<ul class=\"ds-qlist\"><li class=\"ds-q ds-done\"><span class=\"ds-q-box\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M5 12.5l4.5 4.5L19 7.5\"/></svg></span><div class=\"ds-q-main\"><span class=\"ds-q-t\">ชั่งน้ำหนักตอนเช้า</span></div><span class=\"ds-q-xp\">+20 XP</span></li><li class=\"ds-q\"><span class=\"ds-q-box\"></span><div class=\"ds-q-main\"><span class=\"ds-q-t\">ดื่มน้ำ 8 แก้ว</span><div class=\"ds-q-bar\"><i style=\"width:50%\"></i></div><span class=\"ds-q-n\">4 / 8</span></div><span class=\"ds-q-xp\">+30 XP</span></li></ul><div class=\"ds-q-bonus\">ทำครบ 4 เควส รับโบนัส <b>+50 XP</b> · ตอนนี้ 1/4</div>",
+      "css": ".ds-qlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px;font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif;color:#E6F0FF}.ds-q{display:grid;grid-template-columns:26px 1fr auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px dashed rgba(56,189,248,.18)}.ds-q:last-child{border-bottom:0}.ds-q-box{width:22px;height:22px;border:2px solid #38BDF8;border-radius:4px;display:grid;place-items:center}.ds-q-box svg{width:14px;height:14px;stroke:#03121F;stroke-width:3.2;fill:none;stroke-linecap:round;stroke-linejoin:round}.ds-done .ds-q-box{background:#38BDF8;box-shadow:0 0 12px -2px #38BDF8}.ds-q-main{display:flex;flex-direction:column;gap:5px;min-width:0}.ds-q-t{font-weight:600}.ds-done .ds-q-t{color:#A3B3CE}.ds-q-bar{height:6px;background:#081226;border-radius:3px;overflow:hidden}.ds-q-bar i{display:block;height:100%;background:#38BDF8;transition:width .6s}.ds-q-n{font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-size:.86rem;color:#A3B3CE}.ds-q-xp{font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-weight:700;color:#FACC15;white-space:nowrap}.ds-done .ds-q-xp{opacity:.55}.ds-q-bonus{margin-top:10px;border:1px dashed rgba(56,189,248,.38);border-radius:6px;padding:10px 12px;font-size:.95rem;color:#A3B3CE;font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif}.ds-q-bonus b{color:#FACC15;font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif}"
+    },
+    {
       "name": "Default Button",
       "kind": "button",
       "refersTo": "button",
-      "description": "Secondary actions on canvas and cards.",
+      "description": "Secondary actions.",
       "html": "<button class=\"ds-btn\">ดูทั้งหมด</button>",
-      "css": ".ds-btn{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:14px;font-family:var(--fd);font-weight:600;letter-spacing:.005em;padding:10px 16px;min-height:44px;line-height:1.2;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:transform .12s,filter .12s,border-color .12s}.ds-btn:hover{border-color:var(--muted)}.ds-btn:active{transform:scale(.97)}.ds-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}"
+      "css": ".ds-btn{appearance:none;border:1px solid rgba(56,189,248,.38);background:rgba(8,16,32,.6);color:#E6F0FF;border-radius:6px;font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-weight:600;letter-spacing:.005em;padding:10px 16px;min-height:44px;line-height:1.2;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:transform .12s,filter .12s,border-color .12s}.ds-btn:hover{border-color:#38BDF8}.ds-btn:active{transform:scale(.97)}.ds-btn:focus-visible{outline:2px solid #38BDF8;outline-offset:2px}"
     },
     {
-      "name": "Primary Button (blue corner)",
+      "name": "Start / Primary Button",
       "kind": "button",
-      "refersTo": "button-primary",
-      "description": "Save, log and confirm actions off the hero.",
-      "html": "<button class=\"ds-btn-pri\">บันทึก</button>",
-      "css": ".ds-btn-pri{appearance:none;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);border-radius:14px;font-family:var(--fd);font-weight:600;padding:10px 16px;min-height:44px;line-height:1.2;cursor:pointer;transition:transform .12s,filter .12s}.ds-btn-pri:hover{filter:brightness(1.08)}.ds-btn-pri:active{transform:scale(.97)}.ds-btn-pri:focus-visible{outline:2px solid var(--accent);outline-offset:2px}"
-    },
-    {
-      "name": "Go Button (corner red)",
-      "kind": "button",
-      "refersTo": "button-go",
-      "description": "The go action: start setup, onboarding next, primary action on rope surfaces.",
-      "html": "<button class=\"ds-btn-go\">เริ่มตั้งค่า</button>",
-      "css": ".ds-btn-go{appearance:none;border:1px solid var(--go);background:var(--go);color:var(--go-ink);border-radius:16px;font-family:var(--fd);font-weight:600;font-size:1.06rem;padding:14px 22px;min-height:54px;line-height:1.2;cursor:pointer;transition:transform .12s}.ds-btn-go:active{transform:scale(.97)}.ds-btn-go:focus-visible{outline:2px solid var(--accent);outline-offset:2px}"
+      "refersTo": "button-start",
+      "description": "Cyan action with glow: start, go, save.",
+      "html": "<button class=\"ds-btn-go\">เริ่มภารกิจหลัก</button>",
+      "css": ".ds-btn-go{appearance:none;border:1px solid rgba(56,189,248,.38);background:rgba(8,16,32,.6);color:#E6F0FF;border-radius:6px;font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-weight:600;letter-spacing:.005em;padding:10px 16px;min-height:44px;line-height:1.2;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:transform .12s,filter .12s,border-color .12s;background:#38BDF8;border-color:#38BDF8;color:#03121F;box-shadow:0 0 24px -8px #38BDF8;border-radius:8px;font-size:1.3rem;padding:14px 22px;min-height:60px;width:100%}.ds-btn-go:hover{filter:brightness(1.08)}.ds-btn-go:active{transform:scale(.97)}.ds-btn-go:focus-visible{outline:2px solid #38BDF8;outline-offset:2px}"
     },
     {
       "name": "Chip",
       "kind": "chip",
       "refersTo": "chip",
-      "description": "Status and filter pills; pressed chips go blue.",
-      "html": "<span class=\"ds-chip\">20 นาที</span> <span class=\"ds-chip ds-chip-hot\">วันนี้</span> <button class=\"ds-chip ds-chip-btn\" aria-pressed=\"true\">ทั้งหมด</button>",
-      "css": ".ds-chip{display:inline-flex;align-items:center;gap:4px;font-size:.86rem;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--sunk);color:var(--muted);white-space:nowrap;font-family:var(--fb)}.ds-chip-hot{background:var(--hot-soft);color:var(--hot)}.ds-chip-btn{border:1px solid transparent;cursor:pointer;min-height:34px;padding:4px 12px}.ds-chip-btn[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}.ds-chip-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}"
-    },
-    {
-      "name": "Card",
-      "kind": "card",
-      "refersTo": "card",
-      "description": "The default container on canvas.",
-      "html": "<div class=\"ds-card\"><h2 class=\"ds-card-t\">น้ำหนัก</h2><p class=\"ds-card-p\">7 วันล่าสุด</p></div>",
-      "css": ".ds-card{background:var(--surface);border:1px solid var(--card-line);border-radius:22px;padding:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:14px;color:var(--ink)}.ds-card-t{margin:0;font-family:var(--fd);font-weight:700;font-size:1.25rem;line-height:1.2}.ds-card-p{margin:0;color:var(--muted);font-family:var(--fb)}"
+      "description": "4px tags; pressed chips go cyan.",
+      "html": "<span class=\"ds-chip\">20 นาที</span> <span class=\"ds-chip ds-chip-hot\">ใหม่</span> <button class=\"ds-chip ds-chip-btn\" aria-pressed=\"true\">ทั้งหมด</button>",
+      "css": ".ds-chip{display:inline-flex;align-items:center;gap:4px;font-size:.86rem;font-weight:600;padding:4px 10px;border-radius:4px;background:#0B1426;color:#A3B3CE;white-space:nowrap;font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif}.ds-chip-hot{background:#3A1430;color:#F472B6}.ds-chip-btn{border:1px solid transparent;cursor:pointer;min-height:34px;padding:4px 12px}.ds-chip-btn[aria-pressed=true]{background:#38BDF8;color:#03121F}.ds-chip-btn:focus-visible{outline:2px solid #38BDF8;outline-offset:2px}"
     },
     {
       "name": "Text Input",
       "kind": "input",
       "refersTo": "input",
-      "description": "All text and number fields; 16px to stop iOS zoom.",
+      "description": "Well fill, cyan rim; 16px text.",
       "html": "<label class=\"ds-f\">น้ำหนัก (กก.)<input class=\"ds-input\" type=\"number\" value=\"62.5\"></label>",
-      "css": ".ds-f{display:flex;flex-direction:column;gap:5px;font-size:.88rem;font-weight:500;font-family:var(--fb);color:var(--ink)}.ds-input{width:100%;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:14px;padding:11px 13px;min-height:46px;font-size:16px;font-family:var(--fb)}.ds-input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}"
+      "css": ".ds-f{display:flex;flex-direction:column;gap:5px;font-size:.88rem;font-weight:500;font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif;color:#E6F0FF}.ds-input{width:100%;border:1px solid rgba(56,189,248,.38);background:#081226;color:#E6F0FF;border-radius:6px;padding:11px 13px;min-height:46px;font-size:16px;font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif}.ds-input:focus-visible{outline:2px solid #38BDF8;outline-offset:2px}"
     },
     {
-      "name": "Floating Rope Nav",
+      "name": "Floating Nav",
       "kind": "nav",
-      "refersTo": "nav-rope",
-      "description": "Phone nav: ink bar, five items, raised corner-red train button. Hidden during a workout.",
-      "html": "<nav class=\"ds-nav\"><a aria-current=\"page\"><svg viewBox=\"0 0 24 24\"><path d=\"M3 11l9-7 9 7v9H3z\"/></svg>วันนี้</a><a><svg viewBox=\"0 0 24 24\"><path d=\"M4 6h16M4 12h16M4 18h10\"/></svg>แผน</a><a class=\"ds-mid\"><span class=\"ds-ic\"><svg viewBox=\"0 0 24 24\"><path d=\"M7 5v14l12-7z\"/></svg></span>ฝึก</a><a><svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"8\"/></svg>กิน</a><a><svg viewBox=\"0 0 24 24\"><path d=\"M4 19l5-6 4 3 7-9\"/></svg>ผล</a></nav>",
-      "css": ".ds-nav{margin-top:36px;background:var(--rope);border-radius:24px;box-shadow:0 14px 34px -14px rgba(0,0,0,.55);display:grid;grid-template-columns:repeat(5,1fr);align-items:end;padding:0 4px;max-width:520px;font-family:var(--fb)}.ds-nav a{display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 0 8px;min-height:58px;justify-content:flex-end;color:var(--rope-fg);font-size:.8rem;font-weight:500;cursor:pointer}.ds-nav svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}.ds-nav a[aria-current=page]{color:#fff;font-weight:600}.ds-nav a[aria-current=page] svg{color:var(--go)}.ds-nav .ds-ic{width:56px;height:56px;margin-top:-28px;border-radius:19px;background:var(--go);color:var(--go-ink);display:grid;place-items:center;box-shadow:0 0 0 5px var(--bg),0 10px 18px -10px rgba(0,0,0,.45);transition:transform .15s}.ds-nav .ds-mid:active .ds-ic{transform:scale(.94)}.ds-nav .ds-mid svg{width:25px;height:25px}"
+      "refersTo": "nav-bottom",
+      "description": "Phone nav: glowing rimmed bar, raised cyan train button.",
+      "html": "<nav class=\"ds-nav\"><a aria-current=\"page\"><svg viewBox=\"0 0 24 24\"><path d=\"M3 11l9-7 9 7v9H3z\"/></svg>วันนี้</a><a><svg viewBox=\"0 0 24 24\"><path d=\"M4 6h16M4 12h16M4 18h10\"/></svg>แผน</a><a class=\"ds-mid\"><span class=\"ds-ic\"><svg viewBox=\"0 0 24 24\"><path d=\"M7 5v14l12-7z\"/></svg></span>ฝึก</a><a><svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"8\"/></svg>กิน</a><a><svg viewBox=\"0 0 24 24\"><path d=\"M4 19l5-6 4 3 7-9\"/></svg>สถานะ</a></nav>",
+      "css": ".ds-nav{margin-top:36px;background:rgba(5,9,18,.94);border:1px solid rgba(56,189,248,.38);box-shadow:0 0 30px -12px rgba(56,189,248,.5);border-radius:14px;display:grid;grid-template-columns:repeat(5,1fr);align-items:end;padding:0 4px;max-width:520px;font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif}.ds-nav a{display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 0 8px;min-height:58px;justify-content:flex-end;color:#A3B3CE;font-size:.8rem;font-weight:500;cursor:pointer}.ds-nav svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}.ds-nav a[aria-current=page]{color:#fff;font-weight:600}.ds-nav a[aria-current=page] svg{color:#38BDF8}.ds-nav .ds-ic{width:56px;height:56px;margin-top:-28px;border-radius:12px;background:#38BDF8;color:#03121F;display:grid;place-items:center;box-shadow:0 0 0 5px #060A14,0 0 22px -4px #38BDF8;transition:transform .15s}.ds-nav .ds-mid:active .ds-ic{transform:scale(.94)}.ds-nav .ds-mid svg{width:25px;height:25px}"
     },
     {
-      "name": "The Bout (today hero)",
+      "name": "Titles Grid",
       "kind": "custom",
-      "refersTo": "hero-bout",
-      "description": "Signature: corner-red fight card with greeting, session name, coach line and round strip on near-white pills, and the full-width start slab.",
-      "html": "<section class=\"ds-bout\"><div class=\"ds-hi\">สวัสดีตอนเช้า · จันทร์ 29 ต.ค.</div><h1>ร่างกายส่วนบน A</h1><span class=\"ds-sub\">5 ท่า · 25 นาที</span><p class=\"ds-coach\">วันนี้เน้นท่าช้าๆ คุมจังหวะ</p><ol class=\"ds-rounds\"><li><b>1</b>วิดพื้น</li><li><b>2</b>สควอต</li><li><b>3</b>แพลงก์</li><li><b>4</b>ลันจ์</li></ol><button class=\"ds-bell\">เริ่มฝึก</button><button class=\"ds-link\">ดูท่าทั้งหมด</button></section>",
-      "css": ".ds-bout{background:var(--go);color:var(--go-ink);border-radius:28px;padding:22px;display:flex;flex-direction:column;gap:10px;font-family:var(--fb)}.ds-hi{font-family:var(--fd);font-weight:600;font-size:1.02rem}.ds-bout h1{margin:0;font-family:var(--fd);font-weight:800;font-size:clamp(2.4rem,11vw,3.4rem);line-height:1.05;letter-spacing:-.01em}.ds-sub{font-size:1rem;font-weight:500}.ds-coach{margin:0;color:#121318;background:rgba(255,255,255,.9);border-radius:16px;padding:10px 14px;font-weight:500;max-width:52ch}.ds-rounds{list-style:none;margin:4px 0 0;padding:0 0 2px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent)}.ds-rounds li{flex:none;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.9);color:#121318;border-radius:999px;padding:5px 13px 5px 5px;font-size:.95rem;font-weight:600;white-space:nowrap}.ds-rounds b{width:28px;height:28px;border-radius:50%;background:var(--go-ink);color:#fff;display:grid;place-items:center;font-family:var(--fd);font-size:.85rem;font-weight:700}.ds-bell{appearance:none;width:100%;border:1px solid var(--go-ink);background:var(--go-ink);color:#fff;border-radius:16px;font-family:var(--fd);font-weight:600;font-size:1.3rem;padding:14px 22px;min-height:60px;cursor:pointer;transition:transform .12s}.ds-bell:active{transform:scale(.97)}.ds-bell:focus-visible,.ds-link:focus-visible{outline:2px solid var(--accent);outline-offset:2px}.ds-link{appearance:none;border:0;background:none;color:var(--go-ink);font-family:var(--fd);font-weight:600;min-height:40px;text-decoration:underline;text-underline-offset:4px;cursor:pointer}"
+      "refersTo": "title-tile",
+      "description": "Earned titles in gold; locked dashed at 45%.",
+      "html": "<ul class=\"ds-titles\"><li><b>วินัยเหล็ก</b><span>ทำเควสติดกัน 30 วัน</span></li><li class=\"ds-locked\"><b>ตำนาน</b><span>ถึงแรงค์ S (Lv. 55)</span></li></ul>",
+      "css": ".ds-titles{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif;color:#E6F0FF}.ds-titles li{border:1px solid rgba(56,189,248,.38);border-radius:6px;padding:10px;display:flex;flex-direction:column;gap:2px}.ds-titles b{font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;color:#FACC15}.ds-titles span{font-size:.86rem;color:#A3B3CE}.ds-titles li.ds-locked{opacity:.45;border-style:dashed}.ds-titles li.ds-locked b{color:#A3B3CE}"
     },
     {
-      "name": "KPI Stat Row",
+      "name": "Level-Up Window",
       "kind": "custom",
-      "refersTo": "kpi-stat",
-      "description": "Ruled stat row: hairline above, big tabular numeral, muted caption, no fill.",
-      "html": "<div class=\"ds-kpis\"><div class=\"ds-kpi\"><b>62.5</b><span>น้ำหนัก กก.</span></div><div class=\"ds-kpi\"><b>12</b><span>ครั้งที่ฝึก</span></div><div class=\"ds-kpi\"><b>1,850</b><span>แคลอรี่วันนี้</span></div></div>",
-      "css": ".ds-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:0 20px;color:var(--ink)}.ds-kpi{border-top:1px solid var(--line);padding:10px 0 12px;display:flex;flex-direction:column;gap:2px}.ds-kpi b{font-family:var(--fm);font-size:2.1rem;font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums}.ds-kpi span{font-family:var(--fb);font-size:.88rem;color:var(--muted)}"
-    },
-    {
-      "name": "Rest Timer",
-      "kind": "custom",
-      "refersTo": "rest-timer",
-      "description": "Signature: rope card with a huge tabular countdown and a corner-red go action.",
-      "html": "<div class=\"ds-rest\"><b>01:15</b><p>พักก่อนเซ็ตถัดไป</p><button class=\"ds-rest-go\">ข้ามการพัก</button></div>",
-      "css": ".ds-rest{background:var(--rope);color:#fff;border-radius:22px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;font-family:var(--fb)}.ds-rest b{font-family:var(--fm);font-weight:800;font-size:4.2rem;line-height:1;font-variant-numeric:tabular-nums}.ds-rest p{margin:0;color:var(--rope-fg)}.ds-rest-go{appearance:none;border:1px solid var(--go);background:var(--go);color:var(--go-ink);border-radius:14px;font-family:var(--fd);font-weight:600;padding:10px 16px;min-height:44px;cursor:pointer}.ds-rest-go:active{transform:scale(.97)}.ds-rest-go:focus-visible{outline:2px solid var(--accent);outline-offset:2px}"
+      "refersTo": "level-up",
+      "description": "Modal: system notice, gold LEVEL UP!, rank badge on rank change.",
+      "html": "<div class=\"ds-sys ds-lvup\" style=\"--rk:#A78BFA\"><div class=\"ds-sys-h\"><span>แจ้งเตือนจากระบบ</span></div><p class=\"ds-lv-big\">LEVEL UP!</p><p>Lv. 19 → <b>Lv. 20</b></p><div class=\"ds-rank ds-big\" role=\"img\" aria-label=\"แรงค์ B\"><span>B</span></div><p>เลื่อนแรงค์ <b>C → B</b> · นักล่าชั้นยอด</p><button class=\"ds-btn-ok\">รับทราบ</button></div>",
+      "css": ".ds-sys{position:relative;background:linear-gradient(180deg,rgba(17,30,57,.95),rgba(8,14,28,.95));border:1px solid rgba(56,189,248,.38);border-radius:8px;box-shadow:0 0 0 1px rgba(56,189,248,.06),0 0 26px -12px rgba(56,189,248,.6);color:#E6F0FF;font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif;padding:16px 16px 18px;display:flex;flex-direction:column;gap:12px}.ds-sys::after{content:\"\";position:absolute;inset:-1px;pointer-events:none;border-radius:8px;background:linear-gradient(#38BDF8,#38BDF8) left top/14px 2px no-repeat,linear-gradient(#38BDF8,#38BDF8) left top/2px 14px no-repeat,linear-gradient(#38BDF8,#38BDF8) right top/14px 2px no-repeat,linear-gradient(#38BDF8,#38BDF8) right top/2px 14px no-repeat,linear-gradient(#38BDF8,#38BDF8) left bottom/14px 2px no-repeat,linear-gradient(#38BDF8,#38BDF8) left bottom/2px 14px no-repeat,linear-gradient(#38BDF8,#38BDF8) right bottom/14px 2px no-repeat,linear-gradient(#38BDF8,#38BDF8) right bottom/2px 14px no-repeat}.ds-sys-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:2px 10px;font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-weight:700;font-size:1rem;letter-spacing:.08em;color:#38BDF8;border-bottom:1px solid rgba(56,189,248,.38);padding-bottom:8px}.ds-sys-h>span:first-child{white-space:nowrap}.ds-sys-h>span:first-child::before{content:\"\";display:inline-block;width:8px;height:8px;margin-right:8px;background:#38BDF8;box-shadow:0 0 10px #38BDF8;transform:rotate(45deg) translateY(-1px)}.ds-sys-sub{font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif;font-weight:500;font-size:.86rem;letter-spacing:0;color:#A3B3CE}.ds-rank{--sz:64px;flex:none;width:var(--sz);height:var(--sz);margin:6px;display:grid;place-items:center;transform:rotate(45deg);border:2px solid var(--rk);background:color-mix(in srgb,var(--rk) 16%,transparent);box-shadow:0 0 22px -4px var(--rk),inset 0 0 14px -6px var(--rk);border-radius:6px}.ds-rank span{transform:rotate(-45deg);font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-weight:700;font-size:calc(var(--sz) * .5);line-height:1;color:var(--rk);text-shadow:0 0 12px var(--rk)}.ds-lvup{text-align:center;gap:8px;padding:22px;max-width:460px;animation:ds-lv-in .6s cubic-bezier(.16,1,.3,1)}.ds-lvup p{margin:0}.ds-big{--sz:92px;margin:16px auto}.ds-lv-big{font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-weight:700;font-size:2.6rem;letter-spacing:.06em;color:#FACC15;text-shadow:0 0 18px rgba(250,204,21,.7)}.ds-btn-ok{appearance:none;width:100%;min-height:54px;border:1px solid #38BDF8;background:#38BDF8;color:#03121F;border-radius:8px;font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-weight:600;font-size:1.06rem;box-shadow:0 0 24px -8px #38BDF8;cursor:pointer}.ds-btn-ok:active{transform:scale(.97)}.ds-btn-ok:focus-visible{outline:2px solid #38BDF8;outline-offset:2px}@keyframes ds-lv-in{from{opacity:.001;transform:scale(.86)}to{opacity:1;transform:none}}@media (prefers-reduced-motion:reduce){.ds-lvup{animation:none}}"
     }
   ],
   "narrative": {
-    "northStar": "The Fight Card",
-    "overview": "MewFit is a Muay Thai camp (ค่ายมวย) rendered as a phone app. Today's session is the bout you are about to walk into: a full-bleed corner-red block carrying the session name in heavy upright Kanit, a strip of round pills (one per move), and one dark \"start bell\" button. Everything else (food, plan, progress) sits one thumb-reach below on a cool canvas of white cards, and the floating nav is an ink-black rope with a raised red go button at its centre.\n\nThe camp has three corners and each owns a job. Corner-red owns today and the go action. The blue corner owns information: selection, progress bars, data marks, links and focus. Ink rope owns the moments you are mid-fight: the nav, the rest timer, the full-screen interval clock. Colour is applied as solid fields that carry content, not as decoration; the only gradient in the build is a functional fade mask at the end of the round strip. Hierarchy comes from scale contrast: reps, rest and interval clocks are set as huge tabular numerals rather than made louder with colour or chrome.\n\nDensity is phone-first (390px design width, safe down to 360px) with 16px gutters, 14px rhythm between blocks, and touch targets of at least 44px (36px for small chips and secondary buttons). Light and dark themes follow the device, with a manual override; corner-red does not change between themes.\n\n**Identity asset.** The logo and every app icon (`icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, `apple-touch-icon.png`, `icon.svg` which wraps the PNG in a 15/64-radius clip) were generated with ChatGPT image generation on 2026-10-29 at the owner's request: a kettlebell whose handle forms a cat's ears, with negative-space eyes, nose and whiskers, off-white on orange-red #FB4620 (replaced a first leaping-cat mark the owner rejected as too close to Puma). They were then resized into these sizes locally. The icon's orange-red is the source of corner-red, and `theme-color` and the manifest `theme_color` both use it. In the shipped page the icon appears only as the 72px mark in the onboarding hero (10px radius at 34px). The top bar carries the \"Mew**Fit**\" wordmark in Kanit 800, with \"Fit\" in corner-red.",
+    "northStar": "The System Window",
+    "overview": "MewFit plays like a game's quest system. The page is a night-blue field (night-field, with a soft night-glow bloom at the top), and every panel is a glowing system window: a faint navy gradient (window-top to window-bottom), a thin cyan rim, a cyan halo, and four short cyan corner brackets. The system speaks in cyan. It hands out daily quests, measures progress and offers the start action. It pays you in gold: XP, earned titles and the LEVEL UP call. Your standing is a rank from E to S, shown in its own colour on a rotated-square badge. The spirit is the \"daily quest\" status screens of hunter-ranking manhwa, but none of that IP's names or text are used. Every label is MewFit's own Thai.\n\nThe Today view opens on two windows. First is the status window: rank badge, player name, title, level, an XP bar, and five stats (STR, AGI, VIT, END, INT). Below it is the daily-quest window: the coach's line, the strip of today's moves, the quest checklist with +XP rewards, the bonus strip and the start button. Everything else (food, plan, body tracking, knowledge) sits in the same windows lower down. Hierarchy comes from scale and from the cyan/gold split, not from extra chrome. Live numbers (reps, rest, interval clock) are huge tabular numerals in Chakra Petch.\n\nThe app is dark only. Light mode was removed and `color-scheme` is `dark`. The layout is built for phones first (390px design width, safe down to 360px), with 16px gutters, a 14px rhythm between blocks, and touch targets of at least 44px (36px for small chips and buttons).\n\n**Identity asset.** The logo and every app icon (`icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, `apple-touch-icon.png`, `icon.svg`, which wraps the PNG in a 15/64-radius clip) were generated with ChatGPT image generation on 2026-10-29 at the owner's request. The mark is a kettlebell whose handle forms a cat's ears, with negative-space eyes, nose and whiskers, in off-white on orange-red #FB4620. It replaced a first leaping-cat mark that the owner rejected as too close to Puma. The images were then resized locally into each size. The logo stays orange in the HUD world: it is an identity asset, not a palette token. It shows as the 34px mark in the top bar and the 72px mark in the onboarding hero (10px radius). The wordmark \"Mew**Fit**\" is set in Chakra Petch with \"Fit\" in system-cyan. The page `theme-color` is night-field.",
     "keyCharacteristics": [
-      "Full-bleed corner-red \"today\" block on phones, its bottom corners rounded 30px, flowing out of a red top bar.",
-      "Three-corner colour roles: red = today and go, blue = information, ink = in-session.",
-      "Kanit upright for display, buttons and all numerals (tabular); Sarabun (a looped Thai face, easier for long reading) for body text.",
-      "Flat colour fields with one soft ambient shadow; no decorative gradients.",
-      "Animated stick-figure demos tinted by the current surface (ink on canvas, near-black on red, white on rope)."
+      "Every panel is a glowing system window with cyan corner brackets on a night-blue field.",
+      "Cyan is the system's voice (quests, progress, selection, focus, start). Gold is the reward (XP, titles, LEVEL UP). Rank colours mark standing.",
+      "Chakra Petch sets headings, numerals and HUD labels. Sarabun, a looped Thai face, carries every sentence.",
+      "Corners are tight and squarish (4-8px). The rank badge is a square turned 45 degrees.",
+      "One authored motion: windows scan in from the top as a view opens.",
+      "Animated stick-figure demos in ink on dark panels, with pink props."
     ],
     "rules": [
       {
-        "name": "The Corner-Red Rule",
-        "body": "Corner-red marks only today's bout and the go action (start, next, the raised train button, the running rest bar, the today marker). It is never used for information, selection or decoration. If it isn't \"today\" or \"go\", it isn't red.",
+        "name": "The System Voice Rule",
+        "body": "Cyan is the system speaking: quests, progress, selection, focus and the start action. Nothing decorative is cyan except the window frame itself.",
         "section": "colors"
       },
       {
-        "name": "The Blue Corner Rule",
-        "body": "Every selected, in-progress, measured or focused state is blue. Selection never borrows red.",
+        "name": "The Gold Is Earned Rule",
+        "body": "Gold appears only on something the player has earned or is about to earn: XP amounts, titles, the bonus and LEVEL UP. It is never a button, a link or a selection state.",
         "section": "colors"
       },
       {
-        "name": "The Ink Ropes Rule",
-        "body": "Rope black is the in-fight surface: the floating nav, the rest timer and the full-screen interval clock. On rope, the only accent is corner-red.",
+        "name": "The Rank Owns Its Colour Rule",
+        "body": "Rank colours appear only through `--rk` on the rank badge and the window that carries it. They never stand in for status, data or actions.",
         "section": "colors"
-      },
-      {
-        "name": "The Fight-Poster Numeral Rule",
-        "body": "Every number a user counts, logs or watches is Kanit with tabular figures. The number you are acting on now is the largest thing on screen (3.2rem or more, weight 800).",
-        "section": "typography"
       },
       {
         "name": "The Two Voices Rule",
-        "body": "Kanit speaks (headings, buttons, numbers); Sarabun explains (sentences). Don't set paragraphs in Kanit or headings in Sarabun.",
+        "body": "Chakra Petch is the system (headings, numbers, HUD labels, buttons). Sarabun is the coach (sentences). Never set a paragraph in Chakra Petch.",
         "section": "typography"
       },
       {
-        "name": "The One Lift Rule",
-        "body": "Resting surfaces share one ambient shadow. Deeper shadows belong only to things that float over content (nav, rest bar, raised button). The modal scrim blurs instead of shadowing.",
+        "name": "The Live Number Rule",
+        "body": "The number the user is acting on right now is the largest thing on screen (3.2rem or more), tabular and in ink. Colour isn't used to make it louder.",
+        "section": "typography"
+      },
+      {
+        "name": "The Glow Means Live Rule",
+        "body": "A glow appears only on a system window frame, an action, or something the player earned. A glow is never added to plain text, a list row or a secondary control.",
         "section": "elevation"
       }
     ],
     "dos": [
-      "**Do** keep corner-red (#FB4620) for today's bout and the go action only; route selection, progress and data through blue-corner.",
-      "**Do** set every counted or logged number in Kanit with tabular figures, and make the live number the largest element (3.2rem or more, weight 800).",
-      "**Do** let colour fields carry content (the red bout, the rope rest timer) instead of adding chrome to secondary actions.",
+      "**Do** frame every new panel as a system window: window gradient, 1px system-line rim, window glow, 8px radius and the four cyan corner brackets.",
+      "**Do** keep cyan (#38BDF8) for the system's voice (quests, progress, selection, focus, the start action) and gold (#FACC15) for what is earned (XP, titles, LEVEL UP).",
+      "**Do** show standing only through the rank badge and `--rk`, using the ladder E #A3B3CE, D #4ADE80, C #38BDF8, B #A78BFA, A #FB923C, S #FACC15.",
+      "**Do** set headings, numerals and HUD labels in Chakra Petch with tabular figures for numbers, and every sentence in Sarabun.",
+      "**Do** keep muted text at #A3B3CE or lighter (7.8:1 or better on windows), body at 16.5px, small text at 0.86rem or larger, and the 0.74rem stat key for Latin codes only.",
       "**Do** keep touch targets at 44px or more (36px for small chips and buttons) and form inputs at 16px text.",
-      "**Do** keep the figure tinted by its surface by overriding `--fig` and `--prop` rather than adding new figure colours.",
-      "**Do** put every theme-dependent colour on the `:root` tokens so the dark-mode override covers it."
+      "**Do** keep all motion behind `prefers-reduced-motion: no-preference`. The window scan-in is the one authored entrance."
     ],
     "donts": [
-      "**Don't** use gradients as decoration. The only gradient in the system is the fade mask at the end of the round strip.",
-      "**Don't** put red on informational or selected states, or blue on the today/go action.",
-      "**Don't** set body copy in Kanit or headings in Sarabun.",
-      "**Don't** add deeper shadows to resting cards; only floating elements cast real shadows.",
-      "**Don't** recolour corner-red for dark mode; the brand red is the same in both themes."
+      "**Don't** reintroduce a light theme or theme-dependent tokens. The world is a single dark scheme.",
+      "**Don't** use gold for buttons, links or selection, or cyan for rewards.",
+      "**Don't** glow plain text, list rows or secondary controls. Glow marks windows, actions and earned things.",
+      "**Don't** copy names, terms or text from Solo Leveling or any other IP. The labels are MewFit's own Thai (\"สถานะผู้เล่น\", \"เควสประจำวัน\", \"แจ้งเตือนจากระบบ\").",
+      "**Don't** set paragraphs in Chakra Petch or put Thai in the 0.74rem stat-key size.",
+      "**Don't** recolour the kettlebell-cat logo to fit the HUD palette. It stays orange."
     ]
   }
 }

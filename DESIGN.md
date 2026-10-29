@@ -1,84 +1,113 @@
 ---
 name: MewFit
-description: A Thai home-training coach in one installable page; today's session reads as a fight card.
+description: A Thai home-training coach in one installable page; your training runs as a game's daily-quest system.
 colors:
-  corner-red: "#FB4620"
-  corner-red-ink: "#170A05"
-  corner-red-muted: "#3D1608"
-  hero-pill: "rgba(255,255,255,0.9)"
-  ink-on-light: "#121318"
-  ember: "#C2380F"
-  ember-soft: "#FFE8DF"
-  blue-corner: "#2343D8"
-  blue-corner-ink: "#FFFFFF"
-  blue-corner-soft: "#E6EBFF"
-  rope: "#15161B"
-  rope-fg: "#B4B8C2"
-  rope-line: "#3A3C44"
-  rope-track: "#2A2C34"
-  canvas: "#F1F2F4"
-  surface: "#FFFFFF"
-  sunk: "#EBECEF"
-  ink: "#121318"
-  muted: "#454952"
-  line: "#E0E2E7"
-  good: "#11774A"
-  warn: "#975A00"
-  bad: "#BE2E39"
-  figure-prop: "#BDBFC6"
-  figure-bg: "#F6F7F8"
+  system-cyan: "#38BDF8"
+  system-cyan-ink: "#03121F"
+  system-cyan-soft: "#0C2740"
+  system-line: "rgba(56,189,248,0.38)"
+  xp-fill-deep: "#0EA5E9"
+  xp-fill-light: "#7DD3FC"
+  reward-gold: "#FACC15"
+  signal-pink: "#F472B6"
+  signal-pink-soft: "#3A1430"
+  rank-e: "#A3B3CE"
+  rank-d: "#4ADE80"
+  rank-c: "#38BDF8"
+  rank-b: "#A78BFA"
+  rank-a: "#FB923C"
+  rank-s: "#FACC15"
+  night-field: "#060A14"
+  night-glow: "#10284D"
+  window-top: "#111E39"
+  window-bottom: "#080E1C"
+  surface: "#0E1628"
+  sunk: "#0B1426"
+  well: "#081226"
+  rope: "#070C18"
+  rope-line: "#24365A"
+  rope-track: "#13213B"
+  ink: "#E6F0FF"
+  white: "#FFFFFF"
+  muted: "#A3B3CE"
+  line: "#1F2F4D"
+  good: "#4ADE80"
+  warn: "#FBBF24"
+  bad: "#F87171"
+  figure-prop: "#3B5378"
+  figure-bg: "#0A1324"
 typography:
   display:
-    fontFamily: "Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
-    fontSize: "clamp(2.4rem, 11vw, 3.4rem)"
-    fontWeight: 800
-    lineHeight: 1.05
-    letterSpacing: "-0.01em"
-  greeting:
-    fontFamily: "Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
-    fontSize: "1.02rem"
-    fontWeight: 600
+    fontFamily: "Chakra Petch, Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
+    fontSize: "clamp(2rem, 8.5vw, 2.8rem)"
+    fontWeight: 700
+    lineHeight: 1.12
+    letterSpacing: "0.01em"
   headline:
-    fontFamily: "Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
+    fontFamily: "Chakra Petch, Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
     fontSize: "clamp(1.8rem, 7.4vw, 2.5rem)"
-    fontWeight: 800
+    fontWeight: 700
     lineHeight: 1.2
-    letterSpacing: "-0.005em"
+    letterSpacing: "0.01em"
   headline-onboarding:
-    fontFamily: "Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
+    fontFamily: "Chakra Petch, Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
     fontSize: "clamp(1.9rem, 7vw, 2.6rem)"
     fontWeight: 700
     lineHeight: 1.2
     letterSpacing: "-0.02em"
+  level-up:
+    fontFamily: "Chakra Petch, Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
+    fontSize: "2.6rem"
+    fontWeight: 700
+    letterSpacing: "0.06em"
+  status-name:
+    fontFamily: "Chakra Petch, Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
+    fontSize: "1.45rem"
+    fontWeight: 700
+    lineHeight: 1.15
   wordmark:
-    fontFamily: "Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
+    fontFamily: "Chakra Petch, Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
     fontSize: "1.36rem"
-    fontWeight: 800
+    fontWeight: 700
     lineHeight: 1
     letterSpacing: "-0.01em"
   title:
-    fontFamily: "Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
+    fontFamily: "Chakra Petch, Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
     fontSize: "1.25rem"
     fontWeight: 700
     lineHeight: 1.2
-    letterSpacing: "-0.005em"
+    letterSpacing: "0.01em"
   title-player:
-    fontFamily: "Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
+    fontFamily: "Chakra Petch, Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
     fontSize: "clamp(1.4rem, 5vw, 1.9rem)"
     fontWeight: 700
     lineHeight: 1.2
   title-hiit:
-    fontFamily: "Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
+    fontFamily: "Chakra Petch, Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
     fontSize: "clamp(1.4rem, 5vw, 2.2rem)"
     fontWeight: 700
     lineHeight: 1.2
   title-sm:
-    fontFamily: "Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
+    fontFamily: "Chakra Petch, Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
     fontSize: "1.05rem"
     fontWeight: 600
     lineHeight: 1.2
+  window-header:
+    fontFamily: "Chakra Petch, Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
+    fontSize: "1rem"
+    fontWeight: 700
+    letterSpacing: "0.08em"
+  hud-label:
+    fontFamily: "Chakra Petch, Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
+    fontSize: "0.86rem"
+    fontWeight: 600
+  stat-key:
+    fontFamily: "Chakra Petch, Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
+    fontSize: "0.74rem"
+    fontWeight: 600
+    letterSpacing: "0.08em"
   button-start:
-    fontFamily: "Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
+    fontFamily: "Chakra Petch, Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
     fontSize: "1.3rem"
     fontWeight: 600
     lineHeight: 1.2
@@ -107,62 +136,60 @@ typography:
     fontSize: "0.8rem"
     fontWeight: 400
   numeral:
-    fontFamily: "Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
+    fontFamily: "Chakra Petch, Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
     fontSize: "1.05rem"
     fontWeight: 600
     fontFeature: "tnum"
+  numeral-stat:
+    fontFamily: "Chakra Petch, Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
+    fontSize: "1.3rem"
+    fontWeight: 700
+    fontFeature: "tnum"
   numeral-restbar:
-    fontFamily: "Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
+    fontFamily: "Chakra Petch, Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
     fontSize: "1.5rem"
     fontWeight: 700
     fontFeature: "tnum"
   numeral-kpi:
-    fontFamily: "Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
+    fontFamily: "Chakra Petch, Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
     fontSize: "2.1rem"
-    fontWeight: 800
+    fontWeight: 700
     lineHeight: 1.1
     fontFeature: "tnum"
   numeral-live:
-    fontFamily: "Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
+    fontFamily: "Chakra Petch, Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
     fontSize: "3.2rem"
-    fontWeight: 800
+    fontWeight: 700
     lineHeight: 1
     fontFeature: "tnum"
   numeral-timer:
-    fontFamily: "Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
+    fontFamily: "Chakra Petch, Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
     fontSize: "4.2rem"
-    fontWeight: 800
+    fontWeight: 700
     lineHeight: 1
     fontFeature: "tnum"
   numeral-clock:
-    fontFamily: "Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
+    fontFamily: "Chakra Petch, Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
     fontSize: "clamp(4rem, 20vw, 8rem)"
-    fontWeight: 800
+    fontWeight: 700
     lineHeight: 1
     letterSpacing: "-0.01em"
     fontFeature: "tnum"
 rounded:
-  segment: "3px"
-  status: "8px"
-  xs: "10px"
-  button-sm: "11px"
-  sm: "12px"
-  md: "14px"
-  lg: "16px"
-  option: "18px"
-  go: "19px"
-  xl: "20px"
-  card: "22px"
-  nav: "24px"
-  modal: "26px"
-  hero: "28px"
-  hero-bleed: "30px"
+  track: "3px"
+  tick: "4px"
+  control-sm: "5px"
+  control: "6px"
+  window: "8px"
+  nav-go: "12px"
+  nav: "14px"
   pill: "999px"
 spacing:
   xxs: "4px"
   xs: "6px"
   sm: "8px"
   md: "10px"
+  rhythm: "12px"
   lg: "14px"
   gutter: "16px"
   card: "18px"
@@ -170,274 +197,284 @@ spacing:
   hero-wide: "28px"
 components:
   button:
-    backgroundColor: "{colors.surface}"
+    backgroundColor: "rgba(8,16,32,0.6)"
     textColor: "{colors.ink}"
     typography: "{typography.title-sm}"
-    rounded: "{rounded.md}"
+    rounded: "{rounded.control}"
     padding: "10px 16px"
     height: "44px"
   button-primary:
-    backgroundColor: "{colors.blue-corner}"
-    textColor: "{colors.blue-corner-ink}"
-    rounded: "{rounded.md}"
+    backgroundColor: "{colors.system-cyan}"
+    textColor: "{colors.system-cyan-ink}"
+    rounded: "{rounded.control}"
     padding: "10px 16px"
     height: "44px"
-  button-go:
-    backgroundColor: "{colors.corner-red}"
-    textColor: "{colors.corner-red-ink}"
-    rounded: "{rounded.lg}"
-    padding: "14px 22px"
-    height: "54px"
   button-start:
-    backgroundColor: "{colors.corner-red-ink}"
-    textColor: "{colors.surface}"
+    backgroundColor: "{colors.system-cyan}"
+    textColor: "{colors.system-cyan-ink}"
     typography: "{typography.button-start}"
-    rounded: "{rounded.lg}"
+    rounded: "{rounded.window}"
     padding: "14px 22px"
     height: "60px"
     width: "100%"
   button-sm:
     typography: "{typography.label}"
-    rounded: "{rounded.button-sm}"
+    rounded: "{rounded.control-sm}"
     padding: "7px 12px"
     height: "36px"
   chip:
     backgroundColor: "{colors.sunk}"
     textColor: "{colors.muted}"
     typography: "{typography.label}"
-    rounded: "{rounded.pill}"
+    rounded: "{rounded.tick}"
     padding: "4px 10px"
   chip-selected:
-    backgroundColor: "{colors.blue-corner}"
-    textColor: "{colors.blue-corner-ink}"
-    rounded: "{rounded.pill}"
+    backgroundColor: "{colors.system-cyan}"
+    textColor: "{colors.system-cyan-ink}"
+    rounded: "{rounded.tick}"
     padding: "4px 12px"
     height: "34px"
+  system-window:
+    backgroundColor: "{colors.window-top}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.window}"
+    padding: "16px 16px 18px"
   card:
-    backgroundColor: "{colors.surface}"
+    backgroundColor: "{colors.window-top}"
     textColor: "{colors.ink}"
-    rounded: "{rounded.card}"
+    rounded: "{rounded.window}"
     padding: "18px"
-  hero-bout:
-    backgroundColor: "{colors.corner-red}"
-    textColor: "{colors.corner-red-ink}"
-    rounded: "{rounded.hero}"
-    padding: "22px"
-  hero-coach-line:
-    backgroundColor: "{colors.hero-pill}"
-    textColor: "{colors.ink-on-light}"
-    rounded: "{rounded.lg}"
-    padding: "10px 14px"
-  hero-round-chip:
-    backgroundColor: "{colors.hero-pill}"
-    textColor: "{colors.ink-on-light}"
-    rounded: "{rounded.pill}"
-    padding: "5px 13px 5px 5px"
   input:
-    backgroundColor: "{colors.surface}"
+    backgroundColor: "{colors.well}"
     textColor: "{colors.ink}"
-    rounded: "{rounded.md}"
+    rounded: "{rounded.control}"
     padding: "11px 13px"
     height: "46px"
-  option-card:
-    backgroundColor: "{colors.surface}"
+  rank-badge:
+    textColor: "{colors.rank-e}"
+    typography: "{typography.status-name}"
+    rounded: "{rounded.control}"
+    size: "64px"
+  xp-bar:
+    backgroundColor: "{colors.well}"
+    rounded: "{rounded.track}"
+    height: "12px"
+  quest-row:
     textColor: "{colors.ink}"
-    rounded: "{rounded.option}"
-    padding: "14px 16px"
-  nav-rope:
-    backgroundColor: "{colors.rope}"
-    textColor: "{colors.rope-fg}"
+    typography: "{typography.body}"
+    padding: "10px 0"
+  quest-xp:
+    textColor: "{colors.reward-gold}"
+    typography: "{typography.hud-label}"
+  stat-cell:
+    backgroundColor: "rgba(56,189,248,0.05)"
+    textColor: "{colors.ink}"
+    typography: "{typography.numeral-stat}"
+    rounded: "{rounded.tick}"
+    padding: "6px 4px"
+  title-tile:
+    textColor: "{colors.reward-gold}"
+    rounded: "{rounded.control}"
+    padding: "10px"
+  nav-bottom:
+    backgroundColor: "rgba(5,9,18,0.94)"
+    textColor: "{colors.muted}"
     typography: "{typography.label-nav}"
     rounded: "{rounded.nav}"
     height: "58px"
   nav-go-button:
-    backgroundColor: "{colors.corner-red}"
-    textColor: "{colors.corner-red-ink}"
-    rounded: "{rounded.go}"
+    backgroundColor: "{colors.system-cyan}"
+    textColor: "{colors.system-cyan-ink}"
+    rounded: "{rounded.nav-go}"
     size: "56px"
-  kpi-stat:
-    textColor: "{colors.ink}"
-    typography: "{typography.numeral-kpi}"
-    padding: "10px 0 12px"
   rest-timer:
     backgroundColor: "{colors.rope}"
-    textColor: "{colors.surface}"
+    textColor: "{colors.ink}"
     typography: "{typography.numeral-timer}"
-    rounded: "{rounded.card}"
     padding: "18px"
-  rest-bar:
-    backgroundColor: "{colors.corner-red}"
-    textColor: "{colors.corner-red-ink}"
-    typography: "{typography.numeral-restbar}"
-    rounded: "{rounded.xl}"
-    padding: "10px 12px"
 ---
 
 # Design System: MewFit
 
 ## Overview
 
-**Creative North Star: "The Fight Card"**
+**Creative North Star: "The System Window"**
 
-MewFit is a Muay Thai camp (ค่ายมวย) rendered as a phone app. Today's session is the bout you are about to walk into: a full-bleed corner-red block carrying the session name in heavy upright Kanit, a strip of round pills (one per move), and one dark "start bell" button. Everything else (food, plan, progress) sits one thumb-reach below on a cool canvas of white cards, and the floating nav is an ink-black rope with a raised red go button at its centre.
+MewFit plays like a game's quest system. The page is a night-blue field (night-field, with a soft night-glow bloom at the top), and every panel is a glowing system window: a faint navy gradient (window-top to window-bottom), a thin cyan rim, a cyan halo, and four short cyan corner brackets. The system speaks in cyan. It hands out daily quests, measures progress and offers the start action. It pays you in gold: XP, earned titles and the LEVEL UP call. Your standing is a rank from E to S, shown in its own colour on a rotated-square badge. The spirit is the "daily quest" status screens of hunter-ranking manhwa, but none of that IP's names or text are used. Every label is MewFit's own Thai.
 
-The camp has three corners and each owns a job. Corner-red owns today and the go action. The blue corner owns information: selection, progress bars, data marks, links and focus. Ink rope owns the moments you are mid-fight: the nav, the rest timer, the full-screen interval clock. Colour is applied as solid fields that carry content, not as decoration; the only gradient in the build is a functional fade mask at the end of the round strip. Hierarchy comes from scale contrast: reps, rest and interval clocks are set as huge tabular numerals rather than made louder with colour or chrome.
+The Today view opens on two windows. First is the status window: rank badge, player name, title, level, an XP bar, and five stats (STR, AGI, VIT, END, INT). Below it is the daily-quest window: the coach's line, the strip of today's moves, the quest checklist with +XP rewards, the bonus strip and the start button. Everything else (food, plan, body tracking, knowledge) sits in the same windows lower down. Hierarchy comes from scale and from the cyan/gold split, not from extra chrome. Live numbers (reps, rest, interval clock) are huge tabular numerals in Chakra Petch.
 
-Density is phone-first (390px design width, safe down to 360px) with 16px gutters, 14px rhythm between blocks, and touch targets of at least 44px (36px for small chips and secondary buttons). Light and dark themes follow the device, with a manual override; corner-red does not change between themes.
+The app is dark only. Light mode was removed and `color-scheme` is `dark`. The layout is built for phones first (390px design width, safe down to 360px), with 16px gutters, a 14px rhythm between blocks, and touch targets of at least 44px (36px for small chips and buttons).
 
-**Identity asset.** The logo and every app icon (`icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, `apple-touch-icon.png`, `icon.svg` which wraps the PNG in a 15/64-radius clip) were generated with ChatGPT image generation on 2026-10-29 at the owner's request: a kettlebell whose handle forms a cat's ears, with negative-space eyes, nose and whiskers, off-white on orange-red #FB4620 (replaced a first leaping-cat mark the owner rejected as too close to Puma). They were then resized into these sizes locally. The icon's orange-red is the source of corner-red, and `theme-color` and the manifest `theme_color` both use it. In the shipped page the icon appears only as the 72px mark in the onboarding hero (10px radius at 34px). The top bar carries the "Mew**Fit**" wordmark in Kanit 800, with "Fit" in corner-red.
+**Identity asset.** The logo and every app icon (`icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, `apple-touch-icon.png`, `icon.svg`, which wraps the PNG in a 15/64-radius clip) were generated with ChatGPT image generation on 2026-10-29 at the owner's request. The mark is a kettlebell whose handle forms a cat's ears, with negative-space eyes, nose and whiskers, in off-white on orange-red #FB4620. It replaced a first leaping-cat mark that the owner rejected as too close to Puma. The images were then resized locally into each size. The logo stays orange in the HUD world: it is an identity asset, not a palette token. It shows as the 34px mark in the top bar and the 72px mark in the onboarding hero (10px radius). The wordmark "Mew**Fit**" is set in Chakra Petch with "Fit" in system-cyan. The page `theme-color` is night-field.
 
 **Key Characteristics:**
-- Full-bleed corner-red "today" block on phones, its bottom corners rounded 30px, flowing out of a red top bar.
-- Three-corner colour roles: red = today and go, blue = information, ink = in-session.
-- Kanit upright for display, buttons and all numerals (tabular); Sarabun (a looped Thai face, easier for long reading) for body text.
-- Flat colour fields with one soft ambient shadow; no decorative gradients.
-- Animated stick-figure demos tinted by the current surface (ink on canvas, near-black on red, white on rope).
+- Every panel is a glowing system window with cyan corner brackets on a night-blue field.
+- Cyan is the system's voice (quests, progress, selection, focus, start). Gold is the reward (XP, titles, LEVEL UP). Rank colours mark standing.
+- Chakra Petch sets headings, numerals and HUD labels. Sarabun, a looped Thai face, carries every sentence.
+- Corners are tight and squarish (4-8px). The rank badge is a square turned 45 degrees.
+- One authored motion: windows scan in from the top as a view opens.
+- Animated stick-figure demos in ink on dark panels, with pink props.
 
 ## Colors
 
-Three solid corners on a cool grey canvas: an orange-red that is the logo's own colour, a deep signal blue, and near-black rope. A semantic trio handles status.
+A cold night-blue world lit by one cyan system voice, with gold for rewards and a six-step rank ladder.
 
 ### Primary
-- **Corner Red** (corner-red): the logo's orange-red. Fills the today hero, the today-view top bar and safe-area strip, the raised nav train button, the rest bar, the onboarding "next" button, the HIIT work-phase label and progress, the active nav icon, the today border in the week strip, and the "Fit" in the wordmark. The same in light and dark.
-- **Corner Red Ink** (corner-red-ink): text and icons on corner-red. On the hero it also becomes the solid fill of the start button, with white text.
-- **Corner Red Muted** (corner-red-muted): secondary text on corner-red (meta lines, descriptions, the rest bar's caption). Contrast on corner-red is about 4.6:1; don't lighten it.
-- **Ember** (ember) / **Ember Soft** (ember-soft): the text-safe version of red, for small marks. Hot chips, the numbered feature tiles in onboarding, the dumbbell and dashed props in figures, the sleep dot on the timeline, and the third daily ring. Dark mode lifts ember to #FF8259 on #3B1A0F.
+- **System Cyan** (system-cyan): the system's voice. It colours the start and primary buttons (`--go` and `--accent` are the same cyan), the raised nav train button, window headers and their diamond marker, quest check boxes and quest bars, the XP bar glow, stat keys, the move-number circles in the move strip, selected chips, segments and options, progress bars, links, `summary` toggles, focus rings, the caret, text selection, corner brackets, and "Fit" in the wordmark.
+- **System Cyan Ink** (system-cyan-ink): text and icons on cyan fills (8.8:1).
+- **System Cyan Soft** (system-cyan-soft): tinted fills for training days, selected options, banners, OK notes, list hover and tool icon tiles.
+- **System Line** (system-line): the 1px rim of every window, button, input, stat cell, title tile and the nav bar, plus the dividers under window headers. A 0.18-alpha cyan dashes between quest rows.
+- **XP Fill** (xp-fill-deep to xp-fill-light): the horizontal gradient inside the XP bar, with a cyan glow.
 
 ### Secondary
-- **Blue Corner** (blue-corner) with **Blue Corner Ink** and **Blue Corner Soft**: the information corner. Primary buttons outside the hero, checked segments and options, pressed chips, the current set, ladder level, progress bars, onboarding progress, links, `summary` toggles, text selection, caret and every focus ring. Soft blue tints training days, selected options, banners, OK notes and list hover. Dark mode uses #8FA3FF on #0B1033 ink with #1E2552 soft.
+- **Reward Gold** (reward-gold): what the system pays out. Used for +XP amounts on quests, the bonus amount and the completed bonus strip's border and glow, the player's title line, earned title names, and the "LEVEL UP!" headline (with a gold text glow). Rank S also uses this gold.
+
+### Tertiary
+- **Signal Pink** (signal-pink) / **Signal Pink Soft** (signal-pink-soft): the small secondary accent. It covers the dumbbell and dashed props in figure demos, the numbered feature tiles in onboarding, `hot` chips, hot notes and the sleep dot on the timeline.
+
+### Rank ladder
+- **E** (rank-e, steel), **D** (rank-d, green), **C** (rank-c, cyan), **B** (rank-b, violet), **A** (rank-a, amber-orange), **S** (rank-s, gold). The current rank's colour is passed to its window as `--rk`. It sets the badge rim, a 16% tint inside the badge, its outer and inner glow, and the glowing letter. Every rank colour is at least 6:1 on the window.
 
 ### Neutral
-- **Canvas** (canvas): page ground, and the sticky top bar's 86% frosted glass.
-- **Surface** (surface): cards, tool tiles, tips, inputs, the default button, modals.
-- **Sunk** (sunk): recessed fills for chips, target tiles, week days, bar tracks and the "why" boxes in onboarding.
-- **Ink** (ink): text, and the toast background (inverted).
-- **Muted** (muted): secondary text, inactive top tabs, axis labels. Dark mode lifts it to #BEC2CC.
-- **Line** (line): input strokes, hairline dividers between list rows, the default button border.
-- **Rope** (rope) / **Rope Fg** (rope-fg): the floating nav, rest timer card and HIIT screen; rope-fg is their secondary text and inactive nav labels (#ABAFB9 in dark). Dark mode rope is pure black. **Rope Line** (rope-line) outlines buttons and draws figure props on rope; **Rope Track** (rope-track) is the HIIT progress track.
-- **Ink On Light** (ink-on-light) / **Hero Pill** (hero-pill): fixed ink text on the near-white pills that carry small text across the corner-red hero (coach line, round chips). Neither changes with theme.
-- **Figure Prop** / **Figure Bg**: stick-figure props and ground line, and the panel behind figure demos.
+- **Night Field** (night-field): the page ground, the safe-area strip and `theme-color`. The 84% frosted top bar sits on it. **Night Glow** (night-glow) is a fixed 900×520px radial bloom centred above the top of the page and fading by 65%.
+- **Window Top / Window Bottom**: the 180-degree gradient (at 95% opacity) that fills every card, window, tip, tool tile, modal and hero.
+- **Surface** (surface): the base panel colour under the skin, and the toast fill. **Sunk** (sunk): chips, week days, target tiles, bar tracks and the onboarding "why" box. **Well** (well): the darkest recess, used for the XP and quest bar tracks and every input field.
+- **Ink** (ink): text. **White** (white): the active nav label and text on rope (rest timer, HIIT overlay). **Muted** (muted): secondary text, nav labels and quest counts. It is 7.8:1 on the lightest window tone, so don't darken it. **Line** (line): hairlines between list rows and table cells.
+- **Rope** (rope): the rest timer card and the full-screen HIIT overlay. **Rope Line** (rope-line) outlines buttons and figure props there. **Rope Track** (rope-track) is the HIIT progress track.
+- **Figure Prop / Figure Bg**: stick-figure props and ground line, and the panel behind figure demos.
 
 ### Semantic
-- **Good** (good) for completed sets, food dots, water glasses and verdicts; **Warn** (warn) for over-target bars and caution lines; **Bad** (bad) for the danger button and the "ความเชื่อ:" myth prefix. Dark: #4FCB8E / #EAAA4A / #F2737C.
+- **Good** (good) for completed sets, food dots, water glasses and verdicts. **Warn** (warn) for over-target bars, caution lines and the demo-data chip. **Bad** (bad) for the danger button and the "ความเชื่อ:" myth prefix.
 
 ### Named Rules
-**The Corner-Red Rule.** Corner-red marks only today's bout and the go action (start, next, the raised train button, the running rest bar, the today marker). It is never used for information, selection or decoration. If it isn't "today" or "go", it isn't red.
+**The System Voice Rule.** Cyan is the system speaking: quests, progress, selection, focus and the start action. Nothing decorative is cyan except the window frame itself.
 
-**The Blue Corner Rule.** Every selected, in-progress, measured or focused state is blue. Selection never borrows red.
+**The Gold Is Earned Rule.** Gold appears only on something the player has earned or is about to earn: XP amounts, titles, the bonus and LEVEL UP. It is never a button, a link or a selection state.
 
-**The Ink Ropes Rule.** Rope black is the in-fight surface: the floating nav, the rest timer and the full-screen interval clock. On rope, the only accent is corner-red.
+**The Rank Owns Its Colour Rule.** Rank colours appear only through `--rk` on the rank badge and the window that carries it. They never stand in for status, data or actions.
 
 ## Typography
 
-**Display Font:** Kanit (with Leelawadee UI, Noto Sans Thai, system-ui)
-**Body Font:** Sarabun (with Leelawadee UI, Noto Sans Thai Looped, Noto Sans Thai, system-ui). Chosen in a readability pass after the owner found the loopless body face hard to read.
-**Numeral Font:** Kanit with tabular figures (the same family as display)
-**Data Font:** the system monospace stack (ui-monospace, Menlo, Consolas), only in the backup/restore JSON textarea at 0.8rem.
+**Display Font:** Chakra Petch (with Kanit, Leelawadee UI, Noto Sans Thai, system-ui), loaded at 500-700.
+**Body Font:** Sarabun (with Leelawadee UI, Noto Sans Thai Looped, Noto Sans Thai, system-ui). Chosen in a readability pass after the owner said the text was hard to read.
+**Numeral Font:** Chakra Petch with tabular figures.
+**Data Font:** the system monospace stack, used only in the backup/restore JSON textarea (0.8rem) and the recovery code (1.25rem, 0.06em tracking).
 
-**Character:** Kanit set upright and heavy (700-800) gives fight-poster lettering for headings, session names, buttons and every number. Sarabun, a looped Thai face, is the calm reading voice for coaching copy and instructions.
+**Character:** Chakra Petch is squared and technical, and covers Thai, so headings, numbers and HUD labels read like a game interface. Sarabun's looped Thai forms keep the coaching copy calm and easy to read.
 
 ### Hierarchy
-- **Display** (800, clamp(2.4rem, 11vw, 3.4rem), 1.05): the session or day name inside the corner-red hero. The greeting, name and date sit above it as one Kanit 600 line at 1.02rem (Greeting), never as the headline. The top-bar wordmark is Kanit 800 at 1.36rem.
-- **Headline** (800, clamp(1.8rem, 7.4vw, 2.5rem), 1.2): the page `h1` on every other view. Onboarding uses 700 at clamp(1.9rem, 7vw, 2.6rem) with -0.02em tracking.
-- **Title** (700, 1.25rem, 1.2): card and section `h2`. Player move names scale to clamp(1.4rem, 5vw, 1.9rem) (Title Player); the HIIT move name to clamp(1.4rem, 5vw, 2.2rem) (Title HIIT).
-- **Title Small** (600, 1.05rem, 1.2): `h3`, option titles and buttons (buttons use Kanit 600 at inherited size; big buttons 1.06rem, small buttons 0.86rem, the hero start slab 1.3rem).
-- **Body** (400, 16.5px, 1.7): all reading text, capped at 52-62ch inside heroes and coach notes. Small text is 0.93rem. Muted text is #454952 (light) / #BEC2CC (dark), at least 7.5:1 on its ground.
-- **Label** (500-600, 0.8-0.88rem): chips, small buttons, tile captions and table heads (0.86rem 600, muted where secondary), field labels (0.88rem 500), nav labels (0.8rem 500). Never uppercase; Thai has no case. Context lines go under their heading (`.eyebrow` is a subline), never above it.
-- **Numerals** (Kanit 600, tabular): metric values, legends, times, KPIs as a ruled stat row (2.1rem 800, hairline above, no fill). The floating rest bar countdown is 700 at 1.5rem. **Live numerals** step up by scale: the rep stepper is 800 at 3.2rem, the rest timer 800 at 4.2rem, the HIIT clock 800 at clamp(4rem, 20vw, 8rem).
+- **Display** (700, clamp(2rem, 8.5vw, 2.8rem), 1.12): the session name in the training-day hero.
+- **Headline** (700, clamp(1.8rem, 7.4vw, 2.5rem), 1.2, 0.01em): the page `h1`. Onboarding uses clamp(1.9rem, 7vw, 2.6rem) with -0.02em tracking.
+- **Window Header** (700, 1rem, 0.08em): the cyan title row of every system window. A muted Sarabun 0.86rem sub-label sits at the right of the same row.
+- **Title** (700, 1.25rem): card `h2`. Player move names scale to clamp(1.4rem, 5vw, 1.9rem) (Title Player), and the HIIT move name to clamp(1.4rem, 5vw, 2.2rem) (Title HIIT). **Title Small** (600, 1.05rem): `h3`, option titles and buttons. **Status Name** (700, 1.45rem, 1.15): the player name. **Level Up** (700, 2.6rem, 0.06em, gold with glow).
+- **Body** (400, 16.5px, 1.7): all reading text, capped at 52-62ch. Small text is 0.93rem.
+- **Label** (Sarabun 500-600, 0.8-0.88rem): chips, small buttons, tile captions, table heads, field labels and nav labels. **HUD Label** (Chakra Petch 0.86rem): XP captions, quest counts and +XP. **Stat Key** (0.74rem, 0.08em, cyan) is the smallest type in the system. It holds only the three-letter Latin stat codes, never Thai. Thai has no case and nothing is uppercased by CSS.
+- **Numerals** (Chakra Petch, tabular): metrics at 1.05rem 600, stat values at 1.3rem 700, and KPIs as a ruled row at 2.1rem. The rest bar countdown is 1.5rem. Live numerals step up by scale: the rep stepper is 3.2rem, the rest timer 4.2rem and the HIIT clock clamp(4rem, 20vw, 8rem). Chakra Petch tops out at 700, so the 800 weights declared in the CSS render at 700.
 
 ### Named Rules
-**The Fight-Poster Numeral Rule.** Every number a user counts, logs or watches is Kanit with tabular figures. The number you are acting on now is the largest thing on screen (3.2rem or more, weight 800).
+**The Two Voices Rule.** Chakra Petch is the system (headings, numbers, HUD labels, buttons). Sarabun is the coach (sentences). Never set a paragraph in Chakra Petch.
 
-**The Two Voices Rule.** Kanit speaks (headings, buttons, numbers); Sarabun explains (sentences). Don't set paragraphs in Kanit or headings in Sarabun.
+**The Live Number Rule.** The number the user is acting on right now is the largest thing on screen (3.2rem or more), tabular and in ink. Colour isn't used to make it louder.
 
 ## Layout
 
-One centred column with a 1000px max width and 16px gutters (padding respects `env(safe-area-inset-*)`). Views are vertical flex stacks with a 14px gap. Cards stack singly on phones and become 2- or 3-up grids from 740px. KPI stats auto-fit at a 130px minimum with a 20px column gap, and form fields auto-fit at 140px. The tool grid is 3-up, falling to 2-up below 420px with the last tile spanning both columns.
+The page is one centred column, 1000px wide at most, with 16px gutters that respect `env(safe-area-inset-*)`. Each view is a vertical stack with a 14px gap. Inside a system window the gap is 12px, with 16px padding (18px at the bottom). Cards stack singly on phones and form 2- or 3-up grids from 740px. KPI stats auto-fit at a 130px minimum, form fields at 140px, and titles at 150px. The five stats sit in a fixed 5-column grid with a 6px gap. On the Progress view they become rows with a bar (48px key / bar / value).
 
-On phones the today hero breaks out of the gutters (-16px margins) to sit edge to edge under the red top bar, with only its bottom corners rounded (30px). From 640px the hero becomes a 1.25fr / 1fr two-column with the figure beside the text. Below that, the figure floats top-right at 148px and 90% opacity behind the text, and the text gets 110px of right padding.
+Navigation is a floating bar fixed 10px above the bottom safe area. It sits 12px from the sides, is at most 520px wide and has five columns. Main content reserves 116px of bottom padding for it. The bar is hidden during a workout and during onboarding. At 880px it gives way to pill tabs in the top bar. On wide screens the workout player puts the figure in a sticky left column.
 
-Navigation is a floating rope bar fixed 10px above the bottom safe area, 12px from the sides, max 520px, with five equal columns. Main content reserves 116px of bottom padding for it. At 880px the bar is hidden and pill tabs appear in the top bar. The onboarding flow is a 620px column with a sticky footer action bar.
-
-Breakpoints: 420px (tool grid), 640px (hero and option grids), 740px (card grids), 880px (desktop nav).
-
-Rhythm: 4 / 6 / 8 / 10 / 14 / 18px. 8px between chips and inline rows, 14px between cards and inside cards, 18px card padding, 22px hero padding (28px from 640px).
+Breakpoints: 420px (tool grid), 640px (hero and option grids), 740px (card grids), 760px (player split), 880px (desktop nav).
 
 ## Elevation & Depth
 
-Mostly flat colour, with one soft ambient lift. Cards, tool tiles, tips and the active top tab share a single two-layer shadow. Overlays are the only things that cast real shadows. In dark mode the ambient shadow becomes a deep, near-invisible drop and cards gain a 1px hairline (#24262D) to carry the edge instead.
+Depth comes from light, not shadow. Each window glows: a 1px cyan rim, plus a hair-thin 6% cyan ring and a soft cyan halo below it. The field itself is lit by the night-glow bloom. Things that matter glow brighter in their own colour: the primary and start buttons, the raised nav button, a checked quest box, the XP fill, the completed bonus strip in gold, and the rank badge in its rank colour. The base dark drop shadow (`--shadow`) stays only on desktop tabs. The modal scrim blurs (4px) instead of casting a shadow.
 
 ### Shadow Vocabulary
-- **Ambient** (`box-shadow: 0 1px 2px rgba(18,19,24,.05), 0 10px 26px -14px rgba(18,19,24,.18)`): cards, tool tiles, tips, active top tab.
-- **Hero lift** (`box-shadow: 0 16px 32px -22px rgba(18,19,24,.35)`): the corner-red hero when inset as a card. Removed when it runs full-bleed.
-- **Floating rope** (`box-shadow: 0 14px 34px -14px rgba(0,0,0,.55)`): the bottom nav. The rest bar uses `0 14px 30px -14px rgba(0,0,0,.5)`.
-- **Raised go button** (`box-shadow: 0 0 0 5px var(--bg), 0 10px 18px -10px rgba(0,0,0,.45)`): the centre train button. A 5px canvas-coloured ring cuts it out of the rope bar.
+- **Window glow** (`box-shadow: 0 0 0 1px rgba(56,189,248,.06), 0 0 26px -12px rgba(56,189,248,.6)`): every card, window, tip, tool tile, modal, hero and the toast.
+- **Action glow** (`box-shadow: 0 0 24px -8px #38BDF8`; primary buttons `0 0 20px -8px`): start, go and primary buttons.
+- **Nav glow** (`box-shadow: 0 0 30px -12px rgba(56,189,248,.5)`): the floating nav bar. The raised button adds `0 0 0 5px var(--bg), 0 0 22px -4px #38BDF8`, where the night-field ring cuts it out of the bar.
+- **Rank glow** (`box-shadow: 0 0 22px -4px var(--rk), inset 0 0 14px -6px var(--rk)`, letter `text-shadow: 0 0 12px var(--rk)`): the rank badge.
+- **Reward glow** (`box-shadow: 0 0 22px -10px #FACC15`; LEVEL UP `text-shadow: 0 0 18px rgba(250,204,21,.7)`): completed bonus strip and level-up headline.
+- **Tick glow** (`box-shadow: 0 0 10px #38BDF8`, `0 0 12px -2px` on checked boxes, `0 0 12px #38BDF8` on the XP fill): small HUD marks.
 
 ### Named Rules
-**The One Lift Rule.** Resting surfaces share one ambient shadow. Deeper shadows belong only to things that float over content (nav, rest bar, raised button). The modal scrim blurs instead of shadowing.
+**The Glow Means Live Rule.** A glow appears only on a system window frame, an action, or something the player earned. A glow is never added to plain text, a list row or a secondary control.
 
 ## Shapes
 
-Generously rounded, never sharp. Radius grows with the size of the surface: 3px for progress segments (onboarding progress, ladder), 8px for the 28px status squares in the move list, 10px for icon tiles and the logo, 11px for small buttons, 12px for set dots, list rows and small tiles, 14px for buttons, inputs, notes and week days, 16px for large buttons, the hero coach line and figure panels, 18px for option cards, 19px for the raised train button, 20px for tool tiles, tips and the rest bar, 22px for cards and the rest timer, 24px for the nav bar, 26px for modals, and 28px for the hero (30px on its full-bleed bottom edge). Chips, segments, round pills, top tabs and progress bars are full pills (999px), and round numbers in the round strip and legend dots are circles. Borders are 1px hairlines in line colour. 1.5px strokes mark a selectable state (option cards, week days, set dots, which are dashed until done).
+Tight, squarish, technical. System windows, cards, tips, tool tiles, modals, the hero and big buttons use an 8px radius. Buttons and inputs use 6px (small buttons 5px), as do the bonus strip, title tiles and the rank badge. Chips, stat cells and quest boxes use 4px, and the XP and quest tracks 3px. The nav bar is 14px and its raised button 12px. Full pills (999px) remain only for segments, progress bars, top tabs and the move strip, and circles only for move numbers and legend dots. The rank badge is a square turned 45 degrees with its letter turned back upright. The window header marker is an 8px cyan diamond. Corner brackets are 14px × 2px cyan strokes drawn on every corner of each window, card, hero and modal.
+
+Some inner controls inherited from the earlier build still carry softer radii: the rest timer card 22px, option cards 18px, the rest bar and the hero figure panel 20px, banners and figure boxes 16px, and week days, notes, target tiles and the toast 14px. The logo tile is 10px and the water glasses 2px. They ship, but new surfaces should take the 4-8px scale above.
 
 ## Components
 
+### System Window (signature)
+Every panel is a framed console readout.
+- **Frame:** window gradient at 95% opacity, 1px system-line rim, window glow, 8px radius, and four cyan corner brackets drawn by `::after`.
+- **Header:** a cyan Chakra Petch title at 0.08em tracking, led by a glowing 8px diamond, with a muted Sarabun sub-label on the right (streak, date and time left, titles earned). A system-line rule runs under it.
+- **Motion:** as a view opens, each window scans in top-down (`clip-path` reveal over 0.5s, cubic-bezier(.16,1,.3,1)). The second window follows 80ms later. Turned off under reduced motion.
+
+### Status Window (signature)
+The player's sheet. It holds a 64px rank badge, then the player name (Status Name), the title in gold ("ฉายา: …" or a hint to earn one), and "Lv. **n** · แรงค์ X name" in muted Chakra Petch with the level number in ink at 1.3rem. Below that is a 12px XP bar (well track, system-line rim, cyan gradient fill with glow, filling over 0.9s) captioned "into / need XP" with the next rank's threshold. The five stats sit in cyan-rimmed cells (5% cyan tint), each with a cyan Stat Key over a 1.3rem value. The Progress view shows the full form: one row per stat with a bar and a muted Thai explanation.
+
+### Daily Quests (signature)
+- **Row:** a 26px / 1fr / auto grid. It has a 22px cyan-outlined check box (4px radius), the quest text in Sarabun 600, and the +XP amount in gold Chakra Petch on the right. Rows are divided by a dashed 18% cyan line.
+- **Progress:** quests with a count show a 6px cyan bar on a well track and a muted "v / max" count.
+- **Done:** the box fills cyan with a dark check and a glow, the text goes muted, and the +XP dims to 55%.
+- **Bonus strip:** a dashed system-line box ("complete all n quests" plus the gold bonus and the count). When everything is done it turns into a solid gold border with gold glow and ink text.
+- The window also carries the coach's intro line (muted), the move strip, and the start button with an underlined cyan link below it.
+
+### Titles Grid
+Auto-fill tiles at least 150px wide, each with a 1px system-line rim and a 6px radius. Earned titles show the name in gold Chakra Petch over a muted condition. Locked titles drop to 45% opacity with a dashed rim and a muted name.
+
+### Level-Up Window
+A modal in the system-window frame. It holds a "system notice" header, the gold "LEVEL UP!" headline, "Lv. a → Lv. b", and a 92px rank badge with a rank-change line if the rank changed. Below are a muted note and a full-width big go button. It pops in with a 0.6s scale from 0.86, plays a three-note rising beep and vibrates.
+
 ### Buttons
-Upright Kanit labels on soft 14px slabs, with a press that shrinks them slightly.
-- **Shape:** 14px radius, minimum 44px tall. Small is 11px / 36px, big is 16px / 54px. `wide` is full width.
-- **Default:** surface fill, 1px line border, ink text. Hover darkens the border to muted.
-- **Primary:** blue-corner fill and border, white text. Hover brightens it to 1.08.
-- **Go:** corner-red fill with corner-red-ink text. Used for "start setup", the onboarding next button, and the primary action on rope surfaces (rest timer, HIIT).
-- **On the hero:** buttons go transparent with a 22% ink border. The primary and go buttons become a solid corner-red-ink slab with white text: the start bell.
-- **Danger:** transparent with bad-colour text and border. **Ghost:** transparent default. **Disabled:** 40% opacity.
-- **Press:** `scale(.97)` over 0.12s. Focus uses the global 2px blue outline offset 2px.
+- **Shape:** 6px radius, 44px minimum height. Small is 5px / 36px and big is 8px / 54px. `wide` is full width.
+- **Default:** 60% navy fill, system-line rim, ink text. On hover the rim turns full cyan.
+- **Primary / Go / Start:** cyan fill, cyan-ink text, action glow. The start button on the quest window is 60px tall with a 1.3rem label. The on-rope variants (rest timer, HIIT) use the same cyan.
+- **Danger:** transparent with bad-colour text and rim. **Ghost:** transparent default. **Disabled:** 40% opacity.
+- **Press:** scales to 0.97 over 0.12s. Focus is a 2px cyan outline offset by 2px, everywhere.
 
 ### Chips
-- **Style:** full pill, 0.86rem 600, sunk fill and muted text. The `acc` variant is soft blue with ink text; `hot` is ember-soft with ember text. The good, warn and bad variants recolour only the text.
-- **State:** a button chip is 34px tall. When pressed it fills blue-corner with white text.
-
-### Cards / Containers
-- **Corner Style:** 22px.
-- **Background:** surface, with sunk tiles inside for player targets and "why" boxes; KPIs are a ruled stat row, not tiles. The Profile account card (sign-up, log-in, sync status) composes the same parts: chip segment toggle, fields, a full-width go button, and a row of small buttons ending in danger.
-- **Shadow Strategy:** Ambient (see Elevation). Dark mode adds the hairline.
-- **Border:** transparent in light mode, #24262D in dark.
-- **Internal Padding:** 18px, with a 14px column gap.
+- **Style:** a 4px tag, 0.86rem 600, sunk fill and muted text. `acc` is cyan-soft with ink text and `hot` is pink-soft with pink text. Good, warn and bad recolour only the text.
+- **State:** button chips are 34px tall. When pressed they fill cyan with cyan-ink text.
 
 ### Inputs / Fields
-- **Style:** full width, 1px line stroke, surface fill, 14px radius, 11px × 13px padding, 46px minimum height, and a 16px font so iOS never zooms. Big-number inputs use Kanit 600 at 1.25rem.
-- **Segments and options:** segments are 40px pills that fill blue when checked. Option cards have 18px radius and a 1.5px line border, turning blue-bordered on soft blue when checked.
-- **Focus:** 2px blue-corner outline offset 2px (also drawn on the visible span when the native input is hidden).
+- **Style:** full width, well fill, 1px system-line rim, 6px radius, 11px × 13px padding, 46px minimum height, and 16px text so iOS never zooms. Big-number inputs use Chakra Petch 600 at 1.25rem.
+- **Segments and options:** segments are 40px pills that fill cyan when checked. Option cards have a 1.5px line rim and turn cyan-rimmed on cyan-soft when checked.
+- **Focus:** 2px cyan outline offset by 2px. Hidden native inputs draw it on the visible span.
 
 ### Navigation
-- **Phone:** a floating rope bar with 24px radius and five columns. Each column is a 23px stroke icon over a 0.8rem 500 label in rope-fg. The bar is hidden while a workout is running. The active label turns white and its icon corner-red. The centre "train" item is a 56px corner-red square (19px radius) raised 28px above the bar, with a dark icon, a canvas cut-out ring, and a press scale of 0.94.
-- **Desktop (880px and up):** pill tabs in the frosted top bar. Muted text darkens to ink on hover; the active tab gets a surface fill and the ambient shadow.
-- **Top bar:** sticky, 56px, frosted canvas glass (saturate 1.4, blur 16px). On the today view it turns solid corner-red with corner-red-ink text, so the hero reads as one continuous block.
+- **Phone:** a floating bar with a 94% near-black fill, system-line rim, nav glow and 14px radius, with five columns. Each column is a 23px stroke icon over a 0.8rem label in muted. The active item's label turns white and its icon cyan. The centre "train" item is a 56px cyan square (12px radius) raised 28px above the bar, with a night-field cut-out ring and cyan glow. It presses to 0.94.
+- **Desktop (880px and up):** pill tabs in the frosted top bar.
+- **Top bar:** sticky, 56px tall, 84% night-field glass (saturate 1.4, blur 16px), with a 15% cyan hairline underneath.
 
-### The Bout (signature)
-The today hero: corner-red field and corner-red-ink text. It carries the greeting line, the session name in Display, an "x moves · y min" line, the coach line on a near-white pill, the **round strip**, the full-width start slab with an underlined text link beneath, and a demo figure tinted near-black. The round strip is a horizontally scrolling row of near-white pills (hero-pill fill, ink text, 0.95rem 600), each led by a 28px circle numbered in Kanit (corner-red-ink fill, white numeral). The row scroll-snaps and fades at its right edge.
+### Live counters
+The rep stepper is a 64px / 1fr / 64px grid with a 3.2rem numeral. Set dots are 40px squares: dashed while pending, good-rimmed when done, cyan for the current set. The rest timer is a rope card (22px radius, an inherited value) with a 4.2rem countdown. The HIIT overlay is full-screen rope with a clock up to 8rem, and its phase label turns cyan during work. While you rest away from the player, a rest bar floats above the nav: a navy-to-surface gradient with a system-line rim and ink text.
 
-### Live counters (signature)
-The rep stepper is a 64px / 1fr / 64px grid with a 3.2rem 800 numeral. Set dots are 40px squares, dashed while pending, solid good when done, and solid blue for the current set. The rest timer is a rope card with a 4.2rem 800 countdown. The HIIT overlay is full-screen rope with a clock up to 8rem and a phase label that turns corner-red during work. A corner-red rest bar floats above the nav while you rest away from the player.
-
-### Week strip and rings
-The week strip is seven sunk tiles: soft blue on training days, solid blue when done, and a 1.5px corner-red border on today. The daily rings are three concentric SVG rings (blue-corner, good, ember) over a sunk track, with a Kanit tabular legend.
+### Account and sync card
+The Profile account card (sign-up, log-in, sync status, pairing) uses the same parts: a chip segment toggle, fields, a full-width go button, and a row of small buttons ending in danger. Forms, chips, the Google button, the "or" divider and notes keep a 460px maximum line length on wide screens. The Google sign-in button keeps Google's own white button (#FFF fill, #1F1F1F text, #747775 rim) as a vendor requirement. The pairing QR sits on white (180px, 12px radius) so it scans. Recovery and pair codes are monospace and select-all, with the pair code at 2rem and 0.12em tracking.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** keep corner-red (#FB4620) for today's bout and the go action only; route selection, progress and data through blue-corner.
-- **Do** set every counted or logged number in Kanit with tabular figures, and make the live number the largest element (3.2rem or more, weight 800).
-- **Do** let colour fields carry content (the red bout, the rope rest timer) instead of adding chrome to secondary actions.
+- **Do** frame every new panel as a system window: window gradient, 1px system-line rim, window glow, 8px radius and the four cyan corner brackets.
+- **Do** keep cyan (#38BDF8) for the system's voice (quests, progress, selection, focus, the start action) and gold (#FACC15) for what is earned (XP, titles, LEVEL UP).
+- **Do** show standing only through the rank badge and `--rk`, using the ladder E #A3B3CE, D #4ADE80, C #38BDF8, B #A78BFA, A #FB923C, S #FACC15.
+- **Do** set headings, numerals and HUD labels in Chakra Petch with tabular figures for numbers, and every sentence in Sarabun.
+- **Do** keep muted text at #A3B3CE or lighter (7.8:1 or better on windows), body at 16.5px, small text at 0.86rem or larger, and the 0.74rem stat key for Latin codes only.
 - **Do** keep touch targets at 44px or more (36px for small chips and buttons) and form inputs at 16px text.
-- **Do** keep the figure tinted by its surface by overriding `--fig` and `--prop` rather than adding new figure colours.
-- **Do** put every theme-dependent colour on the `:root` tokens so the dark-mode override covers it.
+- **Do** keep all motion behind `prefers-reduced-motion: no-preference`. The window scan-in is the one authored entrance.
 
 ### Don't:
-- **Don't** use gradients as decoration. The only gradient in the system is the fade mask at the end of the round strip.
-- **Don't** put red on informational or selected states, or blue on the today/go action.
-- **Don't** set body copy in Kanit or headings in Sarabun.
-- **Don't** add deeper shadows to resting cards; only floating elements cast real shadows.
-- **Don't** recolour corner-red for dark mode; the brand red is the same in both themes.
+- **Don't** reintroduce a light theme or theme-dependent tokens. The world is a single dark scheme.
+- **Don't** use gold for buttons, links or selection, or cyan for rewards.
+- **Don't** glow plain text, list rows or secondary controls. Glow marks windows, actions and earned things.
+- **Don't** copy names, terms or text from Solo Leveling or any other IP. The labels are MewFit's own Thai ("สถานะผู้เล่น", "เควสประจำวัน", "แจ้งเตือนจากระบบ").
+- **Don't** set paragraphs in Chakra Petch or put Thai in the 0.74rem stat-key size.
+- **Don't** recolour the kettlebell-cat logo to fit the HUD palette. It stays orange.
 
-## Readability and small text on corner-red (added 2026-10-29)
-Small text never sits directly on corner-red: ink on #FB4620 tops out near 5.5:1, which the owner found hard to read. On the Today hero the coach line and the round chips sit on near-white (rgba(255,255,255,.9)) pills with ink text; only display type, the session meta line and the start slab touch the orange. The start action is a full-width ink slab (60px, 1.3rem) with a plain underlined link below it. During a workout (`body.playing`) the floating nav is hidden so the rep stepper and log button stay clear.
+## Readability (added 2026-10-29)
+The owner found earlier text hard to read, so these rules hold. Body text is Sarabun, a looped Thai face, at 16.5px with 1.7 line height. Muted text is #A3B3CE, which measures 9.3:1 on the field, 7.8:1 on the lightest window tone and 8.5:1 on surface. Ink #E6F0FF is 14:1 or better. Small text never drops below 0.86rem except the Latin stat codes. The coach's line in the hero sits on an 8% cyan tint with a 20% cyan rim, in ink at weight 400. During a workout (`body.playing`) the floating nav is hidden so the rep stepper and log button stay clear.

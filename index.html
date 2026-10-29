@@ -181,7 +181,8 @@ body.v-today::before{background:var(--go)}
 .fig{width:100%;height:auto;display:block}
 .fig .l{fill:none;stroke:var(--fig);stroke-width:7;stroke-linecap:round;stroke-linejoin:round}
 .fig .far{opacity:.32} .fig.front .far{opacity:1}
-.fig .hd{fill:var(--fig)} .fig .db{fill:var(--hot)}
+.fig .hd{fill:var(--fig)} .fig .db{fill:var(--hot)} .fig .db.wheel{fill:none;stroke:var(--hot);stroke-width:3.5}
+.fig .ball{fill:none;stroke:var(--prop);stroke-width:3.5}
 .fig .gr{stroke:var(--prop);stroke-width:2}
 .fig .pf{fill:var(--prop)} .fig .ps{stroke:var(--prop);stroke-linecap:round}
 .fig .tw{stroke:var(--hot);stroke-width:3;stroke-dasharray:4 3}
@@ -482,7 +483,7 @@ function rng(seed) { let x = seed >>> 0 || 1; return () => { x ^= x << 13; x ^= 
 const KEY = 'mewfit.v1';
 const APP_URL = 'https://mewfit.m3wxuser.workers.dev/';
 const DEMO = { name: '', sex: 'm', age: 28, height: 172, weight: 75, waist: null, activity: 'light', goal: 'cut', level: 'beginner',
-  days: [1, 3, 5], minutes: 30, eq: { db: false, band: false, bar: false }, wake: '06:30', bed: '22:30',
+  days: [1, 3, 5], minutes: 30, eq: {}, wake: '06:30', bed: '22:30',
   workStart: '09:00', workEnd: '18:00', noWork: false, trainTime: 'evening', whey: false, finisher: true, caution: false, par: [], baseline: {} };
 const fresh = () => ({ v: 2, profile: null, seenDemo: false, guideDone: false, voice: true, levels: {}, calAdjust: 0, workouts: [], weights: [], body: [], food: {}, habits: {}, session: null, mealSeed: 7 });
 let S = load();
@@ -538,11 +539,17 @@ function calc(p = P()) {
 
 /* ---------- exercise library (progression ladders, easiest → hardest) ---------- */
 const X = (id, n, en, r, cues, mis, o = {}) => Object.assign({ id, n, en, r, cues, mis }, o);
+// home equipment; a move lists the keys it needs in eq (one key or an array, all required)
+const EQ = { db: 'ดัมเบล', kb: 'เคตเทิลเบล', band: 'ยางยืดแรงต้าน', bar: 'บาร์โหนติดประตู', abw: 'ล้อกลิ้งหน้าท้อง (Ab wheel)',
+  bench: 'ม้านั่งยกน้ำหนัก', trx: 'สายแขวน TRX', dipbar: 'บาร์คู่ดิป / พาราเล็ตต์', bb: 'บาร์เบลกับแผ่นน้ำหนัก', ball: 'ลูกบอลโยคะ', rope: 'เชือกกระโดด' };
+const eqNeeds = e => e.eq ? [].concat(e.eq) : [];
+const eqLabel = e => eqNeeds(e).map(k => EQ[k]).join(' + ');
 const LAD = {
   push: [
     X('p_wall', 'วิดพื้นกับกำแพง', 'Wall push-up', [10, 20], ['ยืนห่างกำแพงประมาณหนึ่งช่วงแขน มือกว้างกว่าไหล่เล็กน้อย', 'ลำตัวตรงเป็นแผ่นเดียว เกร็งท้องและบีบก้น', 'งอศอกให้อกเข้าใกล้กำแพง แล้วดันกลับ'], 'ศอกกางออก 90° จะเจ็บไหล่ ให้ศอกเฉียงราว 45° จากลำตัว'),
     X('p_incline', 'วิดพื้นมือวางบนโต๊ะหรือขอบเตียง', 'Incline push-up', [8, 15], ['วางมือบนของที่มั่นคง ไม่เลื่อน', 'ยิ่งที่วางมือต่ำ ยิ่งยาก', 'ลงจนอกเกือบแตะขอบ'], 'ก้นโด่งหรือสะโพกตก ให้ลำตัวตรงตลอด'),
     X('p_knee', 'วิดพื้นคุกเข่า', 'Knee push-up', [8, 15], ['เข่าวางบนผ้าหรือเบาะ', 'ลำตัวตรงตั้งแต่เข่าถึงศีรษะ', 'ลงช้า 2 วินาที ดันขึ้น 1 วินาที'], 'ก้มแค่คอ อกไม่ลง ให้ลงทั้งตัว'),
+    X('p_dbbench', 'ดัมเบลเบนช์เพรส', 'Dumbbell bench press', [8, 12], ['นอนบนม้านั่ง เท้าวางพื้นมั่นคง', 'ลดดัมเบลลงข้างอกช้าๆ ศอกทำมุมประมาณ 45 องศากับลำตัว', 'ดันขึ้นจนแขนเกือบตึง'], 'ปล่อยดัมเบลลงเร็วเกินไปหรือยกก้นลอยจากม้านั่ง', { eq: ['db', 'bench'] }),
     X('p_std', 'วิดพื้นมาตรฐาน', 'Push-up', [6, 15], ['มืออยู่ใต้ไหล่หรือกว้างกว่านิดหน่อย', 'เกร็งท้อง บีบก้น ตัวตรงเหมือนแผ่นไม้', 'ลงจนอกห่างพื้นราวหนึ่งกำปั้น'], 'หลังแอ่น สะโพกตก ให้ลดขั้นแล้วฝึกฟอร์มก่อน'),
     X('p_close', 'วิดพื้นมือชิด', 'Close-grip push-up', [6, 15], ['มือห่างกันประมาณหนึ่งฝ่ามือใต้หน้าอก', 'ศอกแนบลำตัว เน้นหลังแขน'], 'ศอกบานออกข้าง'),
     X('p_decline', 'วิดพื้นยกเท้าสูง', 'Decline push-up', [6, 15], ['วางเท้าบนเก้าอี้หรือโซฟา', 'เน้นอกส่วนบนและไหล่หน้า'], 'คอยื่นนำลงไป ให้อกนำ'),
@@ -552,6 +559,7 @@ const LAD = {
     X('v_incpike', 'ไพค์วิดพื้น มือวางขอบเตียง', 'Incline pike push-up', [8, 15], ['ยกก้นสูงเป็นรูปตัว ∧', 'ศีรษะลงไปข้างหน้ามือ เป็นสามเหลี่ยม', 'เน้นไหล่'], 'กลายเป็นวิดพื้นธรรมดา ให้ก้นสูงไว้'),
     X('v_pike', 'ไพค์วิดพื้น', 'Pike push-up', [6, 12], ['มือและเท้าบนพื้น ก้นสูง', 'ลงจนศีรษะเกือบแตะพื้น'], 'ศอกบานออก'),
     X('v_db', 'ดัมเบลชูเหนือศีรษะ', 'Dumbbell overhead press', [8, 12], ['ยืน เกร็งท้อง บีบก้น', 'ดันขึ้นตรงเหนือศีรษะ แขนแนบหู'], 'แอ่นหลังเพื่อดัน', { eq: 'db' }),
+    X('v_kb', 'เคตเทิลเบลชูเหนือศีรษะ แขนเดียว', 'Kettlebell overhead press', [6, 12], ['ถือเคตเทิลเบลที่ไหล่ ลูกบอลพักบนแขนด้านนอก', 'ดันขึ้นตรง ข้อมือตรง ไม่พับ', 'ทำครบข้างหนึ่งแล้วสลับ'], 'เอนตัวหนีหรือแอ่นหลังเพื่อดัน', { eq: 'kb' }),
     X('v_elev', 'ไพค์วิดพื้น ยกเท้าบนเก้าอี้', 'Elevated pike push-up', [5, 12], ['เท้าบนเก้าอี้ ลำตัวเกือบตั้งฉากพื้น', 'ลงช้า ควบคุม'], 'เก้าอี้มีล้อหรือไม่มั่นคง'),
     X('v_wall', 'ตั้งมือพิงกำแพง', 'Wall handstand hold', [15, 45], ['เดินเท้าขึ้นกำแพงทีละนิด', 'แขนล็อกตรง ดันพื้นออก'], 'ฝึกครั้งแรกให้มีคนช่วยดู', { t: 1 }),
     X('v_hspu', 'ตั้งมือพิงกำแพงแล้วลงช้า', 'Handstand push-up negative', [3, 8], ['จากท่าตั้งมือ ค่อยๆ ลง 3–5 วินาที', 'วางหมอนรองศีรษะ'], 'ทิ้งตัวลงเร็ว')
@@ -559,7 +567,10 @@ const LAD = {
   pull: [
     X('r_band', 'แบนด์โรว์', 'Resistance band row', [12, 20], ['คล้องแบนด์กับเสาหรือเท้า', 'ดึงศอกไปข้างหลัง บีบสะบัก'], 'ยักไหล่ขึ้นหู', { eq: 'band' }),
     X('r_towel', 'ดึงผ้าขนหนูกับประตู', 'Door towel row', [10, 20], ['คล้องผ้าขนหนูกับลูกบิดทั้งสองฝั่งของประตูที่ปิดล็อกแน่น', 'เอนตัวไปข้างหลัง ดึงอกเข้าหาประตู บีบสะบัก', 'ยิ่งเท้าชิดประตู ยิ่งยาก'], 'ประตูต้องล็อกและลูกบิดต้องแข็งแรงก่อนเสมอ'),
+    X('r_trx', 'TRX โรว์', 'Suspension row', [8, 15], ['คล้องสายกับประตูให้แน่น ปิดประตูก่อนใช้', 'เอนตัวไปข้างหลัง ตัวตรงเหมือนแพลงก์', 'ดึงอกเข้าหามือ บีบสะบัก', 'ยิ่งเท้าเดินไปข้างหน้ายิ่งหนัก'], 'สะโพกหย่อนหรือยักไหล่ขึ้นหู', { eq: 'trx' }),
     X('r_db', 'ดัมเบลโรว์แขนเดียว', 'One-arm dumbbell row', [8, 15], ['มือและเข่าข้างหนึ่งวางบนเก้าอี้ หลังตรง', 'ดึงดัมเบลเข้าหาสะโพก'], 'บิดลำตัวช่วยดึง', { eq: 'db' }),
+    X('r_kb', 'เคตเทิลเบลโรว์แขนเดียว', 'One-arm kettlebell row', [8, 15], ['มือหนึ่งวางบนเก้าอี้ หลังตรงขนานพื้น', 'ดึงเคตเทิลเบลเข้าหาสะโพก ศอกแนบตัว'], 'บิดลำตัวหรือกระชากขึ้น', { eq: 'kb' }),
+    X('r_bb', 'บาร์เบลโรว์', 'Barbell bent-over row', [6, 12], ['พับสะโพก หลังตรง ลำตัวเอียงประมาณ 45 องศา', 'ดึงบาร์เข้าหาสะดือ บีบสะบัก', 'ลดลงช้า'], 'หลังงอหรือเหวี่ยงตัวช่วยดึง', { eq: 'bb' }),
     X('r_tablek', 'โรว์ใต้โต๊ะ งอเข่า', 'Table row, knees bent', [6, 15], ['ใช้โต๊ะไม้แข็งแรงมาก ลองโยกก่อนทุกครั้ง', 'นอนหงายใต้โต๊ะ จับขอบ ดึงอกขึ้นหาขอบ'], 'ถ้าโต๊ะโยกหรือเบา ให้กลับไปใช้ท่าผ้าขนหนู'),
     X('r_table', 'โรว์ใต้โต๊ะ ขาเหยียด', 'Table inverted row', [6, 15], ['ลำตัวตรงตั้งแต่ส้นเท้าถึงศีรษะ', 'ค้างด้านบน 1 วินาที'], 'สะโพกตก'),
     X('r_tablef', 'โรว์ใต้โต๊ะ ยกเท้าสูง', 'Feet-elevated inverted row', [5, 12], ['วางเท้าบนเก้าอี้ให้ลำตัวขนานพื้น'], 'กระตุกตัวขึ้น')
@@ -578,6 +589,7 @@ const LAD = {
     X('s_box', 'นั่งลุกจากเก้าอี้', 'Box squat', [10, 20], ['นั่งแตะเก้าอี้เบาๆ แล้วลุก ไม่ทิ้งน้ำหนัก', 'เข่าไปทางเดียวกับปลายเท้า'], 'เข่าบีบเข้าใน'),
     X('s_bw', 'สควอท', 'Bodyweight squat', [12, 25], ['เท้ากว้างเท่าไหล่ ปลายเท้าแบะเล็กน้อย', 'นั่งลงเหมือนนั่งเก้าอี้ อกตั้ง', 'ลงให้ต่ำเท่าที่หลังยังตรง'], 'ส้นเท้าลอย'),
     X('s_goblet', 'ก็อบเล็ทสควอท', 'Goblet squat', [8, 15], ['ถือดัมเบลชิดอก', 'ลงลึก ศอกอยู่ระหว่างเข่า'], 'หลังงอ', { eq: 'db' }),
+    X('s_kbgob', 'เคตเทิลเบลก็อบเล็ทสควอท', 'Kettlebell goblet squat', [8, 15], ['จับหูเคตเทิลเบลสองมือ ชิดอก', 'นั่งลงลึก อกตั้ง ศอกอยู่ระหว่างเข่า'], 'ส้นเท้าลอยหรือหลังงอ', { eq: 'kb' }),
     X('s_pause', 'สควอทหยุดค้าง 3 วินาที', 'Pause squat', [10, 20], ['ค้างด้านล่าง 3 วินาทีทุกครั้ง', 'ลุกขึ้นแรงๆ'], 'เด้งออกจากด้านล่าง'),
     X('s_cossack', 'คอสแซคสควอท', 'Cossack squat', [6, 12], ['ยืนกว้าง ย่อไปด้านหนึ่ง ขาอีกข้างเหยียด', 'นับข้างละครั้ง'], 'ส้นเท้าข้างที่ย่อลอย'),
     X('s_apistol', 'สควอทขาเดียว จับขอบประตู', 'Assisted pistol squat', [5, 10], ['จับขอบประตูช่วยทรงตัว', 'ลงช้าด้วยขาเดียว'], 'ดึงแขนช่วยมากเกินไป'),
@@ -593,37 +605,47 @@ const LAD = {
   hinge: [
     X('h_bridge', 'ยกสะโพก', 'Glute bridge', [12, 25], ['นอนหงาย ชันเข่า ส้นเท้าใกล้ก้น', 'ดันสะโพกขึ้น บีบก้นค้าง 1 วินาที'], 'แอ่นหลังแทนการบีบก้น'),
     X('h_slb', 'ยกสะโพกขาเดียว', 'Single-leg glute bridge', [8, 15], ['ขาหนึ่งยกค้าง อีกขาดันสะโพกขึ้น', 'สะโพกไม่เอียง'], 'สะโพกบิด'),
+    X('h_kbdl', 'เคตเทิลเบลเดดลิฟต์', 'Kettlebell deadlift', [10, 15], ['วางเคตเทิลเบลระหว่างเท้า', 'พับสะโพกลงไปจับ หลังตรง', 'ยืนขึ้นโดยดันพื้นด้วยเท้า บีบก้นด้านบน'], 'งอหลังลงไปหยิบ', { eq: 'kb' }),
     X('h_rdl', 'ดัมเบลโรมาเนียนเดดลิฟต์', 'Dumbbell Romanian deadlift', [8, 15], ['เข่างอเล็กน้อย พับสะโพกไปข้างหลัง', 'ดัมเบลไถลชิดขา หลังตรง'], 'หลังงอเป็นกุ้ง', { eq: 'db' }),
+    X('h_swing', 'เคตเทิลเบลสวิง', 'Kettlebell swing', [12, 20], ['พับสะโพกส่งเคตเทิลเบลลอดระหว่างขา', 'ดีดสะโพกไปข้างหน้าแรงๆ แขนเป็นแค่เชือก', 'ลูกขึ้นถึงระดับอกพอ ไม่ต้องสูงกว่านั้น'], 'ใช้แขนยกหรือย่อเข่าเป็นสควอท แรงต้องมาจากสะโพก', { eq: 'kb' }),
+    X('h_bbrdl', 'บาร์เบลโรมาเนียนเดดลิฟต์', 'Barbell Romanian deadlift', [6, 12], ['บาร์ชิดขาตลอด เข่างอเล็กน้อย', 'พับสะโพกไปข้างหลังจนตึงต้นขาหลัง', 'ยืนขึ้นด้วยการดันสะโพกไปข้างหน้า'], 'หลังงอหรือบาร์ลอยห่างขา', { eq: 'bb' }),
     X('h_thrust', 'ฮิปทรัสต์ ไหล่พิงโซฟา', 'Hip thrust', [12, 25], ['สะบักพิงขอบโซฟา', 'ดันสะโพกขึ้นจนลำตัวขนานพื้น'], 'ดันด้วยปลายเท้า ให้ดันส้นเท้า'),
     X('h_slt', 'ฮิปทรัสต์ขาเดียว', 'Single-leg hip thrust', [8, 15], ['ไหล่พิงโซฟา ใช้ขาเดียว'], 'สะโพกเอียง'),
+    X('h_ball', 'ลูกบอลโยคะงอขา', 'Stability ball leg curl', [8, 15], ['นอนหงาย ส้นเท้าบนลูกบอล', 'ยกสะโพกค้าง แล้วดึงลูกบอลเข้าหาก้น', 'เหยียดออกช้าๆ'], 'สะโพกตกระหว่างทำ', { eq: 'ball' }),
     X('h_curl', 'ผ้าลื่นงอขา', 'Sliding leg curl', [6, 12], ['นอนหงาย ส้นเท้าบนผ้าบนพื้นลื่น', 'ยกสะโพก แล้วลากส้นเท้าเข้าออก'], 'สะโพกตกระหว่างทำ')
   ],
   core1: [
     X('c_bug', 'เดดบั๊ก', 'Dead bug', [8, 14], ['นอนหงาย กดหลังล่างแนบพื้น', 'เหยียดแขนขาฝั่งตรงข้ามช้าๆ'], 'หลังล่างลอยจากพื้น'),
     X('c_plank', 'แพลงก์', 'Plank', [20, 60], ['ศอกใต้ไหล่ ตัวตรง', 'บีบก้น เกร็งท้องเหมือนจะโดนต่อย'], 'สะโพกตก', { t: 1 }),
     X('c_tap', 'แพลงก์แตะไหล่', 'Plank shoulder tap', [10, 20], ['ท่าวิดพื้น แตะไหล่สลับข้าง', 'สะโพกนิ่ง ไม่โยก'], 'เท้าชิดเกินไปจนโยก'),
+    X('c_abk', 'ล้อกลิ้งหน้าท้อง คุกเข่า ระยะสั้น', 'Ab wheel short rollout', [6, 12], ['คุกเข่าบนผ้า มือจับล้อใต้ไหล่', 'เกร็งท้อง ซี่โครงลง แล้วกลิ้งออกไปแค่ครึ่งทาง', 'ดึงกลับด้วยท้อง ไม่ใช่สะโพก'], 'หลังล่างแอ่นตก ถ้าแอ่นแปลว่าไกลเกินไป', { eq: 'abw' }),
     X('c_hollow', 'ฮอลโลว์ค้าง', 'Hollow body hold', [15, 40], ['นอนหงาย หลังล่างแนบพื้น', 'ยกแขน ไหล่ และขาลอยจากพื้นเล็กน้อย'], 'หลังล่างลอย ให้งอเข่าช่วย', { t: 1 })
   ],
   core2: [
     X('c_rev', 'รีเวิร์สครันช์', 'Reverse crunch', [10, 20], ['นอนหงาย ม้วนสะโพกขึ้นจากพื้น', 'ลงช้า'], 'เหวี่ยงขา'),
     X('c_side', 'ไซด์แพลงก์', 'Side plank', [15, 45], ['ศอกใต้ไหล่ ลำตัวตรงด้านข้าง', 'จับเวลาข้างละรอบ'], 'สะโพกห้อย', { t: 1 }),
     X('c_bike', 'ไบซิเคิลครันช์', 'Bicycle crunch', [12, 24], ['บิดศอกไปหาเข่าตรงข้ามช้าๆ'], 'ดึงคอด้วยมือ'),
-    X('c_vup', 'วีอัพ', 'V-up', [8, 15], ['ยกแขนและขาพร้อมกันเป็นรูปตัว V'], 'เหวี่ยงตัวใช้แรงส่ง')
+    X('c_vup', 'วีอัพ', 'V-up', [8, 15], ['ยกแขนและขาพร้อมกันเป็นรูปตัว V'], 'เหวี่ยงตัวใช้แรงส่ง'),
+    X('c_abw', 'ล้อกลิ้งหน้าท้อง คุกเข่า สุดระยะ', 'Ab wheel full rollout', [5, 12], ['กลิ้งออกจนลำตัวเกือบขนานพื้น', 'หลังล่างต้องไม่แอ่น ถ้าคุมไม่ได้กลับไประยะสั้น'], 'หลังแอ่นหรือกลั้นหายใจนานเกินไป', { eq: 'abw' })
   ],
   calf: [
     X('k_calf', 'เขย่งปลายเท้า', 'Calf raise', [15, 25], ['เขย่งสุด ค้าง 1 วินาที ลงช้า'], 'เด้งเร็ว'),
     X('k_step', 'เขย่งบนขั้นบันได', 'Step calf raise', [12, 20], ['ส้นเท้าห้อยพ้นขั้น ลงให้ยืดสุด'], 'ระยะสั้น'),
+    X('k_rope', 'กระโดดเชือก', 'Jump rope', [30, 60], ['กระโดดต่ำๆ ลงปลายเท้า เข่างอนิดหน่อย', 'หมุนเชือกด้วยข้อมือ ศอกแนบตัว'], 'กระโดดสูงเกินหรือลงส้นเท้า', { eq: 'rope', t: 1 }),
     X('k_single', 'เขย่งขาเดียวบนขั้นบันได', 'Single-leg calf raise', [8, 15], ['จับราวช่วยทรงตัว'], 'งอเข่าช่วย')
   ],
   dip: [
     X('d_bent', 'ดิปเก้าอี้ งอเข่า', 'Chair dip, knees bent', [8, 15], ['ใช้เก้าอี้ไม่มีล้อ ดันชิดผนัง', 'ลงจนต้นแขนขนานพื้น'], 'ไหล่ห่อไปข้างหน้า ถ้าเจ็บไหล่ให้ข้าม'),
     X('d_str', 'ดิปเก้าอี้ ขาเหยียด', 'Chair dip, legs straight', [8, 15], ['ขาเหยียดตรง ส้นเท้าบนพื้น'], 'ลงลึกเกินจนเจ็บไหล่'),
-    X('d_elev', 'ดิปเก้าอี้ ยกเท้าบนเก้าอี้อีกตัว', 'Feet-elevated chair dip', [8, 15], ['เท้าอยู่บนเก้าอี้อีกตัว'], 'ศอกบานออก')
+    X('d_elev', 'ดิปเก้าอี้ ยกเท้าบนเก้าอี้อีกตัว', 'Feet-elevated chair dip', [8, 15], ['เท้าอยู่บนเก้าอี้อีกตัว'], 'ศอกบานออก'),
+    X('d_bars', 'ดิปบาร์คู่', 'Parallel bar dip', [5, 12], ['ล็อกแขนตรงบนบาร์ ไหล่กดลง', 'ลงจนต้นแขนขนานพื้น ลำตัวเอนไปข้างหน้านิดหน่อย', 'ดันขึ้นจนแขนตึง'], 'ลงลึกเกินจนเจ็บไหล่หน้า', { eq: 'dipbar' })
   ],
   curl: [
     X('b_towel', 'เหยียบผ้าขนหนูดึงงอแขน', 'Towel curl', [8, 12], ['เหยียบกลางผ้าขนหนู มือจับปลายผ้า', 'ดึงงอศอกขึ้นสู้แรงขาที่ต้านไว้ ช้า 3 วินาที'], 'ใช้หลังเหวี่ยง'),
+    X('b_trx', 'TRX เคิร์ล', 'Suspension biceps curl', [8, 15], ['จับสายมือหงาย เอนตัวไปข้างหลัง แขนตึง', 'งอศอกดึงตัวเข้าหามือ ศอกอยู่กับที่'], 'ศอกตกหรือสะโพกหย่อน', { eq: 'trx' }),
     X('b_band', 'แบนด์เคิร์ล', 'Band curl', [12, 20], ['เหยียบแบนด์ งอศอกขึ้น ศอกแนบตัว'], 'ศอกเลื่อนไปข้างหน้า', { eq: 'band' }),
-    X('b_db', 'ดัมเบลเคิร์ล', 'Dumbbell curl', [8, 15], ['ศอกแนบลำตัว ยกขึ้นและลงช้า'], 'เหวี่ยงตัว', { eq: 'db' })
+    X('b_db', 'ดัมเบลเคิร์ล', 'Dumbbell curl', [8, 15], ['ศอกแนบลำตัว ยกขึ้นและลงช้า'], 'เหวี่ยงตัว', { eq: 'db' }),
+    X('b_bb', 'บาร์เบลเคิร์ล', 'Barbell curl', [6, 12], ['จับบาร์มือหงาย กว้างเท่าไหล่', 'ศอกแนบตัว ยกขึ้นและลงช้า'], 'แอ่นหลังเหวี่ยงบาร์', { eq: 'bb' })
   ]
 };
 const EXM = {}; Object.entries(LAD).forEach(([pt, l]) => l.forEach(e => { EXM[e.id] = Object.assign(e, { pt }); }));
@@ -643,7 +665,8 @@ const WARM = ['หมุนข้อต่อ คอ ไหล่ สะโพ�
 const COOL = ['ยืดสะโพกด้านหน้า ข้างละ 30 วินาที', 'ยืดต้นขาด้านหลัง 30 วินาที', 'ยืดอกที่ขอบประตู 30 วินาที', 'ท่าเด็ก (Child’s pose) หายใจลึกๆ 60 วินาที'];
 const SEVEN = ['กระโดดตบ', 'นั่งพิงกำแพง', 'วิดพื้น', 'ครันช์', 'ก้าวขึ้นเก้าอี้', 'สควอท', 'ดิปเก้าอี้', 'แพลงก์', 'วิ่งยกเข่าอยู่กับที่', 'ลันจ์', 'วิดพื้นแล้วบิดตัว', 'ไซด์แพลงก์'];
 
-function ladder(pt, p = P()) { return LAD[pt].filter(x => (!x.eq || p.eq[x.eq]) && (!x.noeq || !p.eq[x.noeq])); }
+const hasEq = (x, p) => eqNeeds(x).every(k => p.eq && p.eq[k]) && (!x.noeq || !p.eq[x.noeq]);
+function ladder(pt, p = P()) { return LAD[pt].filter(x => hasEq(x, p)); }
 function curEx(pt, p = P()) {
   const L = ladder(pt, p); let i = L.findIndex(x => x.id === S.levels[pt]);
   if (i < 0) i = p.caution ? 0 : Math.round(({ beginner: .3, intermediate: .55, advanced: .8 }[p.level] || .3) * (L.length - 1));
@@ -924,7 +947,21 @@ const FIG = {
   jack: FG('120,14 120,28 112,48 110,68 120,70 116,99 116,127 128,48 130,68 124,99 124,127', '120,8 120,22 104,8 96,-8 120,64 108,94 100,123 136,8 144,-8 132,94 140,123', [], { front: 1 }),
   knees: FG('122,14 121,28 112,46 104,60 120,70 121,99 120,127 132,46 140,58 121,99 120,127', '122,10 121,24 132,42 140,54 120,66 140,64 140,94 112,42 104,56 121,95 120,123'),
   climber: FG('182,78 166,88 167,107 168,126 97,108 68,117 40,126 167,107 168,126 68,117 40,126', '182,78 166,88 167,107 168,126 97,108 68,117 40,126 167,107 168,126 128,110 110,124'),
-  wallsit: FG('112,42 110,56 122,70 126,86 108,100 140,100 140,127', null, ['wall:96'])
+  wallsit: FG('112,42 110,56 122,70 126,86 108,100 140,100 140,127', null, ['wall:96']),
+  swing: FG('164,56 150,60 140,80 130,98 106,72 123,99 120,127', '122,14 121,28 141,30 160,30 120,70 121,99 120,127', ['kb']),
+  kbgoblet: FG('122,14 121,28 128,44 128,34 120,70 121,99 120,127', '124,45 118,58 126,72 128,62 100,98 134,96 120,127', ['kb']),
+  kbpress: FG('121,14 121,28 134,46 130,30 120,70 121,99 120,127', '121,14 121,28 126,10 125,-8 120,70 121,99 120,127', ['kb']),
+  kbrow: FG('162,72 148,74 148,96 148,116 100,84 103,105 100,127', '162,72 148,74 130,66 136,88 100,84 103,105 100,127', ['kb']),
+  kbdl: FG('164,62 150,66 150,90 150,112 106,76 123,100 120,127', STAND, ['kb']),
+  bbrow: FG('162,72 148,74 148,96 148,116 100,84 103,105 100,127', '162,72 148,74 130,66 136,88 100,84 103,105 100,127', ['bb']),
+  bbrdl: FG(STAND, '164,56 150,60 150,80 150,98 106,72 123,99 120,127', ['bb']),
+  bbcurl: FG('122,14 121,28 122,50 124,72 120,70 121,99 120,127', '122,14 121,28 122,50 138,34 120,70 121,99 120,127', ['bb']),
+  bench: FG('60,88 74,92 76,72 78,52 120,94 146,96 150,127', '60,88 74,92 62,104 76,80 120,94 146,96 150,127', ['db', 'box:50,98,90,30']),
+  rollout: FG('150,80 138,88 140,106 142,121 100,96 78,124 50,124', '182,100 168,106 186,113 204,121 112,112 78,124 50,124', ['wheel']),
+  trxrow: FG('166,106 150,104 150,88 150,72 98,114 68,121 40,127', '164,82 148,82 128,78 150,72 96,104 67,116 40,127', ['door:190', 'towel:190,-10']),
+  trxcurl: FG('150,30 140,42 156,48 172,50 112,84 122,106 120,127', '146,24 136,36 152,32 160,20 112,80 122,104 120,127', ['door:190', 'towel:190,-10']),
+  pbardip: FG('121,14 121,28 122,48 122,68 121,74 118,100 104,112', '121,36 121,50 104,56 122,68 121,96 118,118 104,122', ['pbar:100,142,68']),
+  ballcurl: FG('42,118 58,122 80,124 100,125 104,104 140,108 176,112', '42,118 58,122 80,124 100,125 106,92 134,86 150,104', ['ball'])
 };
 const ANIM = {
   p_wall: 'pushup_wall', p_incline: 'pushup_incline', p_knee: 'pushup_knee', p_std: 'pushup', p_close: 'pushup', p_decline: 'pushup', p_archer: 'pushup',
@@ -935,7 +972,9 @@ const ANIM = {
   l_split: 'split', l_rev: 'split', l_walk: 'split', l_bulg: 'bulgarian', l_shrimp: 'bulgarian',
   h_bridge: 'bridge', h_slb: 'bridge', h_rdl: 'rdl', h_thrust: 'thrust', h_slt: 'thrust', h_curl: 'legcurl',
   c_bug: 'deadbug', c_plank: 'plank', c_tap: 'plank', c_hollow: 'hollow', c_rev: 'crunch', c_side: 'sideplank', c_bike: 'crunch', c_vup: 'crunch',
-  k_calf: 'calf', k_step: 'calf', k_single: 'calf', d_bent: 'dip', d_str: 'dip', d_elev: 'dip', b_towel: 'curl', b_band: 'curl', b_db: 'curl'
+  k_calf: 'calf', k_step: 'calf', k_single: 'calf', d_bent: 'dip', d_str: 'dip', d_elev: 'dip', b_towel: 'curl', b_band: 'curl', b_db: 'curl',
+  p_dbbench: 'bench', v_kb: 'kbpress', r_trx: 'trxrow', r_kb: 'kbrow', r_bb: 'bbrow', s_kbgob: 'kbgoblet', h_kbdl: 'kbdl', h_swing: 'swing', h_bbrdl: 'bbrdl',
+  h_ball: 'ballcurl', c_abk: 'rollout', c_abw: 'rollout', k_rope: 'knees', d_bars: 'pbardip', b_trx: 'trxcurl', b_bb: 'bbcurl'
 };
 function propsSVG(props) {
   return props.map(pr => {
@@ -944,14 +983,17 @@ function propsSVG(props) {
     if (k === 'door') return `<rect x="${n[0]}" y="-26" width="12" height="154" class="pf"/>`;
     if (k === 'box') return `<rect x="${n[0]}" y="${n[1]}" width="${n[2]}" height="${n[3]}" rx="4" class="pf"/>`;
     if (k === 'bar') return `<line x1="${n[0]}" x2="${n[1]}" y1="${n[2]}" y2="${n[2]}" class="ps" stroke-width="5"/>`;
+    if (k === 'pbar') return `<line x1="${n[0]}" x2="${n[1]}" y1="${n[2]}" y2="${n[2]}" class="ps" stroke-width="5"/><line x1="${n[0] + 6}" x2="${n[0] + 6}" y1="${n[2]}" y2="128" class="ps" stroke-width="4"/><line x1="${n[1] - 6}" x2="${n[1] - 6}" y1="${n[2]}" y2="128" class="ps" stroke-width="4"/>`;
     if (k === 'table') return `<rect x="${n[0]}" y="${n[2] - 5}" width="${n[1] - n[0]}" height="8" rx="3" class="pf"/><line x1="${n[0] + 6}" x2="${n[0] + 6}" y1="${n[2]}" y2="128" class="ps" stroke-width="5"/><line x1="${n[1] - 6}" x2="${n[1] - 6}" y1="${n[2]}" y2="128" class="ps" stroke-width="5"/>`;
     return '';
   }).join('');
 }
+const HELD = { db: [5.5, 0], kb: [8, 9], bb: [10, 0], wheel: [7, 0] };   // [radius, drop below the hand]
+const heldOf = f => f.props.find(p => HELD[p]);
 function figSVG(key, cls = '') {
   const f = FIG[key]; if (!f) return '';
-  const db = f.props.includes('db'), tw = f.props.some(p => p.startsWith('towel'));
-  return `<svg class="fig ${f.front ? 'front' : ''} ${cls}" viewBox="0 -26 240 158" data-fig="${key}" aria-hidden="true"><line x1="0" x2="240" y1="129" y2="129" class="gr"/>${propsSVG(f.props)}${tw ? '<line class="tw"/>' : ''}<g class="far"><polyline class="l a2"/><polyline class="l g2"/></g><polyline class="l t"/><polyline class="l g"/><polyline class="l a"/><circle class="hd" r="8.5"/>${db ? '<circle class="db" r="5.5"/><circle class="db" r="5.5"/>' : ''}</svg>`;
+  const held = heldOf(f), ball = f.props.includes('ball'), tw = f.props.some(p => p.startsWith('towel'));
+  return `<svg class="fig ${f.front ? 'front' : ''} ${cls}" viewBox="0 -26 240 158" data-fig="${key}" aria-hidden="true"><line x1="0" x2="240" y1="129" y2="129" class="gr"/>${propsSVG(f.props)}${tw ? '<line class="tw"/>' : ''}<g class="far"><polyline class="l a2"/><polyline class="l g2"/></g><polyline class="l t"/><polyline class="l g"/><polyline class="l a"/><circle class="hd" r="8.5"/>${held ? `<circle class="db ${held}" r="${HELD[held][0]}"/><circle class="db ${held}" r="${HELD[held][0]}"/>` : ''}${ball ? '<circle class="ball" r="13"/>' : ''}</svg>`;
 }
 function drawFig(svg, t) {
   const f = FIG[svg.dataset.fig]; if (!f) return;
@@ -961,7 +1003,8 @@ function drawFig(svg, t) {
   c.t.setAttribute('points', pts(sh, hp)); c.a.setAttribute('points', pts(sh, el, ha)); c.g.setAttribute('points', pts(hp, kn, ft));
   c.a2.setAttribute('points', pts(sh, el2, ha2)); c.g2.setAttribute('points', pts(hp, kn2, ft2));
   c.hd.setAttribute('cx', hd[0].toFixed(1)); c.hd.setAttribute('cy', hd[1].toFixed(1));
-  if (c.db.length) { c.db[0].setAttribute('cx', ha[0]); c.db[0].setAttribute('cy', ha[1]); c.db[1].setAttribute('cx', ha2[0]); c.db[1].setAttribute('cy', ha2[1]); }
+  if (c.db.length) { const dy = HELD[heldOf(f)][1]; c.db[0].setAttribute('cx', ha[0]); c.db[0].setAttribute('cy', ha[1] + dy); c.db[1].setAttribute('cx', ha2[0]); c.db[1].setAttribute('cy', ha2[1] + dy); }
+  const bl = svg.querySelector('.ball'); if (bl) { bl.setAttribute('cx', ft[0]); bl.setAttribute('cy', Math.min(ft[1] + 12, 116)); }
   if (c.tw) { const an = f.props.find(p => p.startsWith('towel')).split(':')[1].split(','); c.tw.setAttribute('x1', ha[0]); c.tw.setAttribute('y1', ha[1]); c.tw.setAttribute('x2', an[0]); c.tw.setAttribute('y2', an[1]); }
 }
 const reduceMotion = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
@@ -1298,7 +1341,7 @@ function readOb() {
     d[k] = ['age', 'height', 'weight', 'waist'].includes(k) ? (el.value === '' ? '' : +el.value) : el.value;
   });
   if (root.querySelector('input[name="days"]')) d.days = [...root.querySelectorAll('input[name="days"]:checked')].map(i => +i.value);
-  if (root.querySelector('input[name="eq"]')) { d.eq = { db: false, band: false, bar: false }; root.querySelectorAll('input[name="eq"]:checked').forEach(i => { d.eq[i.value] = true; }); }
+  if (root.querySelector('input[name="eq"]')) { d.eq = {}; root.querySelectorAll('input[name="eq"]:checked').forEach(i => { d.eq[i.value] = true; }); }
   ['whey', 'finisher', 'noWork'].forEach(k => { const el = $('#ob-' + k); if (el) d[k] = el.checked; });
   PARQ.forEach((_, i) => { const v = rv('par' + i); if (v) o.par[i] = v; });
   Object.keys(TESTS).forEach(k => { const v = rv('t_' + k); if (v != null) { d.baseline = d.baseline || {}; if (d.baseline[k] !== +v) o.testChanged = true; d.baseline[k] = +v; } });
@@ -1400,10 +1443,9 @@ function rStart() {
         <p class="small muted">${d.days.length ? `ตารางที่จะได้: ${(SEQ[d.days.length] || []).map(t => TPL[t].n.split(':')[0]).join(' · ')}` : ''}</p></fieldset>
       <fieldset><legend>เวลาต่อครั้ง (รวมวอร์มอัพ)</legend>${segR('minutes', { 20: '20 นาที', 30: '30 นาที', 45: '45 นาที', 60: '60 นาที' }, d.minutes)}</fieldset>
       <fieldset><legend>สะดวกฝึกช่วงไหน</legend>${segR('trainTime', { morning: 'เช้าก่อนงาน', lunch: 'พักเที่ยง', evening: 'เย็นหลังเลิกงาน' }, d.trainTime)}</fieldset>
-      <fieldset><legend>อุปกรณ์ที่มี <span class="muted small">ไม่มีเลยก็ฝึกครบทุกส่วน</span></legend><div class="seg">
-        <label><input type="checkbox" name="eq" value="db" ${d.eq.db ? 'checked' : ''}><span>ดัมเบล</span></label>
-        <label><input type="checkbox" name="eq" value="band" ${d.eq.band ? 'checked' : ''}><span>ยางยืดแรงต้าน</span></label>
-        <label><input type="checkbox" name="eq" value="bar" ${d.eq.bar ? 'checked' : ''}><span>บาร์โหนติดประตู</span></label></div></fieldset>
+      <fieldset><legend>อุปกรณ์ที่มี <span class="muted small">เลือกได้หลายอย่าง ไม่มีเลยก็ฝึกครบทุกส่วน</span></legend><div class="seg">
+        ${Object.entries(EQ).map(([k, l]) => `<label><input type="checkbox" name="eq" value="${k}" ${d.eq[k] ? 'checked' : ''}><span>${l}</span></label>`).join('')}</div>
+        <p class="small muted">แต่ละอย่างจะเพิ่มท่าใหม่เข้าไปในตารางตามระดับของคุณ</p></fieldset>
       <fieldset><legend>ตัวเลือกเพิ่ม</legend><div class="seg">
         <label><input type="checkbox" id="ob-finisher" ${d.finisher ? 'checked' : ''}><span>คาร์ดิโอ 4 นาทีท้ายการฝึก</span></label>
         <label><input type="checkbox" id="ob-whey" ${d.whey ? 'checked' : ''}><span>ใช้เวย์โปรตีนได้</span></label></div></fieldset>`;
@@ -1612,8 +1654,8 @@ function rMoves() {
   <div class="view-head"><h1>คลังท่า</h1><span class="eyebrow">${Object.values(LAD).reduce((a, l) => a + l.length, 0)} ท่า · เรียงจากง่ายไปยาก</span>
     <p class="muted">ทุกกลุ่มท่าเป็นบันได ทำขั้นปัจจุบันให้ได้ถึงเพดานทุกเซตก่อนขึ้นขั้นถัดไป ท่าที่ต้องใช้อุปกรณ์จะแสดงเฉพาะเมื่อคุณมี</p></div>
   ${Object.keys(LAD).map(pt => { const cur = curEx(pt).e.id; return `<article class="card"><h2>${PT_L[pt]}</h2>
-    ${LAD[pt].map((e, i) => { const has = (!e.eq || p.eq[e.eq]) && (!e.noeq || !p.eq[e.noeq]); return `<div class="mv" style="${has ? '' : 'opacity:.55'}"><div class="figbox mini">${figSVG(ANIM[e.id])}</div><div>
-      <div class="row" style="gap:6px"><span class="small muted mono">${i + 1}</span><h3>${esc(e.n)}</h3>${e.id === cur ? '<span class="chip acc">ระดับของคุณ</span>' : ''}${e.eq ? `<span class="chip">${{ db: 'ดัมเบล', band: 'ยางยืด', bar: 'บาร์โหน' }[e.eq]}</span>` : ''}${e.noeq ? '<span class="chip">ไม่มีบาร์</span>' : ''}</div>
+    ${LAD[pt].map((e, i) => { const has = hasEq(e, p); return `<div class="mv" style="${has ? '' : 'opacity:.55'}"><div class="figbox mini">${figSVG(ANIM[e.id])}</div><div>
+      <div class="row" style="gap:6px"><span class="small muted mono">${i + 1}</span><h3>${esc(e.n)}</h3>${e.id === cur ? '<span class="chip acc">ระดับของคุณ</span>' : ''}${e.eq ? `<span class="chip">${esc(eqLabel(e))}</span>` : ''}${e.noeq ? '<span class="chip">ไม่มีบาร์</span>' : ''}</div>
       <p class="small muted">${esc(e.en)} · ${e.r[0]}–${e.r[1]} ${e.t ? 'วินาที' : 'ครั้ง'}</p>
       <details><summary>วิธีทำ</summary><ul>${e.cues.map(q => `<li>${esc(q)}</li>`).join('')}</ul><p class="warnline">ระวัง: ${esc(e.mis)}</p></details></div></div>`; }).join('')}</article>`; }).join('')}`;
 }
@@ -1629,7 +1671,7 @@ function rProfile() {
     return;
   }
   const row = (step, title, val) => `<div class="setrow"><div><span class="small muted">${title}</span><br><b>${val}</b></div><button class="btn sm" data-act="ob-edit" data-step="${step}">แก้ไข</button></div>`;
-  const eqs = Object.entries(p.eq).filter(([, v]) => v).map(([k]) => ({ db: 'ดัมเบล', band: 'ยางยืด', bar: 'บาร์โหน' }[k])).join(' ') || 'ไม่มีอุปกรณ์';
+  const eqs = Object.keys(EQ).filter(k => p.eq[k]).map(k => EQ[k]).join(' · ') || 'ไม่มีอุปกรณ์';
   const tests = Object.entries(p.baseline || {}).map(([k, i]) => `${{ push: 'วิดพื้น', squat: 'สควอท', plank: 'แพลงก์', pull: 'ดึงข้อ' }[k]} ${TESTS[k].o[i]}`).join(' · ') || 'ยังไม่ได้ทดสอบ';
   $('#v-profile').innerHTML = `
   <div class="view-head"><h1>${p.name ? 'คุณ' + esc(p.name) : 'โปรไฟล์'}</h1><span class="eyebrow">${SY.token ? 'บัญชี @' + esc(SY.user) + ' · ซิงก์หลายเครื่อง' : 'บันทึกไว้ในเครื่องนี้เท่านั้น'}</span></div>

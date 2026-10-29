@@ -117,6 +117,9 @@ async function shot(pg, name) { if (SHOTS) await pg.screenshot({ path: path.join
   ok(sA2.profile && sA2.weights.length === 4, 'A untouched by B logout');
 
   for (const [n, p] of [['A', A], ['B', B], ['C', C]]) ok(p.errs.length === 0, n + ' no page errors', p.errs);
+  // remove the test account so a run against production leaves nothing behind
+  const del = await A.evaluate(async pin => (await fetch('/api/account/delete', { method: 'POST', headers: { 'content-type': 'application/json', authorization: 'Bearer ' + JSON.parse(localStorage.getItem('mewfit.sync')).token }, body: JSON.stringify({ pin }) })).status, PIN);
+  ok(del === 200, 'test account deleted', del);
   await browser.close();
   console.log(`${pass} passed, ${fail} failed`);
   process.exit(fail ? 1 : 0);

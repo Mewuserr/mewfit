@@ -1,5 +1,5 @@
 // MewFit offline cache: network-first for the page, cache-first for fonts.
-const CACHE = 'mewfit-v20';
+const CACHE = 'mewfit-v21';
 const CORE = ['./', './index.html', './manifest.json', './icon.svg', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => {

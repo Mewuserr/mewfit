@@ -294,7 +294,7 @@ legend{font-weight:600;font-size:.92rem;padding:0;margin-bottom:6px}
 .pl-target{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .pl-target div{background:var(--sunk);border-radius:14px;padding:8px 10px;display:flex;flex-direction:column;min-width:0}
 .pl-target b{font-family:var(--fm);font-size:1.25rem;font-weight:700;overflow-wrap:anywhere}
-.pl-target span{font-size:.84rem;color:var(--muted)}
+.pl-target span{font-size:.86rem;color:var(--muted)}
 .stepper{display:grid;grid-template-columns:64px 1fr 64px;gap:10px;align-items:center}
 .stepper .btn{height:64px;font-size:1.8rem;padding:0}
 .stepper output{text-align:center;font-family:var(--fm);font-weight:800;font-size:3.2rem;line-height:1;font-variant-numeric:tabular-nums}
@@ -460,7 +460,8 @@ h1,h2,h3{letter-spacing:.01em}
 .hud.nrg{--hc:var(--magenta);--hg:linear-gradient(90deg,#1E9BFF,#8B7CFF,#FF4FD8)}
 /* radar */
 .radar{width:100%;max-width:300px;margin:0 auto;display:block;overflow:visible}
-.stat-wrap.compact .radar{max-width:210px;margin-top:-6px;margin-bottom:-10px}
+.stat-wrap.compact .radar{max-width:260px;margin-top:-6px;margin-bottom:-10px}
+.stat-wrap.compact .radar text{font-size:15px}.stat-wrap.compact .radar text.val{font-size:19px}
 .radar .grid{fill:none;stroke:rgba(255,255,255,.09);stroke-width:1}
 .radar .axis{stroke:rgba(255,255,255,.07);stroke-width:1}
 .radar .area{fill:url(#rd-fill);stroke:url(#rd-line);stroke-width:2.2;filter:drop-shadow(0 0 8px rgba(139,124,255,.9))}
@@ -530,6 +531,9 @@ h1,h2,h3{letter-spacing:.01em}
 @media (prefers-reduced-motion:no-preference){.sys .btn.hot.big{animation:cta 3s ease-in-out infinite}}
 @keyframes cta{0%,40%{background-position:160% 0,0 0;filter:brightness(1)}70%{filter:brightness(1.15)}100%{background-position:-60% 0,0 0;filter:brightness(1)}}
 .btn.danger{background:none}
+.btn.sm:not(.pri):not(.hot),.btn.big:not(.pri):not(.hot){border-radius:8px}
+.btn.link{border:0;background:none;box-shadow:none;color:var(--cyan);min-height:40px;text-decoration:underline;text-underline-offset:4px}
+.btn.gbtn{background:#fff;color:#1f1f1f;border:1px solid #747775;box-shadow:none}.btn.gbtn:hover{border-color:#1f1f1f}
 .chip{border-radius:6px}
 /* base components */
 .hero p{background:rgba(255,255,255,.04);color:var(--ink);border:1px solid rgba(255,255,255,.08)}
@@ -1285,7 +1289,7 @@ const STAT_INFO = { STR: 'พลัง: ท่าดัน ดึง หลั�
 const STAT_KEYS = ['STR', 'AGI', 'VIT', 'END', 'INT'];
 const emblem = (g, cls = '') => `<div class="crest ${cls}" style="--rk:${g.rank.c}" role="img" aria-label="แรงค์ ${g.rank.r}"><div class="ring r2"></div><div class="ring"></div><svg viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="cr-rim${cls}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".3" stop-color="${g.rank.c}"/><stop offset=".65" stop-color="#8B7CFF"/><stop offset="1" stop-color="#FF4FD8"/></linearGradient><radialGradient id="cr-in${cls}" cx=".5" cy=".3" r=".75"><stop offset="0" stop-color="#232A55"/><stop offset="1" stop-color="#05060B"/></radialGradient><linearGradient id="cr-tx${cls}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="${g.rank.c}"/></linearGradient></defs>
   <path d="M60 3 113 60 60 117 7 60Z" fill="url(#cr-rim${cls})"/><path d="M60 10.5 106 60 60 109.5 14 60Z" fill="url(#cr-in${cls})"/><path d="M60 19 98 60 60 101 22 60Z" fill="none" stroke="rgba(255,255,255,.13)"/><path d="M33 48 60 19 87 48" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="2"/>
-  <text x="60" y="73" text-anchor="middle" font-size="44" font-weight="700" fill="url(#cr-tx${cls})">${g.rank.r}</text><text x="60" y="90" text-anchor="middle" font-size="8" letter-spacing="3" fill="#A9B1CC">RANK</text></svg></div>`;
+  <text x="60" y="73" text-anchor="middle" font-size="44" font-weight="700" fill="url(#cr-tx${cls})">${g.rank.r}</text><text x="60" y="90" text-anchor="middle" font-size="10" letter-spacing="3" fill="#A9B1CC">RANK</text></svg></div>`;
 function radarSVG(st) {
   const cx = 150, cy = 128, R = 92, max = Math.max(30, ...STAT_KEYS.map(k => st[k])) * 1.08;
   const pt = (i, r) => { const a = -Math.PI / 2 + i * 2 * Math.PI / 5; return [cx + Math.cos(a) * r, cy + Math.sin(a) * r]; };

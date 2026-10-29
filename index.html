@@ -562,6 +562,31 @@ input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(61,224,255,.18)}
 .restbar{background:linear-gradient(90deg,#1A1E36,#0C0F1A);color:var(--ink);border:1px solid rgba(255,255,255,.1);border-radius:12px}
 .restbar .btn{color:var(--ink)}.restbar .grow{color:var(--muted)}
 .wd{background:rgba(255,255,255,.04);border-radius:8px}.wd.train{background:rgba(139,124,255,.14)}.wd.done{background:var(--holo);color:#05060B}.wd.done span{color:#05060B}.wd.today{border-color:var(--cyan)}
+/* coach brain: readiness, effort, records, load */
+.seg3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.seg3 .btn{min-height:40px;padding:4px 6px;font-size:.9rem}
+.seg3 .btn.on{border-color:var(--cyan);background:rgba(61,224,255,.16);color:#fff}
+.ready{display:flex;flex-direction:column;gap:10px;padding:12px;border:1px solid rgba(61,224,255,.25);border-radius:10px;background:rgba(61,224,255,.04)}
+.ready h3{margin:0;font-family:var(--fd);font-size:1rem}
+.rq{display:grid;grid-template-columns:96px 1fr;gap:8px;align-items:center}
+.rq>span{font-size:.9rem;color:var(--muted)}
+.ready-res{--rc:var(--cyan);display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;border:1px solid color-mix(in srgb,var(--rc) 50%,transparent);background:color-mix(in srgb,var(--rc) 8%,transparent)}
+.ready-res>b{font-family:var(--fd);font-size:1.7rem;color:var(--rc);text-shadow:0 0 12px color-mix(in srgb,var(--rc) 60%,transparent)}
+.ready-res span{font-size:.92rem;line-height:1.45}.ready-res span b{font-family:var(--fd)}
+.ready-res .btn{margin-left:auto}
+.rir{display:flex;flex-direction:column;gap:8px;padding:10px;border:1px dashed rgba(255,255,255,.2);border-radius:10px;text-align:left}
+.boss .bs-top{display:flex;gap:14px;align-items:center}
+.boss-ic{flex:none;width:86px;height:86px;overflow:visible;filter:drop-shadow(0 0 14px color-mix(in srgb,var(--bc) 70%,transparent)) drop-shadow(0 8px 12px rgba(0,0,0,.7))}
+.boss h3{font-family:var(--fd);font-size:1.3rem;margin:0}
+.boss .bs-line{color:var(--muted);font-size:.92rem}
+.hud.hp{--hc:#FF5A7A;--hg:linear-gradient(90deg,#7A0F2E,#FF3D6E,#FF9AB0)}
+.boss.dead .boss-ic{filter:grayscale(1) brightness(.55)}
+@media (prefers-reduced-motion:no-preference){.boss:not(.dead) .boss-ic{animation:float 3s ease-in-out infinite}}
+.pr-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:6px}
+.pr-list li{display:flex;justify-content:space-between;gap:10px;padding:8px 12px;border-radius:8px;background:rgba(255,200,87,.06);border:1px solid rgba(255,200,87,.25)}
+.pr-list b{font-family:var(--fd);color:var(--gold);white-space:nowrap}
+.vrow{display:grid;gap:5px}.vrow .row{font-size:.92rem}.vrow b{font-family:var(--fd);color:var(--hc)}
+.vrow.low{--hc:var(--gold);--hg:linear-gradient(90deg,#B7791F,#FFC857)}.vrow.ok{--hc:var(--c-green);--hg:linear-gradient(90deg,#0E9F6E,#3EE6A0)}.vrow.high{--hc:var(--magenta);--hg:linear-gradient(90deg,#8B7CFF,#FF4FD8)}
 /* level up: rays, flash, sparks */
 .modal{border:1px solid transparent;border-radius:16px;background:linear-gradient(180deg,#151933,#07080F) padding-box,var(--frame) border-box}
 .modal-bg{background:rgba(2,3,8,.8)}
@@ -666,7 +691,7 @@ const APP_URL = 'https://mewfit.m3wxuser.workers.dev/';
 const DEMO = { name: '', sex: 'm', age: 28, height: 172, weight: 75, waist: null, activity: 'light', goal: 'cut', level: 'beginner',
   days: [1, 3, 5], minutes: 30, eq: {}, wake: '06:30', bed: '22:30',
   workStart: '09:00', workEnd: '18:00', noWork: false, trainTime: 'evening', whey: false, finisher: true, caution: false, par: [], baseline: {} };
-const fresh = () => ({ v: 2, profile: null, seenDemo: false, guideDone: false, voice: true, levels: {}, calAdjust: 0, workouts: [], weights: [], body: [], food: {}, habits: {}, cardio: {}, seenLv: null, session: null, mealSeed: 7 });
+const fresh = () => ({ v: 2, profile: null, seenDemo: false, guideDone: false, voice: true, levels: {}, calAdjust: 0, workouts: [], weights: [], body: [], food: {}, habits: {}, cardio: {}, ready: {}, seenLv: null, session: null, mealSeed: 7 });
 let S = load();
 function load() {
   try {
@@ -863,7 +888,7 @@ function weekMap(p = P(), ref = iso()) {
   const m = {}; days.forEach((d, i) => { m[d] = seq[i]; }); return m;
 }
 function isDeload() { if (S.workouts.length < 8) return false; const wk = Math.floor(dayDiff(S.workouts[0].date, iso()) / 7); return wk > 0 && (wk + 1) % 6 === 0; }
-function setsFor(p) { let n = p.level === 'advanced' ? 4 : (p.level === 'beginner' && S.workouts.length < 6) ? 2 : 3; if (isDeload()) n = Math.max(2, n - 1); return n; }
+function setsFor(p) { let n = p.level === 'advanced' ? 4 : (p.level === 'beginner' && S.workouts.length < 6) ? 2 : 3; if (isDeload()) n = Math.max(2, n - 1); const r = readyOf(iso()); if (r && r.score < 50) n = Math.max(2, n - 1); return n; }
 function buildSession(tid) {
   const p = P(), t = TPL[tid], sets = setsFor(p);
   const n = clamp(Math.floor((p.minutes - 6) / (sets * 2)), 3, t.s.length);
@@ -1231,6 +1256,79 @@ function questsFor(d) {
   return q;
 }
 const QBONUS = 100;
+/* ---------- coach brain: readiness, records, weekly load, weekly boss ---------- */
+// readiness (autoregulation): three taps before training; a low score trims a set from every move
+const READY_Q = [['sleep', 'การนอนเมื่อคืน', ['แย่', 'พอใช้', 'ดี']], ['sore', 'ความปวดเมื่อย', ['ปวดมาก', 'นิดหน่อย', 'ไม่ปวด']], ['energy', 'พลังงานตอนนี้', ['หมดแรง', 'ปกติ', 'สดชื่น']]];
+function readyOf(d) { const r = (S.ready || {})[d]; if (!r || READY_Q.some(([k]) => !r[k])) return null; return Object.assign({ score: Math.round((READY_Q.reduce((a, [k]) => a + r[k], 0) - 3) / 6 * 100) }, r); }
+const readyMode = sc => sc < 25 ? { c: '#FF5A7A', t: 'ร่างกายล้ามาก แนะนำยืดเหยียดหรือเดินเบาๆ แทน ถ้าจะฝึก ระบบลดให้ 1 เซตต่อท่า' }
+  : sc < 50 ? { c: '#FFC857', t: 'โหมดเบา: ลด 1 เซตต่อท่า เน้นฟอร์มสวย ไม่ต้องเค้น' }
+  : sc >= 84 ? { c: '#3EE6A0', t: 'พร้อมลุย: ลองเพิ่มอีก 1 ครั้งทุกเซต' } : { c: '#3DE0FF', t: 'พร้อมฝึกตามแผน' };
+function readyBox(d) {
+  const r = readyOf(d), cur = (S.ready || {})[d] || {};
+  if (r && !ui.readyEdit) { const m = readyMode(r.score); return `<div class="ready-res" style="--rc:${m.c}"><b>${r.score}%</b><span><b>ความพร้อมวันนี้</b><br>${m.t}</span><button class="btn sm" data-act="ready-edit">แก้</button></div>`; }
+  return `<div class="ready"><h3>เช็กความพร้อมก่อนฝึก (5 วินาที)</h3>${READY_Q.map(([k, l, o]) => `<div class="rq"><span>${l}</span><div class="seg3">${o.map((t, i) => `<button class="btn ${cur[k] === i + 1 ? 'on' : ''}" data-act="ready" data-k="${k}" data-v="${i + 1}" aria-pressed="${cur[k] === i + 1}">${t}</button>`).join('')}</div></div>`).join('')}</div>`;
+}
+// effort: after the last set of a move, how many more reps were left (reps in reserve)
+const rirBox = s => { const i = ui.rirAsk, x = i == null ? null : s.ex[i]; if (!x || x.rir != null) return ''; return `<div class="rir"><span class="small"><b>${esc(EXM[x.id].n)}</b> เซตสุดท้าย ยังทำต่อได้อีกกี่ครั้ง?</span><div class="seg3">${[[0, 'หมดแรง'], [2, 'อีก 1–2'], [4, 'อีก 3+']].map(([v, t]) => `<button class="btn sm" data-act="rir" data-v="${v}">${t}</button>`).join('')}</div></div>`; };
+// personal records: best single set per move, in date order
+function records(upto = S.workouts.length) {
+  const best = {};
+  for (let i = 0; i < upto; i++) (S.workouts[i].ex || []).forEach(x => { (x.reps || []).forEach(v => { if (v !== '' && +v > (best[x.id] || 0)) best[x.id] = +v; }); });
+  return best;
+}
+function prCount() {
+  const best = {}; let n = 0;
+  S.workouts.forEach(w => (w.ex || []).forEach(x => { const m = Math.max(0, ...(x.reps || []).filter(v => v !== '').map(Number)); if (best[x.id] && m > best[x.id]) n++; if (m > (best[x.id] || 0)) best[x.id] = m; }));
+  return n;
+}
+function recordsPanel() {
+  const best = records(), ids = Object.keys(best).filter(id => EXM[id] && best[id] > 0);
+  if (!ids.length) return '';
+  return `<article class="card"><div class="row between"><h2>สถิติสูงสุด</h2><span class="chip acc">ทำลายสถิติ ${prCount()} ครั้ง</span></div><ul class="pr-list">${ids.map(id => `<li><span>${esc(EXM[id].n)}</span><b>${best[id]} ${EXM[id].t ? 'วินาที' : 'ครั้ง'}</b></li>`).join('')}</ul><p class="small muted">ทำได้เกินสถิติเดิมในเซตไหนก็ได้ รับ +25 XP</p></article>`;
+}
+// weekly load: hard sets per muscle group in the last 7 days (about 10-20 per week builds muscle best)
+const VOL_G = [['ดัน · อก ไหล่ หลังแขน', ['push', 'vpush', 'dip']], ['ดึง · หลัง หน้าแขน', ['pull', 'vpull', 'curl']], ['ขา · ก้น น่อง', ['squat', 'lunge', 'hinge', 'calf']], ['แกนกลาง', null]];
+function volumePanel() {
+  const from = addDays(iso(), -6), cnt = VOL_G.map(() => 0);
+  S.workouts.forEach(w => { if (w.date < from) return; (w.ex || []).forEach(x => { const e = EXM[x.id]; if (!e) return; const gi = VOL_G.findIndex(([, pts]) => pts && pts.includes(e.pt)); cnt[gi < 0 ? 3 : gi] += (x.reps || []).filter(v => v !== '').length; }); });
+  const low = VOL_G.map((g, i) => [g[0], cnt[i]]).filter(([, n]) => n < 10);
+  return `<section class="sys" aria-label="ปริมาณฝึก"><div class="sys-h"><div class="sys-k"><em>TRAINING LOAD</em><b>ปริมาณฝึก 7 วันล่าสุด</b></div><span class="sys-sub">เป้า 10–20 เซตต่อกลุ่ม</span></div>
+    <div class="bars">${VOL_G.map(([l], i) => { const n = cnt[i]; return `<div class="vrow ${n < 10 ? 'low' : n > 20 ? 'high' : 'ok'}"><div class="row between"><span>${l}</span><b>${n} เซต</b></div><div class="hb"><i style="width:${clamp(n / 20 * 100, n ? 4 : 0, 100)}%"></i></div></div>`; }).join('')}</div>
+    <p class="small muted">${low.length === VOL_G.length ? 'ยังไม่มีการฝึกใน 7 วันนี้ เริ่มภารกิจหลักวันนี้เพื่อเติมแถบ' : low.length ? `ยังต่ำกว่า 10 เซต: ${low.map(([l]) => l.split(' · ')[0]).join(', ')} · ฝึกให้ครบวันในตาราง หรือเพิ่มวันฝึก` : 'ปริมาณฝึกอยู่ในช่วงที่สร้างกล้ามได้ดี รักษาไว้'} (Schoenfeld 2017: 10 เซตขึ้นไปต่อกลุ่มต่อสัปดาห์ โตดีกว่าน้อยกว่า 5 เซต)</p></section>`;
+}
+// weekly boss raid: every rep and every cleared quest is damage
+const BOSSES = [
+  { n: 'ก็อบลินขี้เกียจ', c: '#3EE6A0', l: 'มันโตขึ้นทุกครั้งที่คุณกดเลื่อนนาฬิกาปลุก' },
+  { n: 'สไลม์น้ำตาล', c: '#FF4FD8', l: 'ดูดพลังจากน้ำหวานและขนมหลังมื้อเย็น' },
+  { n: 'โกเลมโซฟา', c: '#A9B1CC', l: 'แข็งแกร่งที่สุดตอนคุณนั่งนานเกินชั่วโมง' },
+  { n: 'ภูตนอนดึก', c: '#8B7CFF', l: 'ขโมยชั่วโมงนอนของคุณทีละนาที' },
+  { n: 'ไฮดราขนมกรุบกรอบ', c: '#FF8A3D', l: 'ปิดถุงหนึ่ง อีกถุงก็งอกออกมา' },
+  { n: 'อัศวินผัดวันพรุ่ง', c: '#3DE0FF', l: 'อาวุธของมันคือคำว่า "เดี๋ยวค่อยทำ"' },
+  { n: 'มังกรชานมไข่มุก', c: '#FFC857', l: 'หวานร้อยเปอร์เซ็นต์ ไข่มุกเพิ่มพลังโจมตี' },
+  { n: 'ราชาแห่งความล้า', c: '#FF5A7A', l: 'บอสใหญ่ ต้องทั้งฝึก นอน และกินให้ครบถึงจะล้มได้' }];
+const BOSS_XP = 300, QDMG = 20;
+function bossFor(mon) {
+  const p = P(), b = BOSSES[((weekNo(mon) % BOSSES.length) + BOSSES.length) % BOSSES.length], end = addDays(mon, 6), today = iso();
+  const hp = p.days.length * 120 + 300;
+  let dmg = 0;
+  S.workouts.forEach(w => { if (w.date < mon || w.date > end) return; (w.ex || []).forEach(x => { const e = EXM[x.id], n = (x.reps || []).filter(v => v !== '').reduce((a, v) => a + +v, 0); dmg += e && e.t ? Math.round(n / 3) : n; }); });
+  for (let i = 0; i < 7; i++) { const d = addDays(mon, i); if (d > today) break; dmg += questsFor(d).filter(x => x.done && x.k !== 'train').length * QDMG; }
+  return Object.assign({ mon, end, hp, dmg: Math.min(dmg, hp), dead: dmg >= hp }, b);
+}
+const bossSVG = b => { const id = 'bs' + (++giN); return `<svg class="boss-ic" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".35" stop-color="${b.c}"/><stop offset="1" stop-color="#1A0A20"/></linearGradient></defs>
+  <path d="M12 5c3 9 7 13 13 15M52 5c-3 9-7 13-13 15" stroke="url(#${id})" stroke-width="5" stroke-linecap="round" fill="none"/>
+  <path d="M32 13c12 0 21 8 21 21 0 9-5 16-11 20l-3 6H25l-3-6c-6-4-11-11-11-20 0-13 9-21 21-21z" fill="url(#${id})" stroke="#fff" stroke-opacity=".55" stroke-width="1.2"/>
+  <path d="M19 31l10 3-1.4 4.6L19 36zM45 31l-10 3 1.4 4.6L45 36z" fill="#FFF3B0"/><path d="M24 47l3 4 3-4 4 4 3-4 3 4" stroke="#1A0A20" stroke-width="2.4" fill="none" stroke-linejoin="round"/>
+  <path d="M22 22c3-3 6-4 10-4" stroke="#fff" stroke-width="2" stroke-linecap="round" fill="none" opacity=".7"/></svg>`; };
+function bossPanel() {
+  const b = bossFor(mondayOf(iso())), left = dayDiff(iso(), b.end) + 1;
+  return `<section class="sys boss ${b.dead ? 'dead' : ''}" style="--bc:${b.c}" aria-label="บอสประจำสัปดาห์"><span class="sweep" aria-hidden="true"></span>
+    <div class="sys-h"><div class="sys-k"><em>WEEKLY BOSS</em><b>บอสประจำสัปดาห์</b></div><span class="sys-sub">${b.dead ? 'ล้มแล้ว' : `เหลือ <span class="timer">${left}</span> วัน`}</span></div>
+    <div class="bs-top">${bossSVG(b)}<div class="stack" style="gap:4px"><h3>${esc(b.n)}</h3><span class="bs-line">${esc(b.l)}</span>${b.dead ? `<span class="chip good" style="align-self:flex-start">ล้มบอสแล้ว +${BOSS_XP} XP</span>` : ''}</div></div>
+    ${hud('hp', 'HP', b.hp - b.dmg, b.hp, `${fmt(b.hp - b.dmg)}/${fmt(b.hp)}`)}
+    <p class="small muted">โจมตีด้วย: ฝึก 1 ครั้ง = 1 ดาเมจ (ท่าจับเวลา 3 วินาที = 1) · ทุกเควสที่สำเร็จ = ${QDMG} ดาเมจ · ล้มได้ก่อนจบวันอาทิตย์ รับ ${BOSS_XP} XP</p></section>`;
+}
+
 let gameMemo = { key: '', g: null };
 function game() {
   const key = JSON.stringify([S.workouts.length, S.habits, S.food, S.weights.length, S.cardio, S.profile, iso()]);
@@ -1248,6 +1346,9 @@ function game() {
     if (n >= 3) full.add('3:' + d);
   });
   xp += S.weights.filter(w => !w.demo).length * 10;
+  const prs = prCount(); xp += prs * 25;
+  const mons = new Set([...days].filter(d => d <= today).map(mondayOf)); let kills = 0;
+  mons.forEach(m => { if (bossFor(m).dead) kills++; }); xp += kills * BOSS_XP;
   let lv = 1, into = xp; while (into >= xpNeed(lv)) { into -= xpNeed(lv); lv++; }
   // streak: consecutive days (to today, or to yesterday if today is still open) with at least 3 quests done
   let streak = 0, d = full.has('3:' + today) ? today : addDays(today, -1);
@@ -1265,10 +1366,10 @@ function game() {
   const foodDays = Object.keys(S.food || {}).filter(k => (S.food[k] || []).length).length;
   const waterDays = Object.entries(S.habits || {}).filter(([, h]) => +h.water >= calc().glasses).length;
   const stats = { STR: 10 + Math.floor(reps.STR / 40), AGI: 10 + Math.floor(steps / 40000) + cardio * 2, VIT: 10 + Math.floor(reps.VIT / 40), END: 10 + Math.floor(reps.END / 40) + Math.min(streak, 30), INT: 10 + foodDays + Math.floor(S.weights.length / 3) };
-  const ctx = { lv, streak, reps, waterDays };
+  const ctx = { lv, streak, reps, waterDays, prs, kills };
   const titles = TITLES.map(t => Object.assign({ got: !!t.ok(ctx) }, t));
   const got = titles.filter(t => t.got);
-  gameMemo = { key, g: { xp, lv, into, need: xpNeed(lv), rank: rankOf(lv), streak, stats, titles, title: got[got.length - 1] || null } };
+  gameMemo = { key, g: { xp, lv, into, need: xpNeed(lv), rank: rankOf(lv), streak, stats, titles, prs, kills, title: got[got.length - 1] || null } };
   return gameMemo.g;
 }
 const repsOf = pts => S.workouts.reduce((a, w) => a + (w.ex || []).reduce((b, x) => { const e = EXM[x.id]; return e && pts.includes(e.pt) ? b + (x.reps || []).filter(v => v !== '').reduce((c, v) => c + +v, 0) : b; }, 0), 0);
@@ -1277,11 +1378,14 @@ const TITLES = [
   { n: 'แขนเหล็ก', d: 'วิดพื้นรวม 100 ครั้ง', ok: () => repsOf(['push']) >= 100 },
   { n: 'ผู้คุมสายน้ำ', d: 'ดื่มน้ำครบเป้า 7 วัน', ok: c => c.waterDays >= 7 },
   { n: 'ไม่ยอมแพ้', d: 'ทำเควส 3 อย่างขึ้นไปติดกัน 7 วัน', ok: c => c.streak >= 7 },
+  { n: 'ผู้ล้มบอส', d: 'ล้มบอสประจำสัปดาห์ได้ 1 ตัว', ok: c => c.kills >= 1 },
   { n: 'นักสู้ตัวจริง', d: 'ฝึกครบ 10 ครั้ง', ok: () => S.workouts.length >= 10 },
+  { n: 'นักทำลายสถิติ', d: 'ทำสถิติใหม่ 10 ครั้ง', ok: c => c.prs >= 10 },
   { n: 'ขาสายฟ้า', d: 'ท่าขารวม 500 ครั้ง', ok: () => repsOf(['squat', 'lunge', 'hinge']) >= 500 },
   { n: 'ผู้เฝ้ามองตัวเลข', d: 'ชั่งน้ำหนัก 14 ครั้ง', ok: () => S.weights.filter(w => !w.demo).length >= 14 },
   { n: 'นักล่าระดับ C', d: 'ถึงแรงค์ C (Lv. 10)', ok: c => c.lv >= 10 },
   { n: 'วินัยเหล็ก', d: 'ทำเควสติดกัน 30 วัน', ok: c => c.streak >= 30 },
+  { n: 'ผู้พิชิตบอส', d: 'ล้มบอสครบ 8 ตัว', ok: c => c.kills >= 8 },
   { n: 'ไม่รู้จักเหนื่อย', d: 'ฝึกครบ 50 ครั้ง', ok: () => S.workouts.length >= 50 },
   { n: 'นักล่าระดับ A', d: 'ถึงแรงค์ A (Lv. 35)', ok: c => c.lv >= 35 },
   { n: 'ตำนาน', d: 'ถึงแรงค์ S (Lv. 55)', ok: c => c.lv >= 55 }];
@@ -1375,6 +1479,9 @@ function catLines(g, q, tid, msg) {
   L.push(qd === q.length ? 'ภารกิจวันนี้สำเร็จทั้งหมด ได้รับรางวัลแล้ว' : `ความคืบหน้า ${qd} จาก ${q.length} ภารกิจ เหลืออีก ${q.length - qd} ภารกิจ`);
   L.push(`ค่าประสบการณ์อีก ${fmt(g.need - g.into)} จะเลื่อนเป็นเลเวล ${g.lv + 1}${nx ? ` แรงค์ ${nx.r} เปิดที่เลเวล ${nx.lv}` : ''}`);
   if (g.streak) L.push(`สถิติต่อเนื่อง ${g.streak} วัน รักษาไว้`);
+  const bs = bossFor(mondayOf(iso()));
+  L.push(bs.dead ? `บอสประจำสัปดาห์ ${bs.n} ถูกล้มแล้ว รอบอสตัวใหม่วันจันทร์` : `บอสประจำสัปดาห์: ${bs.n} เหลือพลังชีวิต ${fmt(bs.hp - bs.dmg)} โจมตีด้วยการฝึกและทำเควส`);
+  const rd = readyOf(iso()); if (rd && tid) L.push(`ความพร้อม ${rd.score} เปอร์เซ็นต์ ${readyMode(rd.score).t}`);
   L.push('คำแนะนำ: ' + String(msg).replace(/<[^>]+>/g, '').replace(/\s*·\s*$/, ''));
   return L;
 }
@@ -1446,6 +1553,7 @@ function mergeState(server, local) {
   out.habits = Object.assign({}, a.habits, b.habits);
   out.levels = Object.assign({}, a.levels, b.levels);
   out.cardio = Object.assign({}, a.cardio, b.cardio);
+  out.ready = Object.assign({}, a.ready, b.ready);
   Object.keys(a.cardio || {}).forEach(d => { out.cardio[d] = Math.max(a.cardio[d] || 0, (b.cardio || {})[d] || 0); });
   out.seenLv = Math.max(a.seenLv || 0, b.seenLv || 0) || null;
   out.session = b.session || a.session;
@@ -2016,8 +2124,10 @@ function rToday() {
     <ul class="qlist">${q.map(questRow).join('')}</ul>
     <div class="q-reward ${qDone === q.length ? 'done' : ''}"><span>${qDone === q.length ? 'เควสวันนี้สำเร็จ รับรางวัลแล้ว' : `รางวัลเมื่อทำครบ ${q.length} เควส`}</span><b>+${QBONUS} XP</b></div>
     ${qDone < q.length ? `<p class="q-warn">ไม่ครบภายในเที่ยงคืน: <b>สตรีคต่อเนื่องจะหยุด</b></p>` : ''}
+    ${tid && !done && !live ? readyBox(d) : ''}
     <div class="row hero-go">${btns}</div>
   </section>
+  ${bossPanel()}
   ${guide}
   ${acctNudge()}
   <article class="card">
@@ -2079,6 +2189,9 @@ function rTrain() {
     <li><span>ทำทุกเซตถึงเพดานของช่วงครั้ง</span><span class="chip good">ครั้งหน้าเลื่อนขั้น</span></li>
     <li><span>ทุกเซตได้ต่ำกว่าขั้นต่ำ</span><span class="chip warn">ครั้งหน้าลดขั้น</span></li>
     <li><span>จบเซตตอนเหลือแรงอีก 1–3 ครั้ง</span><span class="chip">ไม่ต้องหมดแรง</span></li>
+    <li><span>ถึงเพดานแต่ตอบว่าหมดแรง</span><span class="chip">อยู่ขั้นเดิมให้คล่องก่อน</span></li>
+    <li><span>ทำได้เกินครึ่งช่วงและเหลือแรง 3+ ครั้ง</span><span class="chip good">เลื่อนขั้นเร็ว</span></li>
+    <li><span>ความพร้อมวันนี้ต่ำกว่า 50%</span><span class="chip warn">ลด 1 เซตต่อท่า</span></li>
     <li><span>ทุกสัปดาห์ที่ 6</span><span class="chip acc">สัปดาห์ผ่อน ลด 1 เซต</span></li>
     <li><span>เจ็บแปลบที่ข้อต่อ</span><span class="chip bad">หยุดท่านั้นทันที</span></li></ul></article>`;
 }
@@ -2088,7 +2201,7 @@ function rPlayer() {
   let main;
   if (done) {
     main = `<article class="card" style="align-items:flex-start"><span class="chip good">ครบทุกท่าแล้ว</span><h2>เยี่ยมมาก เหลืออีกนิดเดียว</h2>
-      <p class="muted">${s.fin ? 'ถ้ายังไหว ทำคาร์ดิโอ 4 นาที แล้ว' : ''}ยืดเหยียด 3 นาที จากนั้นกดจบการฝึกเพื่อบันทึกและดูว่าท่าไหนได้เลื่อนขั้น</p>
+      <p class="muted">${s.fin ? 'ถ้ายังไหว ทำคาร์ดิโอ 4 นาที แล้ว' : ''}ยืดเหยียด 3 นาที จากนั้นกดจบการฝึกเพื่อบันทึกและดูว่าท่าไหนได้เลื่อนขั้น</p>${rirBox(s)}
       <div class="row">${s.fin ? '<button class="btn" data-act="finisher">คาร์ดิโอ 4 นาที</button>' : ''}<button class="btn" data-act="cool">ยืดเหยียดหลังฝึก</button><button class="btn pri big" data-act="finish">จบการฝึกและบันทึก</button></div></article>`;
   } else {
     const x = s.ex[c.i], e = EXM[x.id], L = ladder(x.pt), k = L.findIndex(y => y.id === x.id), prev = lastPerf(x.id), unit = e.t ? 'วินาที' : 'ครั้ง';
@@ -2098,7 +2211,7 @@ function rPlayer() {
       <div class="pl-stage figbox">${figSVG(ANIM[x.id], 'big')}<span class="chip acc pl-k">ท่า ${c.i + 1}/${s.ex.length}</span></div>
       <div class="stack" style="gap:4px"><h2 class="pl-name">${esc(e.n)}</h2><span class="eyebrow">${PT_L[x.pt]} · ขั้น ${k + 1}/${L.length}</span><span class="small muted">${esc(e.en)}</span>${ladderBar(L.length, k)}</div>
       <div class="pl-target"><div><b>${c.s + 1}/${x.sets}</b><span>เซต</span></div><div><b>${e.r[0]}–${e.r[1]}</b><span>${unit}${side}</span></div><div><b>${prev ? prev.filter(v => v !== '').join('·') : '–'}</b><span>ครั้งก่อน</span></div></div>
-      ${rest.on ? `<div class="pl-rest"><span class="eyebrow">พัก หายใจลึกๆ</span><b id="pl-rest-t">${mmss((rest.end - Date.now()) / 1000)}</b><p>${esc(rest.label)}</p><div class="row"><button class="btn sm" data-act="rest-add">+15 วินาที</button><button class="btn sm pri" data-act="rest-skip">พร้อมแล้ว</button></div></div>`
+      ${rest.on ? `<div class="pl-rest"><span class="eyebrow">พัก หายใจลึกๆ</span><b id="pl-rest-t">${mmss((rest.end - Date.now()) / 1000)}</b><p>${esc(rest.label)}</p>${rirBox(s)}<div class="row"><button class="btn sm" data-act="rest-add">+15 วินาที</button><button class="btn sm pri" data-act="rest-skip">พร้อมแล้ว</button></div></div>`
         : `<div class="stepper"><button class="btn" data-act="step" data-n="-1" aria-label="ลด">−</button><output id="step-v" aria-live="polite">${ui.stepVal}</output><button class="btn" data-act="step" data-n="1" aria-label="เพิ่ม">+</button></div>
           ${e.t ? `<button class="btn" data-act="sw" id="sw-b">${ui.sw ? 'หยุดจับเวลา' : 'เริ่มจับเวลาให้'}</button>` : ''}
           <button class="btn pri big wide" data-act="log-set" id="log-b">บันทึกเซต ${c.s + 1}: ${ui.stepVal} ${unit}</button>`}
@@ -2192,33 +2305,42 @@ function stopSW() { if (ui.sw) { clearInterval(ui.sw.iv); ui.sw = null; } }
 function logSet() {
   const s = S.session, c = s.cur, x = s.ex[c.i], e = EXM[x.id];
   stopSW(); x.reps[c.s] = Math.max(0, Math.round(ui.stepVal || 0)); ui.stepVal = null; ui.cancelAsk = false;
-  const prevI = c.i; advance(s); save(); beep(760, .1);
+  const val = x.reps[c.s], was = records()[x.id] || 0, pr = was > 0 && val > was && !(s.prs || []).some(q => q.id === x.id && q.v >= val);
+  if (pr) s.prs = (s.prs || []).filter(q => q.id !== x.id).concat({ id: x.id, v: val, was });
+  const prevI = c.i; if (!e.t && x.reps.every(v => v !== '')) ui.rirAsk = prevI;
+  advance(s); save(); beep(760, .1);
   if (!sessionDone(s)) {
     const nx = s.ex[s.cur.i], label = s.cur.i === prevI ? `ต่อไป: ${e.n} เซต ${s.cur.s + 1}` : `ต่อไป: ${EXM[nx.id].n}`;
     startRest(e.t ? 45 : (s.cur.i === prevI ? 75 : 90), label);
   } else { stopRest(); toast('ครบทุกเซตแล้ว'); }
+  if (pr) { toast(`สถิติใหม่! ${e.n} ${val} ${e.t ? 'วินาที' : 'ครั้ง'} (เดิม ${was}) +25 XP`); burst(); beep(1046, .2); }
   render(); window.scrollTo(0, 0);
 }
 function finishSession() {
   const s = S.session; if (!s) return;
-  const ups = [], downs = []; let reps = 0, sets = 0;
+  const ups = [], downs = [], notes = []; let reps = 0, sets = 0;
   s.ex.forEach(x => {
     const e = EXM[x.id], L = ladder(x.pt), k = L.findIndex(y => y.id === x.id);
     const v = x.reps.filter(n => n !== '').map(Number); reps += v.reduce((a, b) => a + b, 0); sets += v.length;
     if (!v.length || x.skip) return;
-    if (v.length === x.sets && Math.min(...v) >= e.r[1]) {
+    if (x.rir === 0 && v.length === x.sets && Math.min(...v) >= e.r[1]) { S.levels[x.pt] = x.id; notes.push(`${e.n}: ถึงเพดานแต่หมดแรง อยู่ขั้นเดิมอีกครั้งให้คล่องก่อน`); }
+    else if (v.length === x.sets && Math.min(...v) >= e.r[1]) {
       if (k < L.length - 1) { S.levels[x.pt] = L[k + 1].id; ups.push(`${e.n} → ${L[k + 1].n}`); }
       else { S.levels[x.pt] = x.id; ups.push(`${e.n}: ขั้นสูงสุดแล้ว ครั้งหน้าลงช้า 3 วินาทีหรือเพิ่มอีกหนึ่งเซต`); }
-    } else if (Math.max(...v) < e.r[0] && k > 0) { S.levels[x.pt] = L[k - 1].id; downs.push(`${e.n} → ${L[k - 1].n}`); }
+    } else if (x.rir >= 4 && k < L.length - 1 && v.length === x.sets && Math.min(...v) >= Math.ceil((e.r[0] + e.r[1]) / 2)) { S.levels[x.pt] = L[k + 1].id; ups.push(`${e.n} → ${L[k + 1].n} (เหลือแรงเยอะ เลื่อนเร็ว)`); }
+    else if (Math.max(...v) < e.r[0] && k > 0) { S.levels[x.pt] = L[k - 1].id; downs.push(`${e.n} → ${L[k - 1].n}`); }
     else S.levels[x.pt] = x.id;
   });
   if (!sets) { toast('ยังไม่ได้บันทึกเซตไหนเลย'); return; }
   const mins = Math.min(180, Math.max(1, Math.round((Date.now() - s.start) / 60000)));
-  S.workouts.push({ date: s.date, tid: s.tid, name: TPL[s.tid].n, mins, sets, reps, ups, ex: s.ex.map(x => ({ id: x.id, reps: x.reps })) });
+  S.workouts.push({ date: s.date, tid: s.tid, name: TPL[s.tid].n, mins, sets, reps, ups, ex: s.ex.map(x => ({ id: x.id, reps: x.reps, rir: x.rir })) });
+  const prs = s.prs || []; ui.rirAsk = null;
   S.session = null; ui.stepVal = null; save(); unlockScreen(); stopRest(); stopSW();
   showModal(`<span class="chip good" style="align-self:flex-start">บันทึกแล้ว</span><h2>เสร็จแล้ว เก่งมาก</h2><div class="kpis"><div class="kpi"><b>${sets}</b><span>เซต</span></div><div class="kpi"><b>${fmt(reps)}</b><span>ครั้งรวม</span></div><div class="kpi"><b>${mins}</b><span>นาที</span></div></div>
     ${ups.length ? `<div><b>เลื่อนขั้นครั้งหน้า</b><ul>${ups.map(u => `<li>${esc(u)}</li>`).join('')}</ul></div>` : '<p class="muted">ครั้งหน้าพยายามเพิ่มอีก 1–2 ครั้งในแต่ละเซต ทำได้ถึงเพดานทุกเซตเมื่อไหร่ ระบบจะเลื่อนขั้นให้</p>'}
     ${downs.length ? `<div><b>ปรับให้ง่ายลงก่อน</b><ul>${downs.map(u => `<li>${esc(u)}</li>`).join('')}</ul></div>` : ''}
+    ${notes.length ? `<div><b>โค้ชปรับให้</b><ul>${notes.map(u => `<li>${esc(u)}</li>`).join('')}</ul></div>` : ''}
+    ${prs.length ? `<div><b>สถิติใหม่ ${prs.length} ท่า (+${prs.length * 25} XP)</b><ul>${prs.map(q => `<li>${esc(EXM[q.id].n)}: ${q.v} (เดิม ${q.was})</li>`).join('')}</ul></div>` : ''}
     <p class="small muted">ภายใน 2 ชั่วโมง กินโปรตีนราว ${calc().perMeal} กรัม และดื่มน้ำเพิ่ม 500 ml</p>`);
   location.hash = 'today'; render();
 }
@@ -2351,6 +2473,9 @@ document.addEventListener('click', ev => {
       break;
     }
     case 'log-set': logSet(); break;
+    case 'rir': { const x = S.session && S.session.ex[ui.rirAsk]; if (x) { x.rir = +el.dataset.v; save(); toast('บันทึกแล้ว ระบบใช้ปรับขั้นครั้งหน้า'); } ui.rirAsk = null; render(); break; }
+    case 'ready': { S.ready = S.ready || {}; S.ready[d] = Object.assign({}, S.ready[d], { [el.dataset.k]: +el.dataset.v }); const r = readyOf(d); if (r) { ui.readyEdit = false; ui.catSay = `ความพร้อม ${r.score} เปอร์เซ็นต์ ${readyMode(r.score).t}`; } save(); render(); break; }
+    case 'ready-edit': ui.readyEdit = true; render(); break;
     case 'finish': finishSession(); break;
     case 'cancel': if (!ui.cancelAsk) { ui.cancelAsk = true; render(); break; } S.session = null; ui.cancelAsk = false; ui.stepVal = null; save(); stopRest(); stopSW(); unlockScreen(); render(); toast('ทิ้งการฝึกนี้แล้ว'); break;
     case 'rest-add': rest.end += 15000; tickRest(); break;
@@ -2537,6 +2662,8 @@ function rProgress() {
   ${statusPanel(game(), true)}
   <section class="sys" aria-label="ฉายา"><div class="sys-h"><span>ฉายา</span><span class="sys-sub">ได้แล้ว ${game().titles.filter(t => t.got).length}/${TITLES.length}</span></div>
     <ul class="titles">${game().titles.map(t => `<li class="${t.got ? '' : 'locked'}"><b>${esc(t.n)}</b><span>${esc(t.d)}</span></li>`).join('')}</ul></section>
+  ${volumePanel()}
+  ${recordsPanel()}
   <article class="card">
     <div class="row between"><h2>น้ำหนัก</h2>${demoW ? '<span class="chip warn">ข้อมูลตัวอย่าง</span>' : ''}</div>
     <div class="row"><label class="f" style="flex:1 1 140px">วันที่<input type="date" id="w-d" value="${iso()}" max="${iso()}"></label><label class="f" style="flex:1 1 120px">น้ำหนัก (กก.)<input type="number" id="w-kg" inputmode="decimal" step="0.1" min="25" max="300" placeholder="${p.weight}"></label><button class="btn pri" data-act="w-add" style="align-self:flex-end">บันทึก</button></div>

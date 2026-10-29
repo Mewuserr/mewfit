@@ -1,0 +1,10 @@
+{
+  "$schema": "https://unpkg.com/wrangler/config-schema.json",
+  "name": "mewfit",
+  // ล็อกบัญชีไว้ — บัญชี Cloudflare ของ m3wxuser@gmail.com (คนละบัญชีกับ ALTF4/FanQuiz)
+  "account_id": "784ec89cbd9ffe6aa24ef5158cea48be",
+  "compatibility_date": "2026-09-30",
+  "assets": {
+    "directory": "."
+  }
+}

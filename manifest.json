@@ -1,0 +1,16 @@
+{
+  "name": "MewFit — เทรนเนอร์ส่วนตัวที่บ้าน",
+  "short_name": "MewFit",
+  "description": "ตารางฝึกที่บ้านที่ปรับระดับเอง ท่าสาธิตเคลื่อนไหว แผนอาหารไทย ตารางชีวิต และความรู้จากงานวิจัย",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0F1A5E",
+  "theme_color": "#2443E6",
+  "lang": "th",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

@@ -3,7 +3,7 @@
 > Facts marked *(inferred)* were inferred from the code and README because the owner delegated design decisions ("คุณตัดสินใจได้เลย"). Confirm or correct them.
 
 ## What it is
-A free single-file web app (installable PWA) that acts as a personal trainer for working out at home. All data stays in the user's own browser; no account, no server.
+A free single-file web app (installable PWA) that acts as a personal trainer for working out at home. Works with no sign-up (data in the browser), and optional accounts (username + 6-digit PIN) sync each user's data to Cloudflare D1 so it survives a cleared browser and follows them across devices. Anyone can use it; each account's data is private to that account.
 
 ## Who uses it
 - Thai adults who want to get fit at home with little or no equipment *(inferred)*.
@@ -27,6 +27,6 @@ A free single-file web app (installable PWA) that acts as a personal trainer for
 Someone opens it on their phone, immediately sees what to do today, starts a workout in one tap, and comes back daily *(inferred)*.
 
 ## Constraints
-- One `index.html`, no build step, no framework; deployed on Cloudflare Workers static assets.
+- One `index.html` plus a small `worker.js` API, no build step, no framework; deployed on Cloudflare Workers (static assets + D1).
 - Must work offline (service worker) and on small phones (360px wide).
 - Owner wants: simple, beautiful, easy to use, modern; mobile first.

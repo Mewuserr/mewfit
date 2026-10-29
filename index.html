@@ -19,7 +19,7 @@
 <style>
 /* World: a Muay Thai camp. Corner-red (the logo's orange) owns today's bout and the go action;
    blue corner carries info and data; ink ropes hold the floating nav. Kanit sets display and numerals
-   upright like fight-poster lettering; IBM Plex Sans Thai carries the reading. */
+   upright like fight-poster lettering; Sarabun (a looped Thai face) carries the reading. */
 :root{
   --bg:#F1F2F4; --surface:#FFFFFF; --sunk:#EBECEF; --ink:#121318; --muted:#454952; --line:#E0E2E7;
   --accent:#2343D8; --accent-ink:#FFFFFF; --accent-soft:#E6EBFF; --hot:#C2380F; --hot-soft:#FFE8DF;
@@ -64,7 +64,7 @@ button,input,select,textarea,output{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .num,.mono{font-family:var(--fm);font-variant-numeric:tabular-nums;font-weight:600}
 .muted{color:var(--muted)} .small{font-size:.93rem}
-.eyebrow{font-size:.93rem;color:var(--muted);font-weight:500}
+.eyebrow{display:block;font-size:.93rem;color:var(--muted);font-weight:500}
 
 /* top bar + logo */
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--glass);-webkit-backdrop-filter:saturate(1.4) blur(16px);backdrop-filter:saturate(1.4) blur(16px)}
@@ -80,7 +80,8 @@ button,input,select,textarea,output{font:inherit;color:inherit}
 .tabs a[aria-current="page"],.top-mini a[aria-current="page"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
 .top-mini{margin-left:auto;display:flex;gap:2px}
 @media (min-width:880px){.tabs{display:flex}.top-mini{display:none}}
-body.v-start .tabs,body.v-start .top-mini,body.v-start .bottom{display:none!important}
+body.v-start .tabs,body.v-start .top-mini,body.v-start .bottom,body.playing .bottom{display:none!important}
+body.playing main{padding-bottom:calc(32px + env(safe-area-inset-bottom,0px))}
 
 main{max-width:1000px;margin:0 auto;padding-block:12px calc(116px + env(safe-area-inset-bottom,0px));
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
@@ -139,18 +140,21 @@ button.chip[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink
 /* hero brand surface */
 .hero{position:relative;overflow:hidden;background:var(--hero);color:var(--hero-fg);border-radius:28px;padding:22px;display:grid;gap:14px;
   grid-template-columns:1fr;box-shadow:0 16px 32px -22px rgba(18,19,24,.35)}
-@media (min-width:640px){.hero{grid-template-columns:1.25fr 1fr;padding:28px;align-items:center}}
+@media (min-width:640px){.hero{grid-template-columns:1.25fr 1fr;padding:28px;align-items:center}.hero .hero-fig{background:none}.rounds{flex-wrap:wrap;-webkit-mask-image:none;mask-image:none}}
 .hero .eyebrow{color:var(--hero-fg);font-weight:600}
 .hero p{color:var(--ink-on-light);max-width:52ch;background:rgba(255,255,255,.9);border-radius:16px;padding:10px 14px;font-weight:500}   /* the coach speaking: small text never sits on the orange */
 .hero-txt{display:flex;flex-direction:column;gap:10px;min-width:0}
-.hero h1{font-weight:800;letter-spacing:-.01em;font-size:clamp(2rem,9vw,2.8rem);line-height:1.08}
+.hero h1{font-weight:800;letter-spacing:-.01em;font-size:clamp(2.4rem,11vw,3.4rem);line-height:1.05}
 .hero h2{color:var(--hero-fg)}
 .hero .btn{border-color:var(--hero-line);background:transparent;color:var(--hero-fg)}
 .hero .btn:hover{border-color:var(--hero-fg)}
 .hero .btn.pri{background:var(--hero-fg);border-color:var(--hero-fg);color:#fff}
 .hero .btn.hot{background:var(--hero-fg);border-color:var(--hero-fg);color:#fff}
 .hero-sess{display:flex;flex-direction:column;gap:2px}
-.hero-sess b{font-family:var(--fd);font-size:1.35rem;font-weight:700;line-height:1.2}
+.hero-hi{font-family:var(--fd);font-weight:600;font-size:1.02rem;color:var(--hero-fg)}
+.hero-go{flex-direction:column;align-items:stretch;gap:4px}
+.hero-go .btn.big{min-height:60px;font-size:1.3rem}
+.hero .btn.link{border:0;background:none;min-height:40px;text-decoration:underline;text-underline-offset:4px}
 .hero-sess span{color:var(--hero-fg);font-size:1rem;font-weight:500}
 .hero-fig{background:rgba(255,255,255,.16);border-radius:20px;padding:6px;--fig:var(--hero-fg);--prop:var(--hero-line)}
 .hero-fig .gr{stroke:var(--hero-line)}
@@ -200,9 +204,9 @@ body.v-today::before{background:var(--go)}
 .bar{height:8px;border-radius:999px;background:var(--sunk);overflow:hidden}
 .bar i{display:block;height:100%;background:var(--accent);border-radius:inherit;transition:width .3s}
 .bar.over i{background:var(--warn)} .bar.ok i{background:var(--good)}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:10px}
-.kpi{background:var(--sunk);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;min-width:0}
-.kpi b{font-family:var(--fm);font-size:1.55rem;font-weight:700;letter-spacing:0;font-variant-numeric:tabular-nums}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:0 20px}
+.kpi{border-top:1px solid var(--line);padding:10px 0 12px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.kpi b{font-family:var(--fm);font-size:2.1rem;font-weight:800;line-height:1.1;letter-spacing:0;font-variant-numeric:tabular-nums}
 .kpi span{font-size:.88rem;color:var(--muted)}
 
 /* week strip */
@@ -283,13 +287,14 @@ legend{font-weight:600;font-size:.92rem;padding:0;margin-bottom:6px}
 
 /* workout player */
 .player .pl-stage{position:relative}
+@media (max-width:639px){.player .pl-stage{height:19vh;min-height:130px;display:flex;justify-content:center}.player .pl-stage .fig{width:auto;max-width:100%;height:100%}}
 .pl-k{position:absolute;top:10px;left:10px}
 .pl-name{font-size:clamp(1.4rem,5vw,1.9rem)}
 .ladder{display:flex;gap:3px;margin-top:2px}
 .ladder i{height:5px;flex:1;max-width:24px;border-radius:3px;background:var(--sunk)}
 .ladder i.on{background:var(--accent)}
 .pl-target{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.pl-target div{background:var(--sunk);border-radius:14px;padding:10px;display:flex;flex-direction:column;min-width:0}
+.pl-target div{background:var(--sunk);border-radius:14px;padding:8px 10px;display:flex;flex-direction:column;min-width:0}
 .pl-target b{font-family:var(--fm);font-size:1.1rem;font-weight:600;overflow-wrap:anywhere}
 .pl-target span{font-size:.84rem;color:var(--muted)}
 .stepper{display:grid;grid-template-columns:64px 1fr 64px;gap:10px;align-items:center}
@@ -1184,7 +1189,7 @@ function acctCard() {
     ${a.open === 'delete' ? `<form class="stack" data-acct="delete" novalidate><p>ลบบัญชี @${esc(SY.user)} และข้อมูลทั้งหมดบนคลาวด์และในเครื่องนี้ กู้คืนไม่ได้</p>${pinField('pin', 'ใส่รหัสเพื่อยืนยัน', 'current-password')}${err}<div class="row">${go('ลบบัญชีถาวร', 'btn danger')}${cancel}</div></form>` : ''}
   </article>`;
 }
-const acctNudge = () => !SY.token && S.profile && !S.acctNudgeOff ? `<div class="banner"><span><b>ข้อมูลอยู่แค่ในเครื่องนี้</b> สร้างบัญชีกันข้อมูลหาย และเปิดได้หลายเครื่อง</span><div class="row"><a class="btn hot sm" href="#profile">สร้างบัญชี</a><button class="btn sm ghost" data-act="acct-nudge-off">ไว้ทีหลัง</button></div></div>` : '';
+const acctNudge = () => !SY.token && S.profile && !S.acctNudgeOff ? `<div class="banner"><span><b>ข้อมูลอยู่แค่ในเครื่องนี้</b> สร้างบัญชีกันข้อมูลหาย และเปิดได้หลายเครื่อง</span><div class="row"><a class="btn pri sm" href="#profile">สร้างบัญชี</a><button class="btn sm ghost" data-act="acct-nudge-off">ไว้ทีหลัง</button></div></div>` : '';
 var syncReady = true;   // save() may run before this module is reached; it only syncs from here on
 window.addEventListener('online', () => cloudSync());
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') cloudSync(); else if (SY.dirty) cloudSync(true); });
@@ -1230,7 +1235,7 @@ const view = () => {
 };
 function render() {
   const v = view();
-  document.body.className = 'v-' + v + (rest.on ? ' resting' : '');
+  document.body.className = 'v-' + v + (rest.on ? ' resting' : '') + (v === 'train' && S.session ? ' playing' : '');
   VIEWS.forEach(n => { $('#v-' + n).hidden = n !== v; });
   const navKey = v === 'moves' ? 'train' : v;
   document.querySelectorAll('.tabs a,.bottom a,.top-mini a').forEach(a => { if (a.getAttribute('href') === '#' + navKey) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
@@ -1419,16 +1424,16 @@ function rStart() {
     const p = obProfile(), c = calc(p), map = weekMap(p), lv = o.testChanged || !S.profile || p.caution ? levelsFrom(p) : S.levels;
     const startEx = pt => { const L = ladder(pt, p); let i = L.findIndex(x => x.id === lv[pt]); if (i < 0) i = p.caution ? 0 : Math.round(({ beginner: .3, intermediate: .55, advanced: .8 }[p.level] || .3) * (L.length - 1)); return L[i]; };
     body = `<div class="hero" style="grid-template-columns:1fr"><div class="hero-txt"><span class="eyebrow">เป้าต่อวัน · ${GOALS[p.goal].l}</span>
-        <div class="kpis">${[[fmt(c.kcal), 'kcal'], [c.protein + ' g', 'โปรตีน'], [c.carb + ' g', 'คาร์บ'], [c.fat + ' g', 'ไขมัน']].map(([v, l]) => `<div class="kpi" style="background:rgba(255,255,255,.9);color:var(--ink-on-light)"><b>${v}</b><span style="color:#454952">${l}</span></div>`).join('')}</div>
+        <div class="kpis">${[[fmt(c.kcal), 'kcal'], [c.protein + ' g', 'โปรตีน'], [c.carb + ' g', 'คาร์บ'], [c.fat + ' g', 'ไขมัน']].map(([v, l]) => `<div class="kpi" style="border-color:var(--hero-line);color:var(--hero-fg)"><b>${v}</b><span style="color:var(--hero-fg);font-weight:600">${l}</span></div>`).join('')}</div>
         <p>เผาผลาญราว ${fmt(c.tdee)} kcal ต่อวัน · น้ำ ${(c.water / 1000).toFixed(1)} ลิตร · เดิน ${fmt(c.steps)} ก้าว · น้ำหนักควรเปลี่ยน ${c.rateKg[0]} ถึง ${c.rateKg[1]} กก. ต่อสัปดาห์</p></div></div>
       <div class="card"><h3>ตารางฝึกต่อสัปดาห์</h3>${weekStrip(p)}<p class="small muted">${p.minutes} นาทีต่อครั้ง · ช่วง${{ morning: 'เช้า', lunch: 'พักเที่ยง', evening: 'เย็น' }[p.trainTime]}</p></div>
       <div class="card"><h3>ท่าเริ่มต้นของคุณ</h3>${p.caution ? '<p class="note">เริ่มที่ขั้นง่ายที่สุดทุกท่าตามผลคัดกรองสุขภาพ</p>' : ''}
-        ${['push', 'pull', 'squat', 'hinge', 'core1'].map(pt => { const e = startEx(pt); return `<div class="mv"><div class="figbox mini">${figSVG(ANIM[e.id])}</div><div><span class="eyebrow">${PT_L[pt]}</span><h3>${esc(e.n)}</h3></div></div>`; }).join('')}</div>`;
+        ${['push', 'pull', 'squat', 'hinge', 'core1'].map(pt => { const e = startEx(pt); return `<div class="mv"><div class="figbox mini">${figSVG(ANIM[e.id])}</div><div><h3>${esc(e.n)}</h3><span class="eyebrow">${PT_L[pt]}</span></div></div>`; }).join('')}</div>`;
   }
   const yes = o.par.some(v => v === 'y');
   el.innerHTML = `<div class="ob">
     <div class="ob-prog" aria-hidden="true">${OB.slice(1).map((_, i) => `<i class="${i < n ? 'on' : ''}"></i>`).join('')}</div>
-    <div class="stack" style="gap:6px"><span class="eyebrow">ขั้น ${n}/${OB.length - 1}${st.k === 'test' ? ' · ไม่บังคับ' : ''}</span><h1>${st.t}</h1></div>
+    <div class="stack" style="gap:6px"><h1>${st.t}</h1><span class="eyebrow">ขั้น ${n}/${OB.length - 1}${st.k === 'test' ? ' · ไม่บังคับ' : ''}</span></div>
     ${st.why ? `<div class="ob-why"><b>ทำไมถาม</b><span>${st.why}</span></div>` : ''}
     ${body}
     <div class="ob-nav">${n > 1 || o.edit ? '<button class="btn big" data-act="ob-back">ย้อนกลับ</button>' : '<button class="btn big" data-act="ob-back">ย้อนกลับ</button>'}
@@ -1469,22 +1474,20 @@ function rToday() {
   let btns;
   if (live) btns = '<a class="btn hot big" href="#train">ฝึกต่อ</a>';
   else if (done) btns = `<span class="chip good" style="background:rgba(255,255,255,.12)">เสร็จแล้ว ${done.mins} นาที · ${done.sets} เซต</span><button class="btn" data-act="stretch">ยืดเหยียด 8 นาที</button>`;
-  else if (tid) btns = `<button class="btn hot big" data-act="start" data-tid="${tid}">เริ่มฝึก</button><a class="btn" href="#train">ดูท่าวันนี้</a>`;
+  else if (tid) btns = `<button class="btn hot big" data-act="start" data-tid="${tid}">เริ่มฝึก</button><a class="btn link" href="#train">ดูท่าวันนี้ทั้งหมด</a>`;
   else btns = '<button class="btn pri" data-act="stretch">ยืดเหยียด 8 นาที</button><button class="btn" data-act="seven">วงจร 7 นาที</button>';
   $('#v-today').innerHTML = `
   ${demoBanner()}
   <section class="hero">
     <div class="hero-txt">
-      <span class="eyebrow">${DAY_L[dow]} ${thDate(d)}${isDeload() ? ' · สัปดาห์ผ่อน' : ''}</span>
-      <h1>${hi}${name}</h1>
-      ${tid ? `<div class="hero-sess"><b>${esc(TPL[tid].n)}</b><span>${sess.ex.length} ท่า · ${sess.ex[0].sets} เซต · ราว ${estMin(tid)} นาที</span></div><ol class="rounds" aria-label="ท่าวันนี้">${sess.ex.map((x, i) => `<li><b>${i + 1}</b>${esc(EXM[x.id].n)}</li>`).join('')}</ol>` : '<div class="hero-sess"><b>วันพัก</b><span>ฟื้นตัว เดินเยอะๆ</span></div>'}
+      <div class="hero-hi">${hi}${name} · ${DAY_L[dow]} ${thDate(d)}${isDeload() ? ' · สัปดาห์ผ่อน' : ''}</div>
+      ${tid ? `<h1>${esc(TPL[tid].n)}</h1><div class="hero-sess"><span>${sess.ex.length} ท่า · ${sess.ex[0].sets} เซต · ราว ${estMin(tid)} นาที</span></div><ol class="rounds" aria-label="ท่าวันนี้">${sess.ex.map((x, i) => `<li><b>${i + 1}</b>${esc(EXM[x.id].n)}</li>`).join('')}</ol>` : '<h1>วันพัก</h1><div class="hero-sess"><span>ฟื้นตัว เดินเยอะๆ</span></div>'}
       <p>${msg}</p>
-      <div class="row">${btns}</div>
+      <div class="row hero-go">${btns}</div>
     </div>
     <div class="hero-fig">${figSVG(tid ? ANIM[sess.ex[0].id] : 'bridge')}</div>
   </section>
   ${guide}
-  ${acctNudge()}
   <div class="grid g2">
     <article class="card">
       <div class="row between"><h2>วันนี้</h2><a class="btn sm" href="#eat">บันทึกอาหาร</a></div>
@@ -1505,6 +1508,7 @@ function rToday() {
       </div>
     </article>
   </div>
+  ${acctNudge()}
   <article class="card">
     <div class="row between"><h2>สัปดาห์นี้</h2><span class="chip ${wkDone >= wkNeed ? 'good' : 'acc'}">${wkDone}/${wkNeed} ครั้ง · ครบติดกัน ${weekStreak()} สัปดาห์</span></div>
     ${weekStrip(p)}
@@ -1514,7 +1518,7 @@ function rToday() {
     ${tool('stretch', 'stretch', 'ยืดเหยียด 8 นาที', 'วันพักหรือก่อนนอน')}
     ${tool('', 'scale', 'ชั่งน้ำหนัก', 'บันทึกทุกเช้า', '#progress')}
   </div>
-  <div class="tip"><span class="eyebrow">เคล็ดลับวันนี้ · ${TIP_CAT[tip.c]}</span><h3>${esc(tip.t)}</h3><p>${esc(tip.b)}</p><p class="src">ที่มา: ${esc(tip.s)}</p></div>`;
+  <div class="tip"><h3>${esc(tip.t)}</h3><span class="eyebrow">เคล็ดลับวันนี้ · ${TIP_CAT[tip.c]}</span><p>${esc(tip.b)}</p><p class="src">ที่มา: ${esc(tip.s)}</p></div>`;
 }
 
 /* ---------- train: overview + player ---------- */
@@ -1537,15 +1541,15 @@ function rTrain() {
   const sess = tid ? buildSession(tid) : null;
   $('#v-train').innerHTML = `
   ${demoBanner()}
-  <div class="view-head"><span class="eyebrow">ฝึกที่บ้าน · ${p.days.length} วันต่อสัปดาห์ · ${p.minutes} นาที${isDeload() ? ' · สัปดาห์ผ่อน' : ''}</span><h1>ฝึก</h1></div>
+  <div class="view-head"><h1>ฝึก</h1><span class="eyebrow">ฝึกที่บ้าน · ${p.days.length} วันต่อสัปดาห์ · ${p.minutes} นาที${isDeload() ? ' · สัปดาห์ผ่อน' : ''}</span></div>
   ${tid ? `<section class="hero">
-    <div class="hero-txt"><span class="eyebrow">วันนี้${doneToday ? ' · ฝึกแล้ว' : ''}</span><h1>${esc(TPL[tid].n)}</h1>
+    <div class="hero-txt"><h1>${esc(TPL[tid].n)}</h1><span class="eyebrow">วันนี้${doneToday ? ' · ฝึกแล้ว' : ''}</span>
       <p>${sess.ex.length} ท่า × ${sess.ex[0].sets} เซต · ราว ${estMin(tid)} นาที รวมวอร์มอัพ ${sess.fin ? '· มีคาร์ดิโอท้าย 4 นาที' : ''}</p>
       <div class="row"><button class="btn hot big" data-act="start" data-tid="${tid}">เริ่มฝึก</button><button class="btn" data-act="warm">วอร์มอัพ 5 นาที</button></div></div>
     <div class="hero-fig">${figSVG(ANIM[sess.ex[0].id])}</div></section>
   <article class="card"><h2>ท่าวันนี้</h2>
-    ${sess.ex.map(x => { const e = EXM[x.id], L = ladder(x.pt), k = L.findIndex(y => y.id === x.id), pv = lastPerf(x.id); return `<div class="mv"><div class="figbox mini">${figSVG(ANIM[x.id])}</div><div><span class="eyebrow">${PT_L[x.pt]} · ขั้น ${k + 1}/${L.length}</span><h3>${esc(e.n)}</h3><p class="small muted">${x.sets} เซต × ${e.r[0]}–${e.r[1]} ${e.t ? 'วินาที' : 'ครั้ง'}${pv ? ' · ครั้งก่อน ' + pv.filter(v => v !== '').join('·') : ''}</p></div></div>`; }).join('')}
-  </article>` : `<section class="hero"><div class="hero-txt"><span class="eyebrow">วันนี้</span><h1>วันพัก</h1><p>กล้ามเนื้อซ่อมแซมตัวเองในวันพัก ยืดเหยียดหรือเดินเบาๆ ช่วยให้ฟื้นตัวเร็วขึ้น อยากฝึกเพิ่มก็เลือกด้านล่างได้</p>
+    ${sess.ex.map(x => { const e = EXM[x.id], L = ladder(x.pt), k = L.findIndex(y => y.id === x.id), pv = lastPerf(x.id); return `<div class="mv"><div class="figbox mini">${figSVG(ANIM[x.id])}</div><div><h3>${esc(e.n)}</h3><span class="eyebrow">${PT_L[x.pt]} · ขั้น ${k + 1}/${L.length}</span><p class="small muted">${x.sets} เซต × ${e.r[0]}–${e.r[1]} ${e.t ? 'วินาที' : 'ครั้ง'}${pv ? ' · ครั้งก่อน ' + pv.filter(v => v !== '').join('·') : ''}</p></div></div>`; }).join('')}
+  </article>` : `<section class="hero"><div class="hero-txt"><h1>วันพัก</h1><span class="eyebrow">วันนี้</span><p>กล้ามเนื้อซ่อมแซมตัวเองในวันพัก ยืดเหยียดหรือเดินเบาๆ ช่วยให้ฟื้นตัวเร็วขึ้น อยากฝึกเพิ่มก็เลือกด้านล่างได้</p>
     <div class="row"><button class="btn pri" data-act="stretch">ยืดเหยียด 8 นาที</button><button class="btn" data-act="seven">วงจร 7 นาที</button></div></div><div class="hero-fig">${figSVG('bridge')}</div></section>`}
   <div class="tools">
     ${tool('warm', 'fire', 'วอร์มอัพ', '5 นาที ก่อนฝึกทุกครั้ง')}
@@ -1581,7 +1585,7 @@ function rPlayer() {
     if (ui.stepVal == null) ui.stepVal = defVal(x, c.s, prev);
     main = `<article class="card player">
       <div class="pl-stage figbox">${figSVG(ANIM[x.id], 'big')}<span class="chip acc pl-k">ท่า ${c.i + 1}/${s.ex.length}</span></div>
-      <div class="stack" style="gap:4px"><span class="eyebrow">${PT_L[x.pt]} · ขั้น ${k + 1}/${L.length}</span><h2 class="pl-name">${esc(e.n)}</h2><span class="small muted">${esc(e.en)}</span>${ladderBar(L.length, k)}</div>
+      <div class="stack" style="gap:4px"><h2 class="pl-name">${esc(e.n)}</h2><span class="eyebrow">${PT_L[x.pt]} · ขั้น ${k + 1}/${L.length}</span><span class="small muted">${esc(e.en)}</span>${ladderBar(L.length, k)}</div>
       <div class="pl-target"><div><b>${c.s + 1}/${x.sets}</b><span>เซต</span></div><div><b>${e.r[0]}–${e.r[1]}</b><span>${unit}${side}</span></div><div><b>${prev ? prev.filter(v => v !== '').join('·') : '–'}</b><span>ครั้งก่อน</span></div></div>
       ${rest.on ? `<div class="pl-rest"><span class="eyebrow">พัก หายใจลึกๆ</span><b id="pl-rest-t">${mmss((rest.end - Date.now()) / 1000)}</b><p>${esc(rest.label)}</p><div class="row"><button class="btn sm" data-act="rest-add">+15 วินาที</button><button class="btn sm pri" data-act="rest-skip">พร้อมแล้ว</button></div></div>`
         : `<div class="stepper"><button class="btn" data-act="step" data-n="-1" aria-label="ลด">−</button><output id="step-v" aria-live="polite">${ui.stepVal}</output><button class="btn" data-act="step" data-n="1" aria-label="เพิ่ม">+</button></div>
@@ -1595,7 +1599,7 @@ function rPlayer() {
     </article>`;
   }
   $('#v-train').innerHTML = `
-  <div class="view-head"><span class="eyebrow">กำลังฝึก · ${elapsed} นาที${s.date !== iso() ? ' · เริ่ม ' + thDate(s.date) : ''}${isDeload() ? ' · สัปดาห์ผ่อน' : ''}</span><h1>${esc(TPL[s.tid].n)}</h1></div>
+  <div class="view-head"><h1>${esc(TPL[s.tid].n)}</h1><span class="eyebrow">กำลังฝึก · ${elapsed} นาที${s.date !== iso() ? ' · เริ่ม ' + thDate(s.date) : ''}${isDeload() ? ' · สัปดาห์ผ่อน' : ''}</span></div>
   ${s.ex.every(x => x.reps.every(v => v === '')) && !rest.on ? `<div class="banner"><span>ยังไม่ได้วอร์มอัพ? 5 นาทีช่วยลดการบาดเจ็บและทำให้เซตแรกแรงขึ้น</span><button class="btn sm pri" data-act="warm">วอร์มอัพ 5 นาที</button></div>` : ''}
   ${main}
   <article class="card"><h3>ลำดับวันนี้</h3><ol class="pl-list">${s.ex.map((x, i) => { const f = x.reps.filter(v => v !== '').length, ok = x.skip || f === x.sets; const j = Math.max(0, x.reps.findIndex(v => v === '')); return `<li><button data-act="goto" data-i="${i}" data-s="${ok ? 0 : j}" class="${i === c.i && !done ? 'cur' : ''}"><span class="st ${ok ? 'ok' : ''}">${ok ? '✓' : i + 1}</span><span>${esc(EXM[x.id].n)}</span><span class="mono small muted">${x.skip ? 'ข้าม' : f + '/' + x.sets}</span></button></li>`; }).join('')}</ol></article>
@@ -1605,7 +1609,7 @@ function rPlayer() {
 function rMoves() {
   const p = P();
   $('#v-moves').innerHTML = `
-  <div class="view-head"><span class="eyebrow">${Object.values(LAD).reduce((a, l) => a + l.length, 0)} ท่า · เรียงจากง่ายไปยาก</span><h1>คลังท่า</h1>
+  <div class="view-head"><h1>คลังท่า</h1><span class="eyebrow">${Object.values(LAD).reduce((a, l) => a + l.length, 0)} ท่า · เรียงจากง่ายไปยาก</span>
     <p class="muted">ทุกกลุ่มท่าเป็นบันได ทำขั้นปัจจุบันให้ได้ถึงเพดานทุกเซตก่อนขึ้นขั้นถัดไป ท่าที่ต้องใช้อุปกรณ์จะแสดงเฉพาะเมื่อคุณมี</p></div>
   ${Object.keys(LAD).map(pt => { const cur = curEx(pt).e.id; return `<article class="card"><h2>${PT_L[pt]}</h2>
     ${LAD[pt].map((e, i) => { const has = (!e.eq || p.eq[e.eq]) && (!e.noeq || !p.eq[e.noeq]); return `<div class="mv" style="${has ? '' : 'opacity:.55'}"><div class="figbox mini">${figSVG(ANIM[e.id])}</div><div>
@@ -1628,7 +1632,7 @@ function rProfile() {
   const eqs = Object.entries(p.eq).filter(([, v]) => v).map(([k]) => ({ db: 'ดัมเบล', band: 'ยางยืด', bar: 'บาร์โหน' }[k])).join(' ') || 'ไม่มีอุปกรณ์';
   const tests = Object.entries(p.baseline || {}).map(([k, i]) => `${{ push: 'วิดพื้น', squat: 'สควอท', plank: 'แพลงก์', pull: 'ดึงข้อ' }[k]} ${TESTS[k].o[i]}`).join(' · ') || 'ยังไม่ได้ทดสอบ';
   $('#v-profile').innerHTML = `
-  <div class="view-head"><span class="eyebrow">${SY.token ? 'บัญชี @' + esc(SY.user) + ' · ซิงก์หลายเครื่อง' : 'บันทึกไว้ในเครื่องนี้เท่านั้น'}</span><h1>${p.name ? 'คุณ' + esc(p.name) : 'โปรไฟล์'}</h1></div>
+  <div class="view-head"><h1>${p.name ? 'คุณ' + esc(p.name) : 'โปรไฟล์'}</h1><span class="eyebrow">${SY.token ? 'บัญชี @' + esc(SY.user) + ' · ซิงก์หลายเครื่อง' : 'บันทึกไว้ในเครื่องนี้เท่านั้น'}</span></div>
   <div class="kpis"><div class="kpi"><b>${fmt(c.kcal)}</b><span>kcal ต่อวัน</span></div><div class="kpi"><b>${c.protein} g</b><span>โปรตีน</span></div><div class="kpi"><b>${c.bmi}</b><span>BMI</span></div><div class="kpi"><b>${fmt(c.tdee)}</b><span>เผาผลาญต่อวัน</span></div></div>
   ${acctCard()}
   <article class="card"><h2>ข้อมูลที่ใช้คำนวณ</h2>
@@ -1910,7 +1914,7 @@ function rEat() {
   const planTot = sumItems([].concat(...Object.values(plan)));
   $('#v-eat').innerHTML = `
   ${demoBanner()}
-  <div class="view-head"><span class="eyebrow">${GOALS[p.goal].l} · ${GOALS[p.goal].d}</span><h1>กิน</h1></div>
+  <div class="view-head"><h1>กิน</h1><span class="eyebrow">${GOALS[p.goal].l} · ${GOALS[p.goal].d}</span></div>
   <article class="card">
     <h2>เป้าหมายต่อวัน</h2>
     <div class="kpis">
@@ -1961,7 +1965,7 @@ function rPlan() {
   const sleepH = ((toMin(p.wake) - toMin(p.bed) + 1440) % 1440) / 60;
   $('#v-plan').innerHTML = `
   ${demoBanner()}
-  <div class="view-head"><span class="eyebrow">ตื่น ${p.wake} · นอน ${p.bed} · งาน ${p.workStart}–${p.workEnd}</span><h1>ตารางชีวิต</h1>
+  <div class="view-head"><h1>ตารางชีวิต</h1><span class="eyebrow">ตื่น ${p.wake} · นอน ${p.bed} · งาน ${p.workStart}–${p.workEnd}</span>
     <p class="muted">จัดวันให้เหมือนมีเทรนเนอร์คอยเตือน เลือกวันเพื่อดูตาราง เปลี่ยนเวลาได้ในหน้าโปรไฟล์</p></div>
   <article class="card">${weekStrip(p, { pick: true })}</article>
   <article class="card">
@@ -2005,7 +2009,7 @@ function rProgress() {
   const demoW = ws.length && ws[0].demo;
   $('#v-progress').innerHTML = `
   ${demoBanner()}
-  <div class="view-head"><span class="eyebrow">ชั่งตอนเช้า หลังเข้าห้องน้ำ ก่อนกิน</span><h1>ความคืบหน้า</h1></div>
+  <div class="view-head"><h1>ความคืบหน้า</h1><span class="eyebrow">ชั่งตอนเช้า หลังเข้าห้องน้ำ ก่อนกิน</span></div>
   <article class="card">
     <div class="row between"><h2>น้ำหนัก</h2>${demoW ? '<span class="chip warn">ข้อมูลตัวอย่าง</span>' : ''}</div>
     <div class="row"><label class="f" style="flex:1 1 140px">วันที่<input type="date" id="w-d" value="${iso()}" max="${iso()}"></label><label class="f" style="flex:1 1 120px">น้ำหนัก (กก.)<input type="number" id="w-kg" inputmode="decimal" step="0.1" min="25" max="300" placeholder="${p.weight}"></label><button class="btn pri" data-act="w-add" style="align-self:flex-end">บันทึก</button></div>
@@ -2051,12 +2055,12 @@ function rLearn() {
   const tips = cat === 'myth' ? [] : TIPS.filter(t => cat === 'all' || t.c === cat);
   const myths = (cat === 'all' || cat === 'myth') ? MYTHS : [];
   $('#v-learn').innerHTML = `
-  <div class="view-head"><span class="eyebrow">ทุกข้อมีงานวิจัยหรือแนวทางทางการแพทย์รองรับ</span><h1>ความรู้</h1>
+  <div class="view-head"><h1>ความรู้</h1><span class="eyebrow">ทุกข้อมีงานวิจัยหรือแนวทางทางการแพทย์รองรับ</span>
     <p class="muted">เคล็ดลับที่ใช้ได้จริง พร้อมที่มา อ่านวันละข้อก็พอ</p></div>
   <div class="chips" role="group" aria-label="หมวด">${Object.entries(TIP_CAT).map(([k, l]) => `<button class="chip" data-act="learn-cat" data-c="${k}" aria-pressed="${k === cat}">${l}</button>`).join('')}</div>
   <div class="tips">
-    ${tips.map(t => `<div class="tip"><span class="eyebrow">${TIP_CAT[t.c]}</span><h3>${esc(t.t)}</h3><p>${esc(t.b)}</p><p class="src">ที่มา: ${esc(t.s)}</p></div>`).join('')}
-    ${myths.map(t => `<div class="tip myth"><span class="eyebrow">ความเชื่อผิดๆ</span><h3>${esc(t.t)}</h3><p><span class="verdict">ความจริง:</span> ${esc(t.b)}</p><p class="src">ที่มา: ${esc(t.s)}</p></div>`).join('')}
+    ${tips.map(t => `<div class="tip"><h3>${esc(t.t)}</h3><span class="eyebrow">${TIP_CAT[t.c]}</span><p>${esc(t.b)}</p><p class="src">ที่มา: ${esc(t.s)}</p></div>`).join('')}
+    ${myths.map(t => `<div class="tip myth"><h3>${esc(t.t)}</h3><span class="eyebrow">ความเชื่อผิดๆ</span><p><span class="verdict">ความจริง:</span> ${esc(t.b)}</p><p class="src">ที่มา: ${esc(t.s)}</p></div>`).join('')}
   </div>
   <p class="small muted">MewFit ให้ข้อมูลทั่วไป ไม่ใช่คำแนะนำทางการแพทย์ ถ้ามีโรคประจำตัว ตั้งครรภ์ หรือเจ็บระหว่างฝึก ให้ปรึกษาแพทย์หรือนักกายภาพก่อน</p>`;
 }

@@ -1,4 +1,5 @@
-// MewFit API: accounts (Sign in with Google, or username + 6-digit PIN) and one synced state document per user.
+// MewFit API: accounts (username + 6-digit PIN, recovery code, device pairing; optional Sign in with Google)
+// and one synced state document per user.
 // Everything outside /api/* is served from static assets.
 
 const PIN_ITER = 20000;               // PBKDF2 rounds; online guessing is stopped by the lockouts below
@@ -11,6 +12,8 @@ const SESSION_MS = 365 * 24 * 60 * 60 * 1000;
 const MAX_STATE = 900 * 1024;         // bytes of JSON per user
 const OAUTH_STATE_MS = 10 * 60 * 1000; // time allowed on Google's screen
 const OAUTH_CODE_MS = 2 * 60 * 1000;   // time for the page to redeem the one-time code
+const PAIR_MS = 5 * 60 * 1000;         // a pairing code shown on a signed-in device lives this long
+const RC_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no 0/O/1/I: easy to copy by hand
 
 const enc = new TextEncoder();
 
@@ -46,6 +49,10 @@ async function route(req, env, url) {
   if (path === '/api/auth/google/link' && m === 'POST') return googleLink(req, env, url);
   if (path === '/api/auth/google/callback' && m === 'GET') return googleCallback(env, url);
   if (path === '/api/auth/redeem' && m === 'POST') return redeem(req, env);
+  if (path === '/api/recover' && m === 'POST') return recover(req, env);
+  if (path === '/api/recovery/new' && m === 'POST') return newRecovery(req, env);
+  if (path === '/api/pair/start' && m === 'POST') return pairStart(req, env);
+  if (path === '/api/pair/redeem' && m === 'POST') return pairRedeem(req, env);
   if (path === '/api/signup' && m === 'POST') return signup(req, env);
   if (path === '/api/login' && m === 'POST') return login(req, env);
   if (path === '/api/state' && m === 'GET') return getState(req, env);
@@ -135,7 +142,7 @@ async function auth(req, env) {
   if (!m) throw new HttpError(401, 'no_session', 'กรุณาเข้าสู่ระบบอีกครั้ง');
   const th = await sha256(m[1]);
   const now = Date.now();
-  const s = await env.DB.prepare('SELECT s.user_id, s.last_seen, u.username, u.email, u.google_sub, u.pin_hash FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token_hash = ?').bind(th).first();
+  const s = await env.DB.prepare('SELECT s.user_id, s.last_seen, u.username, u.email, u.google_sub, u.pin_hash, u.recovery_hash FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token_hash = ?').bind(th).first();
   if (!s || now - s.last_seen > SESSION_MS) {
     if (s) await env.DB.prepare('DELETE FROM sessions WHERE token_hash = ?').bind(th).run();
     throw new HttpError(401, 'no_session', 'กรุณาเข้าสู่ระบบอีกครั้ง');
@@ -145,7 +152,7 @@ async function auth(req, env) {
 }
 
 // what the page shows and which controls apply: Google accounts have no PIN unless one was set
-const who = u => ({ username: u.email || u.username, google: !!u.google_sub, pin: !!u.pin_hash });
+const who = u => ({ username: u.email || u.username, google: !!u.google_sub, pin: !!u.pin_hash, recovery: !!u.recovery_hash });
 
 /* ---------- PIN verification with lockouts ---------- */
 async function verifyPin(env, req, user, pin, now) {
@@ -181,9 +188,10 @@ async function signup(req, env) {
   const id = crypto.randomUUID();
   const salt = hex(randomBytes(16));
   const ph = await hashPin(pin, salt);
+  const recovery = recoveryCode();
   try {
     await env.DB.batch([
-      env.DB.prepare('INSERT INTO users (id, username, pin_hash, pin_salt, created_at) VALUES (?, ?, ?, ?, ?)').bind(id, username, ph, salt, now),
+      env.DB.prepare('INSERT INTO users (id, username, pin_hash, pin_salt, created_at, recovery_hash) VALUES (?, ?, ?, ?, ?, ?)').bind(id, username, ph, salt, now, await sha256(normRecovery(recovery))),
       env.DB.prepare('INSERT INTO states (user_id, data, version, updated_at) VALUES (?, ?, 1, ?)').bind(id, data, now),
     ]);
   } catch (e) {
@@ -192,7 +200,7 @@ async function signup(req, env) {
   }
   await ipBump(env, ipKey, now);
   const token = await newSession(env, id, now);
-  return json(201, { token, username, google: false, pin: true, version: 1, updatedAt: now });
+  return json(201, { token, username, google: false, pin: true, recovery: true, recoveryCode: recovery, version: 1, updatedAt: now });
 }
 
 async function login(req, env) {
@@ -201,7 +209,7 @@ async function login(req, env) {
   try { username = normName(b.username); } catch (e) { throw new HttpError(401, 'wrong_pin', 'ชื่อผู้ใช้หรือรหัสไม่ถูกต้อง'); }
   const pin = checkPin(b.pin, false);
   const now = Date.now();
-  const user = await env.DB.prepare('SELECT id, pin_hash, pin_salt, failed, locked_until, google_sub, email FROM users WHERE username = ?').bind(username).first();
+  const user = await env.DB.prepare('SELECT id, pin_hash, pin_salt, failed, locked_until, google_sub, email, recovery_hash FROM users WHERE username = ?').bind(username).first();
   if (!user || !user.pin_hash) {
     const ipKey = 'fail:' + clientIp(req);
     if (await ipCount(env, ipKey, now) >= IP_MAX_FAILS) throw new HttpError(429, 'ip_limited', 'ลองผิดหลายครั้งเกินไป รอ 1 ชั่วโมงแล้วลองใหม่', { retryAfter: 3600 });
@@ -259,15 +267,10 @@ async function logout(req, env) {
 async function changePin(req, env) {
   const a = await auth(req, env);
   const b = await body(req);
-  const pin = checkPin(b.pin, false);
   const newPin = checkPin(b.newPin, true);
-  const now = Date.now();
-  const user = await env.DB.prepare('SELECT id, pin_hash, pin_salt, failed, locked_until FROM users WHERE id = ?').bind(a.userId).first();
-  if (!user.pin_hash) throw new HttpError(400, 'no_pin', 'บัญชีนี้เข้าด้วย Google ไม่มีรหัสให้เปลี่ยน');
-  await verifyPin(env, req, user, pin, now);
   const salt = hex(randomBytes(16));
   await env.DB.batch([
-    env.DB.prepare('UPDATE users SET pin_hash = ?, pin_salt = ? WHERE id = ?').bind(await hashPin(newPin, salt), salt, a.userId),
+    env.DB.prepare('UPDATE users SET pin_hash = ?, pin_salt = ?, failed = 0, locked_until = 0 WHERE id = ?').bind(await hashPin(newPin, salt), salt, a.userId),
     // sign out every other device
     env.DB.prepare('DELETE FROM sessions WHERE user_id = ? AND token_hash != ?').bind(a.userId, a.tokenHash),
   ]);
@@ -284,6 +287,7 @@ async function deleteAccount(req, env) {
   else if (String(b.confirm || '').trim() !== 'ลบ') throw new HttpError(400, 'confirm', 'พิมพ์คำว่า ลบ เพื่อยืนยัน');
   await env.DB.batch([
     env.DB.prepare('DELETE FROM oauth_codes WHERE user_id = ?').bind(a.userId),
+    env.DB.prepare('DELETE FROM pair_codes WHERE user_id = ?').bind(a.userId),
     env.DB.prepare('DELETE FROM sessions WHERE user_id = ?').bind(a.userId),
     env.DB.prepare('DELETE FROM states WHERE user_id = ?').bind(a.userId),
     env.DB.prepare('DELETE FROM users WHERE id = ?').bind(a.userId),
@@ -365,7 +369,78 @@ async function redeem(req, env) {
   const r = /^[A-Za-z0-9_-]{20,64}$/.test(code) ? await env.DB.prepare('SELECT user_id, created_at FROM oauth_codes WHERE code = ?').bind(code).first() : null;
   if (r) await env.DB.prepare('DELETE FROM oauth_codes WHERE code = ?').bind(code).run();
   if (!r || now - r.created_at > OAUTH_CODE_MS) throw new HttpError(400, 'bad_code', 'ลิงก์เข้าสู่ระบบหมดอายุ ลองกดเข้าสู่ระบบด้วย Google อีกครั้ง');
-  const u = await env.DB.prepare('SELECT username, email, google_sub, pin_hash FROM users WHERE id = ?').bind(r.user_id).first();
+  const u = await env.DB.prepare('SELECT username, email, google_sub, pin_hash, recovery_hash FROM users WHERE id = ?').bind(r.user_id).first();
   if (!u) throw new HttpError(400, 'bad_code', 'ไม่พบบัญชีนี้แล้ว');
+  return json(200, await sessionPayload(env, r.user_id, who(u), now));
+}
+
+/* ---------- recovery code (shown once, only its hash kept) ---------- */
+function recoveryCode() {
+  const b = randomBytes(16);
+  let out = '';
+  for (let i = 0; i < 16; i++) out += RC_ALPHABET[b[i] % RC_ALPHABET.length] + (i % 4 === 3 && i < 15 ? '-' : '');
+  return out;   // 16 characters from 32 symbols: 80 bits
+}
+const normRecovery = v => String(v || '').toUpperCase().replace(/[^A-Z0-9]/g, '');   // dashes and spaces optional
+
+async function newRecovery(req, env) {
+  const a = await auth(req, env);
+  const code = recoveryCode();
+  await env.DB.prepare('UPDATE users SET recovery_hash = ? WHERE id = ?').bind(await sha256(normRecovery(code)), a.userId).run();
+  return json(200, { recoveryCode: code });
+}
+
+// forgot the PIN: username + recovery code sets a new PIN, signs out every other device and signs this one in
+async function recover(req, env) {
+  const b = await body(req);
+  const newPin = checkPin(b.newPin, true);
+  const now = Date.now();
+  const ipKey = 'fail:' + clientIp(req);
+  if (await ipCount(env, ipKey, now) >= IP_MAX_FAILS) throw new HttpError(429, 'ip_limited', 'ลองผิดหลายครั้งเกินไป รอ 1 ชั่วโมงแล้วลองใหม่', { retryAfter: 3600 });
+  let username;
+  try { username = normName(b.username); } catch (e) { username = ''; }
+  const user = username ? await env.DB.prepare('SELECT id, username, email, google_sub, recovery_hash FROM users WHERE username = ?').bind(username).first() : null;
+  const given = normRecovery(b.code);
+  if (!user || !user.recovery_hash || given.length !== 16 || !sameHex(await sha256(given), user.recovery_hash)) {
+    await ipBump(env, ipKey, now);
+    throw new HttpError(401, 'bad_recovery', 'ชื่อผู้ใช้หรือรหัสกู้คืนไม่ถูกต้อง');
+  }
+  const salt = hex(randomBytes(16));
+  const fresh = recoveryCode();   // the used code is spent; hand out the next one
+  await env.DB.batch([
+    env.DB.prepare('UPDATE users SET pin_hash = ?, pin_salt = ?, failed = 0, locked_until = 0, recovery_hash = ? WHERE id = ?').bind(await hashPin(newPin, salt), salt, await sha256(normRecovery(fresh)), user.id),
+    env.DB.prepare('DELETE FROM sessions WHERE user_id = ?').bind(user.id),
+  ]);
+  return json(200, { ...(await sessionPayload(env, user.id, { username: user.email || user.username, google: !!user.google_sub, pin: true, recovery: true }, now)), recoveryCode: fresh });
+}
+
+/* ---------- pairing a new device from a signed-in one ---------- */
+async function pairStart(req, env) {
+  const a = await auth(req, env);
+  const now = Date.now();
+  await env.DB.prepare('DELETE FROM pair_codes WHERE created_at < ? OR user_id = ?').bind(now - PAIR_MS, a.userId).run();
+  for (let i = 0; i < 5; i++) {
+    const n = crypto.getRandomValues(new Uint32Array(1))[0] % 1000000;
+    const code = String(n).padStart(6, '0');
+    const r = await env.DB.prepare('INSERT INTO pair_codes (code, user_id, created_at) VALUES (?, ?, ?) ON CONFLICT(code) DO NOTHING').bind(code, a.userId, now).run();
+    if (r.meta.changes === 1) return json(200, { code, expiresIn: PAIR_MS / 1000 });
+  }
+  throw new HttpError(503, 'busy', 'ระบบไม่ว่าง ลองใหม่อีกครั้ง');
+}
+
+async function pairRedeem(req, env) {
+  const b = await body(req);
+  const code = String(b.code || '').replace(/\D/g, '');
+  const now = Date.now();
+  const ipKey = 'fail:' + clientIp(req);
+  if (await ipCount(env, ipKey, now) >= IP_MAX_FAILS) throw new HttpError(429, 'ip_limited', 'ลองผิดหลายครั้งเกินไป รอ 1 ชั่วโมงแล้วลองใหม่', { retryAfter: 3600 });
+  const r = code.length === 6 ? await env.DB.prepare('SELECT user_id, created_at FROM pair_codes WHERE code = ?').bind(code).first() : null;
+  if (!r || now - r.created_at > PAIR_MS) {
+    await ipBump(env, ipKey, now);
+    throw new HttpError(400, 'bad_pair', 'รหัสจับคู่ไม่ถูกต้องหรือหมดอายุ ขอรหัสใหม่จากเครื่องที่เข้าสู่ระบบอยู่');
+  }
+  await env.DB.prepare('DELETE FROM pair_codes WHERE code = ?').bind(code).run();
+  const u = await env.DB.prepare('SELECT username, email, google_sub, pin_hash, recovery_hash FROM users WHERE id = ?').bind(r.user_id).first();
+  if (!u) throw new HttpError(400, 'bad_pair', 'ไม่พบบัญชีนี้แล้ว');
   return json(200, await sessionPayload(env, r.user_id, who(u), now));
 }

@@ -159,7 +159,7 @@ button.chip[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink
 .hero-fig{background:rgba(255,255,255,.16);border-radius:20px;padding:6px;--fig:var(--hero-fg);--prop:var(--hero-line)}
 .hero-fig .gr{stroke:var(--hero-line)}
 @media (max-width:639px){.hero-fig{position:absolute;right:-14px;top:12px;width:148px;background:none;opacity:.9;pointer-events:none}
-  .hero-fig .gr{display:none}.hero-txt{position:relative}.hero h1,.hero .eyebrow{padding-right:110px}}
+  .hero-fig .gr{display:none}.hero-txt{position:relative}.hero h1,.hero h2,.hero .eyebrow{padding-right:110px}}
 .ob-fig{max-width:240px;width:100%;align-self:center}
 body.v-start .top{display:none}
 
@@ -179,7 +179,10 @@ body.v-today::before{background:var(--go)}
 
 @media (hover:none){.kbd-hint{display:none}}
 /* account forms keep a comfortable line length on wide screens */
-#acct form,#acct .chips,#acct .gbtn,#acct .or{max-width:460px}
+#acct form,#acct .chips,#acct .gbtn,#acct .or,#acct .note{max-width:460px}
+.rc{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:1.25rem;font-weight:700;letter-spacing:.06em;background:var(--surface);color:var(--ink);border-radius:10px;padding:8px 12px;align-self:flex-start;user-select:all}
+.pair-code{font-size:2rem;letter-spacing:.12em}
+.pair-qr{width:180px;background:#fff;border-radius:12px;padding:6px}.pair-qr:empty{display:none}.pair-qr svg{display:block;width:100%;height:auto}
 .gbtn{background:#fff;color:#1f1f1f;border:1px solid #747775;gap:10px}
 .gbtn:hover{border-color:#1f1f1f}
 .or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.86rem}
@@ -1049,11 +1052,11 @@ const ui = { learnCat: 'all', planDay: new Date().getDay(), foodQ: '', resetAsk:
    copy dirty and a debounced PUT sends the whole state with the version it was based on; the server
    accepts it only if nobody else wrote since (409 otherwise), and the client merges and retries. */
 const SKEY = 'mewfit.sync';
-const blankSync = () => ({ token: null, user: null, google: false, pin: false, version: 0, dirty: false, rev: 0, at: 0 });
+const blankSync = () => ({ token: null, user: null, google: false, pin: false, recovery: false, version: 0, dirty: false, rev: 0, at: 0 });
 function loadSync() { try { return Object.assign(blankSync(), JSON.parse(localStorage.getItem(SKEY) || '{}')); } catch (e) { return blankSync(); } }
 let SY = loadSync();
 const cloud = { busy: null, timer: 0, offline: false, again: false, google: false };
-const acctUi = () => ({ mode: 'signup', open: '', err: '', busy: false, name: '' });
+const acctUi = () => ({ mode: 'signup', open: '', err: '', busy: false, name: '', rc: '', pair: null });
 ui.acct = acctUi();
 function saveSync() { try { localStorage.setItem(SKEY, JSON.stringify(SY)); } catch (e) {} }
 const hasData = o => !!(o && (o.profile || (o.workouts || []).length || (o.weights || []).length || (o.body || []).length || Object.keys(o.food || {}).length));
@@ -1130,7 +1133,7 @@ function cloudSync(keepalive) {
         if (!SY.dirty) {
           const r = await api('/state');
           if (!r.ok) break;
-          if (r.body.username) Object.assign(SY, { user: r.body.username, google: !!r.body.google, pin: !!r.body.pin });
+          if (r.body.username) Object.assign(SY, { user: r.body.username, google: !!r.body.google, pin: !!r.body.pin, recovery: !!r.body.recovery });
           if (r.body.version !== SY.version || !SY.at) changed = adoptCloud(r.body.data, r.body.version) || changed;
           if (!SY.dirty) { SY.at = Date.now(); break; }
           continue;
@@ -1177,7 +1180,7 @@ async function acctLogout() {
   wipeLocal('ออกจากระบบแล้ว ข้อมูลยังอยู่ในบัญชีครบ');
 }
 function adoptAccount(b) {
-  Object.assign(SY, { token: b.token, user: b.username, google: !!b.google, pin: !!b.pin, version: b.version, at: Date.now() });
+  Object.assign(SY, { token: b.token, user: b.username, google: !!b.google, pin: !!b.pin, recovery: !!b.recovery, version: b.version, at: Date.now() });
   const remote = b.data;
   if (!hasData(remote)) SY.dirty = hasData(S);
   else if (!hasData(S)) { S = normalize(remote); SY.dirty = false; }
@@ -1187,7 +1190,18 @@ function adoptAccount(b) {
 }
 // back from Google: ?gauth=<one-time code> or ?g=<outcome>; read it once, then clean the address bar
 async function googleReturn() {
-  const q = new URLSearchParams(location.search), code = q.get('gauth'), g = q.get('g');
+  const q = new URLSearchParams(location.search), code = q.get('gauth'), g = q.get('g'), pair = q.get('pair');
+  if (pair) {
+    history.replaceState(null, '', location.pathname + location.hash);
+    if (SY.token) { toast('เครื่องนี้เข้าสู่ระบบอยู่แล้ว'); return; }
+    try {
+      const r = await api('/pair/redeem', 'POST', { code: pair });
+      if (!r.ok) throw new Error(r.body.error);
+      adoptAccount(r.body); toast('เข้าสู่ระบบแล้ว ข้อมูลจะซิงก์อัตโนมัติ');
+      location.hash = S.profile ? 'today' : 'start'; render();
+    } catch (e) { toast(e.message); ui.acct.mode = 'pair'; render(); }
+    return;
+  }
   if (!code && !g) return;
   history.replaceState(null, '', location.pathname + location.hash);
   const msg = { cancel: 'ยกเลิกการเข้าสู่ระบบด้วย Google', expired: 'หมดเวลา ลองกดเข้าสู่ระบบด้วย Google อีกครั้ง', fail: 'เข้าสู่ระบบด้วย Google ไม่สำเร็จ ลองใหม่อีกครั้ง',
@@ -1201,6 +1215,31 @@ async function googleReturn() {
     location.hash = S.profile ? 'today' : 'start'; render();
   } catch (e) { toast(e.message); }
 }
+async function pairStart() {
+  const a = ui.acct;
+  try {
+    const r = await api('/pair/start', 'POST', {});
+    if (!r.ok) throw new Error(r.body.error);
+    a.pair = { code: r.body.code, until: Date.now() + r.body.expiresIn * 1000 }; a.open = 'pair'; render(); drawPairQR();
+  } catch (e) { toast(e.message); }
+}
+// QR of the pairing link, drawn by a small library fetched only when needed; the 6 digits work without it
+function drawPairQR() {
+  const box = $('#pair-qr'), a = ui.acct; if (!box || !a.pair) return;
+  const link = location.origin + '/?pair=' + a.pair.code + '#profile';
+  const paint = () => { try { const q = qrcode(0, 'M'); q.addData(link); q.make(); box.innerHTML = q.createSvgTag({ cellSize: 5, margin: 2, scalable: true }); } catch (e) {} };
+  if (window.qrcode) return paint();
+  const sc = document.createElement('script');
+  sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js'; sc.onload = paint;
+  document.head.appendChild(sc);
+}
+async function newRecovery() {
+  try {
+    const r = await api('/recovery/new', 'POST', {});
+    if (!r.ok) throw new Error(r.body.error);
+    SY.recovery = true; saveSync(); ui.acct.rc = r.body.recoveryCode; ui.acct.open = ''; render();
+  } catch (e) { toast(e.message); }
+}
 async function googleLink() {
   try { const r = await api('/auth/google/link', 'POST', {}); if (!r.ok) throw new Error(r.body.error); location.href = r.body.url; }
   catch (e) { toast(e.message); }
@@ -1209,22 +1248,42 @@ async function acctSubmit(kind, form) {
   const a = ui.acct, f = new FormData(form), val = k => String(f.get(k) || '').trim();
   const pinOk = v => /^\d{6}$/.test(v);
   a.err = '';
-  if (kind === 'signup' || kind === 'login') {
+  if (kind === 'pair') {
+    if (!/^\d{6}$/.test(val('code').replace(/\D/g, ''))) a.err = 'ใส่รหัสจับคู่ 6 หลักจากเครื่องที่เข้าสู่ระบบอยู่';
+  } else if (kind === 'recover') {
+    a.name = val('username');
+    if (a.name.length < 3) a.err = 'ใส่ชื่อผู้ใช้';
+    else if (val('code').replace(/[^A-Za-z0-9]/g, '').length !== 16) a.err = 'รหัสกู้คืนมี 16 ตัว (ไม่นับขีด)';
+    else if (!pinOk(val('newPin'))) a.err = 'รหัสใหม่ต้องเป็นตัวเลข 6 หลัก';
+    else if (val('newPin') !== val('pin2')) a.err = 'รหัสใหม่สองช่องไม่ตรงกัน';
+  } else if (kind === 'signup' || kind === 'login') {
     a.name = val('username');
     if (a.name.length < 3) a.err = 'ใส่ชื่อผู้ใช้อย่างน้อย 3 ตัว';
     else if (!pinOk(val('pin'))) a.err = 'รหัสต้องเป็นตัวเลข 6 หลัก';
     else if (kind === 'signup' && val('pin') !== val('pin2')) a.err = 'รหัสสองช่องไม่ตรงกัน';
   } else if (kind === 'pin') {
-    if (!pinOk(val('pin')) || !pinOk(val('newPin'))) a.err = 'รหัสต้องเป็นตัวเลข 6 หลัก';
+    if (!pinOk(val('newPin'))) a.err = 'รหัสต้องเป็นตัวเลข 6 หลัก';
     else if (val('newPin') !== val('pin2')) a.err = 'รหัสใหม่สองช่องไม่ตรงกัน';
   } else if (SY.pin ? !pinOk(val('pin')) : val('confirm') !== 'ลบ') a.err = SY.pin ? 'ใส่รหัส 6 หลักเพื่อยืนยัน' : 'พิมพ์คำว่า ลบ เพื่อยืนยัน';
   if (a.err) { render(); return; }
   a.busy = true; render();
   try {
-    if (kind === 'signup') {
+    if (kind === 'pair') {
+      const r = await api('/pair/redeem', 'POST', { code: val('code') });
+      if (!r.ok) throw new Error(r.body.error);
+      adoptAccount(r.body); toast('เข้าสู่ระบบแล้ว');
+      if (S.profile) { location.hash = 'today'; return; }
+    } else if (kind === 'recover') {
+      const r = await api('/recover', 'POST', { username: a.name, code: val('code'), newPin: val('newPin') });
+      if (!r.ok) throw new Error(r.body.error);
+      adoptAccount(r.body); ui.acct.rc = r.body.recoveryCode;
+      toast('ตั้งรหัสใหม่และเข้าสู่ระบบแล้ว จดรหัสกู้คืนชุดใหม่ไว้ด้วย');
+      render(); return;
+    } else if (kind === 'signup') {
       const r = await api('/signup', 'POST', { username: a.name, pin: val('pin'), data: hasData(S) ? S : null });
       if (!r.ok) throw new Error(r.body.error);
-      Object.assign(SY, { token: r.body.token, user: r.body.username, google: false, pin: true, version: r.body.version, dirty: false, at: Date.now() });
+      a.rc = r.body.recoveryCode;
+      Object.assign(SY, { token: r.body.token, user: r.body.username, google: false, pin: true, recovery: true, version: r.body.version, dirty: false, at: Date.now() });
       saveSync(); a.open = '';
       toast('สร้างบัญชีแล้ว ข้อมูลจะซิงก์อัตโนมัติ');
     } else if (kind === 'login') {
@@ -1234,9 +1293,9 @@ async function acctSubmit(kind, form) {
       toast('เข้าสู่ระบบแล้ว');
       if (S.profile) { a.busy = false; location.hash = 'today'; return; }
     } else if (kind === 'pin') {
-      const r = await api('/pin', 'POST', { pin: val('pin'), newPin: val('newPin') });
+      const r = await api('/pin', 'POST', { newPin: val('newPin') });
       if (!r.ok) throw new Error(r.body.error);
-      a.open = ''; toast('เปลี่ยนรหัสแล้ว เครื่องอื่นต้องเข้าสู่ระบบใหม่');
+      SY.pin = true; saveSync(); a.open = ''; toast('ตั้งรหัสใหม่แล้ว เครื่องอื่นต้องเข้าสู่ระบบใหม่');
     } else if (kind === 'delete') {
       const r = await api('/account/delete', 'POST', SY.pin ? { pin: val('pin') } : { confirm: val('confirm') });
       if (!r.ok) throw new Error(r.body.error);
@@ -1257,23 +1316,34 @@ function acctCard() {
       <p class="small muted">${SY.user ? `เครื่องนี้ออกจากบัญชี @${esc(SY.user)} แล้ว เข้าสู่ระบบอีกครั้งเพื่อซิงก์ข้อมูลต่อ` : 'ตอนนี้ข้อมูลอยู่แค่ในเครื่องนี้ ล้างเบราว์เซอร์หรือเปลี่ยนเครื่องแล้วจะหาย สร้างบัญชีเพื่อเก็บไว้บนคลาวด์ และเปิดได้หลายเครื่อง'}</p>
       ${cloud.google ? `${googleBtn('เข้าสู่ระบบด้วย Google')}<p class="small muted">ไม่ต้องจำรหัส ใช้บัญชี Google ที่มีอยู่แล้ว ครั้งแรกจะสร้างบัญชี MewFit ให้เอง ลืมรหัส Google ก็กู้ผ่าน Google ได้</p>
       <p class="or"><span>หรือใช้ชื่อผู้ใช้ + รหัส 6 หลัก</span></p>` : ''}
-      <div class="chips" role="group" aria-label="บัญชี"><button type="button" class="chip" data-act="acct-mode" data-m="signup" aria-pressed="${su}">สร้างบัญชีใหม่</button><button type="button" class="chip" data-act="acct-mode" data-m="login" aria-pressed="${!su}">มีบัญชีแล้ว</button></div>
-      <form class="stack" data-acct="${su ? 'signup' : 'login'}" novalidate>
+      <div class="chips" role="group" aria-label="บัญชี">${[['signup', 'สร้างบัญชีใหม่'], ['login', 'มีบัญชีแล้ว'], ['pair', 'ใช้รหัสจากเครื่องอื่น'], ['recover', 'ลืมรหัส']].map(([m, l]) => `<button type="button" class="chip" data-act="acct-mode" data-m="${m}" aria-pressed="${a.mode === m}">${l}</button>`).join('')}</div>
+      ${a.mode === 'pair' ? `<form class="stack" data-acct="pair" novalidate>
+        <p class="small muted">บนเครื่องที่เข้าสู่ระบบอยู่ ไปที่โปรไฟล์ แล้วกด "เพิ่มเครื่องใหม่" จะได้เลข 6 หลัก (หรือสแกน QR ด้วยกล้องมือถือ)</p>
+        <label class="f">รหัสจับคู่ 6 หลัก<input name="code" inputmode="numeric" pattern="[0-9]*" maxlength="7" autocomplete="one-time-code" required></label>
+        ${err}${go('เข้าสู่ระบบ')}</form>` : a.mode === 'recover' ? `<form class="stack" data-acct="recover" novalidate>
+        <p class="small muted">ใช้รหัสกู้คืนที่ได้ตอนสมัคร (เช่น K7QF-2MXP-9RTA-HD4C) ตั้งรหัสใหม่ได้เลย ถ้ายังเข้าสู่ระบบอยู่บนเครื่องไหน เปลี่ยนรหัสจากเครื่องนั้นได้โดยไม่ต้องใช้รหัสเดิม</p>
+        <label class="f">ชื่อผู้ใช้<input name="username" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="20" required value="${esc(a.name || SY.user || '')}"></label>
+        <label class="f">รหัสกู้คืน<input name="code" autocapitalize="characters" autocomplete="off" spellcheck="false" maxlength="24" required></label>
+        ${pinField('newPin', 'รหัสใหม่ 6 หลัก', 'new-password')}${pinField('pin2', 'รหัสใหม่อีกครั้ง', 'new-password')}
+        ${err}${go('ตั้งรหัสใหม่และเข้าสู่ระบบ')}</form>` : `<form class="stack" data-acct="${su ? 'signup' : 'login'}" novalidate>
         <label class="f">ชื่อผู้ใช้<input name="username" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="20" required value="${esc(a.name || SY.user || '')}"></label>
         ${pinField('pin', 'รหัสตัวเลข 6 หลัก', su ? 'new-password' : 'current-password')}
         ${su ? pinField('pin2', 'ใส่รหัสอีกครั้ง', 'new-password') : ''}
         ${err}${go(su ? 'สร้างบัญชี' : 'เข้าสู่ระบบ')}
-        <p class="small muted">${su ? 'ไม่ต้องใช้อีเมล ชื่อผู้ใช้ 3–20 ตัว ลืมรหัสแล้วกู้ไม่ได้ จดไว้ให้ดี' + (hasData(S) ? ' ข้อมูลที่มีในเครื่องนี้จะย้ายขึ้นบัญชีให้เลย' : '') : 'ข้อมูลในเครื่องนี้ (ถ้ามี) จะรวมกับข้อมูลในบัญชี ไม่หายทั้งสองฝั่ง'}</p>
-      </form></article>`;
+        <p class="small muted">${su ? 'ไม่ต้องใช้อีเมล ชื่อผู้ใช้ 3–20 ตัว หลังสมัครจะได้รหัสกู้คืนไว้ใช้ตอนลืมรหัส' + (hasData(S) ? ' ข้อมูลที่มีในเครื่องนี้จะย้ายขึ้นบัญชีให้เลย' : '') : 'ข้อมูลในเครื่องนี้ (ถ้ามี) จะรวมกับข้อมูลในบัญชี ไม่หายทั้งสองฝั่ง'}</p>
+      </form>`}</article>`;
   }
   const cancel = '<button type="button" class="btn" data-act="acct-open" data-o="">ยกเลิก</button>';
   return `<article class="card" id="acct">
     <div class="row between"><h2>บัญชี ${SY.google ? '' : '@'}${esc(SY.user)}</h2><button class="btn sm" data-act="acct-sync">ซิงก์ตอนนี้</button></div>
     ${SY.google ? '<p class="small"><span class="chip good">เชื่อมกับ Google แล้ว</span> เข้าสู่ระบบด้วย Google ได้ทุกเครื่อง ไม่ต้องจำรหัส</p>' : (cloud.google ? `<div class="note ok stack"><b>กันลืมรหัส: เชื่อมบัญชีนี้กับ Google</b><span class="small">ต่อไปกดเข้าสู่ระบบด้วย Google ได้เลย ข้อมูลเดิมอยู่ครบ</span>${googleBtn('เชื่อมกับ Google', 'acct-glink')}</div>` : '')}
     <p class="small muted" id="acct-status" role="status">${syncLabel()}</p>
-    <p class="small muted">ใช้เครื่องอื่นได้: เปิด MewFit แล้วเข้าสู่ระบบด้วยชื่อและรหัสเดียวกัน ข้อมูลจะตรงกันเอง</p>
-    <div class="row">${SY.pin ? '<button class="btn sm" data-act="acct-open" data-o="pin">เปลี่ยนรหัส</button>' : ''}<button class="btn sm" data-act="acct-open" data-o="logout">ออกจากระบบ</button><button class="btn sm danger" data-act="acct-open" data-o="delete">ลบบัญชี</button></div>
-    ${a.open === 'pin' ? `<form class="stack" data-acct="pin" novalidate>${pinField('pin', 'รหัสเดิม', 'current-password')}${pinField('newPin', 'รหัสใหม่ 6 หลัก', 'new-password')}${pinField('pin2', 'รหัสใหม่อีกครั้ง', 'new-password')}${err}<div class="row">${go('เปลี่ยนรหัส', 'btn pri')}${cancel}</div></form>` : ''}
+    ${a.rc ? `<div class="note ok stack rc-box"><b>รหัสกู้คืนของคุณ (ใช้ตอนลืมรหัส)</b><code class="rc">${esc(a.rc)}</code><span class="small">จดใส่กระดาษหรือแคปหน้าจอเก็บไว้ ระบบจะไม่แสดงรหัสนี้อีก</span><div class="row"><button type="button" class="btn sm" data-act="acct-rc-copy">คัดลอก</button><button type="button" class="btn sm pri" data-act="acct-rc-done">จดไว้แล้ว</button></div></div>`
+      : !SY.recovery ? `<div class="note stack"><b>ยังไม่มีรหัสกู้คืน</b><span class="small">สร้างไว้กันลืมรหัส</span><div class="row"><button type="button" class="btn sm pri" data-act="acct-rc-new">สร้างรหัสกู้คืน</button></div></div>` : ''}
+    ${a.open === 'pair' && a.pair ? `<div class="note ok stack pair-box"><b>เพิ่มเครื่องใหม่</b><span class="small">บนเครื่องใหม่ เปิด MewFit แล้วกด "ใช้รหัสจากเครื่องอื่น" ใส่เลขนี้ หรือสแกน QR ด้วยกล้องมือถือ ใช้ได้ครั้งเดียว ภายใน 5 นาที</span><code class="rc pair-code">${a.pair.code.slice(0, 3)} ${a.pair.code.slice(3)}</code><div id="pair-qr" class="pair-qr" aria-label="QR สำหรับเพิ่มเครื่องใหม่"></div><div class="row"><button type="button" class="btn sm" data-act="acct-open" data-o="">ปิด</button></div></div>` : ''}
+    <p class="small muted">ใช้เครื่องอื่น: กด "เพิ่มเครื่องใหม่" แล้วสแกน QR หรือใส่เลข 6 หลักบนเครื่องนั้น หรือเข้าสู่ระบบด้วยชื่อและรหัสเดียวกัน ข้อมูลจะตรงกันเอง</p>
+    <div class="row"><button class="btn sm pri" data-act="acct-pair">เพิ่มเครื่องใหม่</button><button class="btn sm" data-act="acct-open" data-o="pin">${SY.pin ? 'เปลี่ยนรหัส' : 'ตั้งรหัส'}</button>${SY.recovery ? '<button class="btn sm" data-act="acct-rc-new">รหัสกู้คืนใหม่</button>' : ''}<button class="btn sm" data-act="acct-open" data-o="logout">ออกจากระบบ</button><button class="btn sm danger" data-act="acct-open" data-o="delete">ลบบัญชี</button></div>
+    ${a.open === 'pin' ? `<form class="stack" data-acct="pin" novalidate><p class="small muted">ไม่ต้องใช้รหัสเดิม เพราะเครื่องนี้เข้าสู่ระบบอยู่แล้ว เครื่องอื่นจะต้องเข้าสู่ระบบใหม่</p>${pinField('newPin', 'รหัสใหม่ 6 หลัก', 'new-password')}${pinField('pin2', 'รหัสใหม่อีกครั้ง', 'new-password')}${err}<div class="row">${go('บันทึกรหัสใหม่', 'btn pri')}${cancel}</div></form>` : ''}
     ${a.open === 'logout' ? `<p>ข้อมูลในเครื่องนี้จะถูกล้าง แต่ยังอยู่ในบัญชีครบ เข้าสู่ระบบอีกครั้งเมื่อไหร่ก็ได้</p>${err}<div class="row"><button class="btn pri" data-act="acct-logout"${a.busy ? ' disabled' : ''}>${a.busy ? 'กำลังส่ง…' : 'ออกจากระบบ'}</button>${cancel}</div>` : ''}
     ${a.open === 'delete' ? `<form class="stack" data-acct="delete" novalidate><p>ลบบัญชี ${esc(SY.user)} และข้อมูลทั้งหมดบนคลาวด์และในเครื่องนี้ กู้คืนไม่ได้</p>${SY.pin ? pinField('pin', 'ใส่รหัสเพื่อยืนยัน', 'current-password') : '<label class="f">พิมพ์คำว่า ลบ เพื่อยืนยัน<input name="confirm" autocomplete="off" required></label>'}${err}<div class="row">${go('ลบบัญชีถาวร', 'btn danger')}${cancel}</div></form>` : ''}
   </article>`;
@@ -1330,6 +1400,7 @@ function render() {
   document.querySelectorAll('.tabs a,.bottom a,.top-mini a').forEach(a => { if (a.getAttribute('href') === '#' + navKey) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   ({ start: rStart, today: rToday, train: rTrain, moves: rMoves, eat: rEat, plan: rPlan, progress: rProgress, learn: rLearn, profile: rProfile })[v]();
   mountFigs($('#v-' + v));
+  if (v === 'profile' && ui.acct && ui.acct.pair && ui.acct.open === 'pair') drawPairQR();
 }
 
 /* ---------- onboarding wizard ---------- */
@@ -1981,6 +2052,10 @@ document.addEventListener('click', ev => {
     case 'acct-login': ui.acct = acctUi(); ui.acct.mode = 'login'; location.hash = 'profile'; break;
     case 'acct-nudge-off': S.acctNudgeOff = true; save(); render(); break;
     case 'acct-glink': googleLink(); break;
+    case 'acct-pair': pairStart(); break;
+    case 'acct-rc-new': newRecovery(); break;
+    case 'acct-rc-copy': copyText(ui.acct.rc); break;
+    case 'acct-rc-done': ui.acct.rc = ''; render(); break;
   }
 });
 // keyboard on a computer: Space pauses the interval timer, Escape leaves it

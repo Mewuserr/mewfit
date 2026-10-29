@@ -8,6 +8,8 @@ const CHROME = process.env.CHROME;
 let pass = 0, fail = 0;
 const ok = (c, name, x) => { if (c) pass++; else { fail++; console.log('FAIL', name, x !== undefined ? JSON.stringify(x) : ''); } };
 const wait = ms => new Promise(r => setTimeout(r, ms));
+// poll until fn() is truthy (network round trips to production take longer than to localhost)
+const until = async (fn, ms = 10000) => { const end = Date.now() + ms; while (Date.now() < end) { if (await fn()) return true; await wait(250); } return false; };
 const user = 'e2e' + Math.random().toString(36).slice(2, 8), PIN = '583920';
 
 async function device(browser) {
@@ -56,7 +58,12 @@ async function shot(pg, name) { if (SHOTS) await pg.screenshot({ path: path.join
   await wait(1500);
   let sy = await sync(A);
   ok(sy && sy.token && sy.user === user && sy.version === 1 && !sy.dirty, 'A signed up', sy);
+  const rc = await A.$eval('#acct .rc-box code', el => el.textContent).catch(() => '');
+  ok(/^[A-Z2-9]{4}(-[A-Z2-9]{4}){3}$/.test(rc), 'recovery code shown after sign-up', rc);
+  await A.$eval('#acct', el => el.scrollIntoView());
   await shot(A, 'acct-signedin');
+  await A.$eval('[data-act="acct-rc-done"]', el => el.click()); await wait(200);
+  ok(await A.$('#acct .rc-box') === null, 'recovery code hidden after "จดไว้แล้ว"');
 
   // A logs a weight -> pushed
   await addWeight(A, '2026-10-25', 75.4);
@@ -70,7 +77,7 @@ async function shot(pg, name) { if (SHOTS) await pg.screenshot({ path: path.join
   await B.click('[data-act="acct-login"]'); await wait(400);
   ok(B.url().endsWith('#profile'), 'welcome login button goes to profile', B.url());
   await fillAndSubmit(B, { username: user.toUpperCase(), pin: PIN });
-  await wait(1500);
+  await until(async () => { const x = await state(B); return x && x.profile; });
   let sB = await state(B);
   ok(sB && sB.profile && sB.profile.name === 'มิว' && sB.weights.length === 2, 'B got A data', sB && sB.weights);
   ok(B.url().endsWith('#profile') || B.url().endsWith('#today'), 'B on app after login', B.url());
@@ -111,15 +118,54 @@ async function shot(pg, name) { if (SHOTS) await pg.screenshot({ path: path.join
   await B.$eval('[data-act="acct-open"][data-o="logout"]', el => el.scrollIntoView({ block: 'center' }));
   await B.click('[data-act="acct-open"][data-o="logout"]'); await wait(200);
   await B.$eval('[data-act="acct-logout"]', el => el.scrollIntoView({ block: 'center' }));
-  await B.click('[data-act="acct-logout"]'); await wait(1500);
+  await B.click('[data-act="acct-logout"]');
+  await until(async () => !(await sync(B)).token);
   ok((await state(B)).profile === null && !(await sync(B)).token, 'B logged out and cleared', await sync(B));
   ok(B.url().endsWith('#start'), 'B back at welcome', B.url());
   const sA2 = await state(A);
   ok(sA2.profile && sA2.weights.length === 4, 'A untouched by B logout');
 
-  for (const [n, p] of [['A', A], ['B', B], ['C', C]]) ok(p.errs.length === 0, n + ' no page errors', p.errs);
+  // pair a new device from A: the 6 digits, and the QR link
+  await A.goto(BASE + '/#profile'); await wait(800);
+  await A.$eval('[data-act="acct-pair"]', el => el.click()); await until(() => A.$('#acct .pair-code'));
+  await wait(800);   // QR library load
+  const pc = (await A.$eval('#acct .pair-code', el => el.textContent).catch(() => '')).replace(/\D/g, '');
+  ok(/^\d{6}$/.test(pc), 'pair code shown on A', pc);
+  ok(await A.$('#pair-qr svg') !== null, 'pair QR drawn');
+  await A.$eval('#acct .pair-box', el => el.scrollIntoView({ block: 'center' }));
+  await shot(A, 'acct-pair');
+  const D = await device(browser);
+  await D.goto(BASE + '/?pair=' + pc + '#profile'); await until(async () => ((await sync(D)) || {}).token);
+  await until(async () => ((await state(D)) || {}).profile);
+  const sD = await state(D), syD = await sync(D);
+  ok(syD && syD.token && syD.user === user && sD.weights.length === 4, 'QR link signs the new device in with the data', syD);
+  ok(!D.url().includes('pair='), 'pair code removed from the address bar', D.url());
+  await A.$eval('[data-act="acct-pair"]', el => el.click());
+  await until(async () => { const t = await A.$eval('#acct .pair-code', el => el.textContent).catch(() => ''); return t && t.replace(/\D/g, '') !== pc; });
+  const pc2 = (await A.$eval('#acct .pair-code', el => el.textContent)).replace(/\D/g, '');
+  const E = await device(browser);
+  await E.goto(BASE + '/#profile'); await wait(1200);
+  await E.$eval('[data-act="acct-mode"][data-m="pair"]', el => el.click()); await wait(300);
+  await fillAndSubmit(E, { code: pc2 });
+  await until(async () => ((await state(E)) || {}).profile);
+  ok(((await sync(E)) || {}).token && (await state(E)).weights.length === 4, 'typing the 6 digits signs the device in', await sync(E));
+
+  // forgot the PIN on a fifth device: recovery code sets a new one
+  const F = await device(browser);
+  await F.goto(BASE + '/#profile'); await wait(1200);
+  await F.$eval('[data-act="acct-mode"][data-m="recover"]', el => el.click()); await wait(300);
+  await shot(F, 'acct-recover');
+  await fillAndSubmit(F, { username: user, code: rc.toLowerCase(), newPin: '274915', pin2: '274915' });
+  await until(async () => ((await state(F)) || {}).profile);
+  await until(() => F.$('#acct .rc-box code'), 4000);
+  const syF = await sync(F);
+  ok(syF && syF.token && (await state(F)).weights.length === 4, 'recovery code signs in with all data', syF);
+  const rc2 = await F.$eval('#acct .rc-box code', el => el.textContent).catch(() => '');
+  ok(rc2 && rc2 !== rc, 'a fresh recovery code is shown', rc2);
+
+  for (const [n, p] of [['A', A], ['B', B], ['C', C], ['D', D], ['E', E], ['F', F]]) ok(p.errs.length === 0, n + ' no page errors', p.errs);
   // remove the test account so a run against production leaves nothing behind
-  const del = await A.evaluate(async pin => (await fetch('/api/account/delete', { method: 'POST', headers: { 'content-type': 'application/json', authorization: 'Bearer ' + JSON.parse(localStorage.getItem('mewfit.sync')).token }, body: JSON.stringify({ pin }) })).status, PIN);
+  const del = await F.evaluate(async pin => (await fetch('/api/account/delete', { method: 'POST', headers: { 'content-type': 'application/json', authorization: 'Bearer ' + JSON.parse(localStorage.getItem('mewfit.sync')).token }, body: JSON.stringify({ pin }) })).status, '274915');
   ok(del === 200, 'test account deleted', del);
   await browser.close();
   console.log(`${pass} passed, ${fail} failed`);

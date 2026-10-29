@@ -1,585 +1,745 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-29T23:55:00+07:00",
+  "generatedAt": "2026-10-29T23:59:00+07:00",
   "title": "Design System: MewFit",
   "extensions": {
     "colorMeta": {
-      "system-cyan": {
-        "role": "primary",
-        "displayName": "System Cyan",
-        "canonical": "#38BDF8",
-        "cssVar": "--accent / --go",
-        "purpose": "The system's voice: quests, progress, selection, focus, start action, corner brackets.",
-        "tonalRamp": [
-          "#022331",
-          "#034563",
-          "#066F9E",
-          "#0899D9",
-          "#26B7F7",
-          "#61CBF9",
-          "#9CDEFC",
-          "#D8F2FE"
-        ]
-      },
-      "system-cyan-ink": {
-        "role": "primary",
-        "displayName": "System Cyan Ink",
-        "canonical": "#03121F",
-        "cssVar": "--accent-ink / --go-ink",
-        "purpose": "Text and icons on cyan fills (8.8:1).",
-        "tonalRamp": [
-          "#041B2F",
-          "#09365D",
-          "#0E5695",
-          "#1477CD",
-          "#3295EB",
-          "#6AB2F1",
-          "#A2CFF6",
-          "#DAECFB"
-        ]
-      },
-      "system-cyan-soft": {
-        "role": "primary",
-        "displayName": "System Cyan Soft",
-        "canonical": "#0C2740",
-        "cssVar": "--accent-soft",
-        "purpose": "Training days, selected options, banners, OK notes, list hover, tool icon tiles.",
-        "tonalRamp": [
-          "#081A2B",
-          "#103456",
-          "#1A5489",
-          "#2373BD",
-          "#4292DC",
-          "#76B0E5",
-          "#A9CDEF",
-          "#DDEBF9"
-        ]
-      },
-      "system-line": {
-        "role": "primary",
-        "displayName": "System Line",
-        "canonical": "rgba(56,189,248,0.38)",
-        "cssVar": "--sys-line / --card-line / --hero-line",
-        "purpose": "1px rim of windows, buttons, inputs, stat cells, title tiles, nav.",
-        "tonalRamp": [
-          "#022331",
-          "#034563",
-          "#066F9E",
-          "#0899D9",
-          "#26B7F7",
-          "#61CBF9",
-          "#9CDEFC",
-          "#D8F2FE"
-        ]
-      },
-      "xp-fill-deep": {
-        "role": "primary",
-        "displayName": "XP Fill Deep",
-        "canonical": "#0EA5E9",
-        "cssVar": "(literal)",
-        "purpose": "Start of the XP bar gradient.",
-        "tonalRamp": [
-          "#032230",
-          "#064460",
-          "#096D9A",
-          "#0D96D4",
-          "#2BB5F2",
-          "#65C9F6",
-          "#9FDDF9",
-          "#D9F1FD"
-        ]
-      },
-      "xp-fill-light": {
-        "role": "primary",
-        "displayName": "XP Fill Light",
-        "canonical": "#7DD3FC",
-        "cssVar": "(literal)",
-        "purpose": "End of the XP bar gradient.",
-        "tonalRamp": [
-          "#012232",
-          "#024464",
-          "#046DA0",
-          "#0596DB",
-          "#24B5FA",
-          "#5FC9FB",
-          "#9BDDFD",
-          "#D7F2FE"
-        ]
-      },
-      "reward-gold": {
+      "arcade-cyan": {
         "role": "secondary",
-        "displayName": "Reward Gold",
-        "canonical": "#FACC15",
-        "cssVar": "--gold",
-        "purpose": "+XP, bonus, titles, LEVEL UP; rank S.",
+        "displayName": "Arcade Cyan",
+        "canonical": "#22D3EE",
+        "oklch": "oklch(79.7% 0.134 211.5)",
+        "cssVar": "--c-cyan",
+        "purpose": "Water quest and AGI; active nav icon, today in the week strip, tool icons, hero link; first gradient stop.",
         "tonalRamp": [
-          "#322801",
-          "#645002",
-          "#A08003",
-          "#DCB105",
-          "#FACF23",
-          "#FCDC5F",
-          "#FDE99B",
-          "#FEF6D7"
+          "#000E11",
+          "#002B32",
+          "#014B56",
+          "#066E7D",
+          "#0D92A6",
+          "#1EB9D0",
+          "#3AE0FB",
+          "#D0F7FF"
         ]
       },
-      "signal-pink": {
-        "role": "tertiary",
-        "displayName": "Signal Pink",
-        "canonical": "#F472B6",
-        "cssVar": "--hot",
-        "purpose": "Figure props, onboarding feature numerals, hot chips, sleep dot.",
-        "tonalRamp": [
-          "#2F041B",
-          "#5F0735",
-          "#970C55",
-          "#D01075",
-          "#EF2F93",
-          "#F368B1",
-          "#F8A0CE",
-          "#FCD9EB"
-        ]
-      },
-      "signal-pink-soft": {
-        "role": "tertiary",
-        "displayName": "Signal Pink Soft",
-        "canonical": "#3A1430",
-        "cssVar": "--hot-soft",
-        "purpose": "Fill behind pink marks; notes.",
-        "tonalRamp": [
-          "#260D1F",
-          "#4C1A3F",
-          "#792A64",
-          "#A73A8A",
-          "#C558A9",
-          "#D586C0",
-          "#E5B3D8",
-          "#F5E1EF"
-        ]
-      },
-      "rank-e": {
-        "role": "rank",
-        "displayName": "Rank E",
-        "canonical": "#A3B3CE",
-        "cssVar": "RANKS[0].c",
-        "purpose": "Rank E badge (steel).",
-        "tonalRamp": [
-          "#121821",
-          "#232F43",
-          "#394B6A",
-          "#4E6792",
-          "#6D86B1",
-          "#95A7C6",
-          "#BCC8DC",
-          "#E4E9F1"
-        ]
-      },
-      "rank-d": {
-        "role": "rank",
-        "displayName": "Rank D",
-        "canonical": "#4ADE80",
-        "cssVar": "RANKS[1].c",
-        "purpose": "Rank D badge (green).",
-        "tonalRamp": [
-          "#082B15",
-          "#105629",
-          "#198A42",
-          "#23BE5B",
-          "#41DC7A",
-          "#75E69E",
-          "#A9EFC2",
-          "#DCF9E7"
-        ]
-      },
-      "rank-c": {
-        "role": "rank",
-        "displayName": "Rank C",
-        "canonical": "#38BDF8",
-        "cssVar": "RANKS[2].c",
-        "purpose": "Rank C badge (cyan).",
-        "tonalRamp": [
-          "#022331",
-          "#034563",
-          "#066F9E",
-          "#0899D9",
-          "#26B7F7",
-          "#61CBF9",
-          "#9CDEFC",
-          "#D8F2FE"
-        ]
-      },
-      "rank-b": {
-        "role": "rank",
-        "displayName": "Rank B",
+      "arcade-violet": {
+        "role": "secondary",
+        "displayName": "Arcade Violet",
         "canonical": "#A78BFA",
-        "cssVar": "RANKS[3].c",
-        "purpose": "Rank B badge (violet).",
+        "oklch": "oklch(70.9% 0.159 293.5)",
+        "cssVar": "--c-violet / --accent",
+        "purpose": "Sleep quest and INT; the interface accent: links, focus, caret, selection, selected chips and options.",
         "tonalRamp": [
-          "#0E0231",
-          "#1C0462",
-          "#2D079C",
-          "#3D09D7",
-          "#5C28F6",
-          "#8863F8",
-          "#B59DFB",
-          "#E1D8FD"
+          "#0F0029",
+          "#2D0262",
+          "#4A258C",
+          "#6849B1",
+          "#896BD7",
+          "#AB8FFE",
+          "#CBBFFD",
+          "#EFECFE"
         ]
       },
-      "rank-a": {
-        "role": "rank",
-        "displayName": "Rank A",
-        "canonical": "#FB923C",
-        "cssVar": "RANKS[4].c",
-        "purpose": "Rank A badge (amber-orange).",
+      "arcade-pink": {
+        "role": "secondary",
+        "displayName": "Arcade Pink",
+        "canonical": "#F472B6",
+        "oklch": "oklch(72.5% 0.175 349.8)",
+        "cssVar": "--c-pink / --hot",
+        "purpose": "Protein quest and STR; figure props, onboarding feature tiles, hot chips; last gradient stop.",
         "tonalRamp": [
-          "#321701",
-          "#642E02",
-          "#A04A03",
-          "#DC6505",
-          "#FA8423",
-          "#FCA65F",
-          "#FDC79B",
-          "#FEE9D7"
+          "#1C000F",
+          "#48002D",
+          "#78004E",
+          "#A4266F",
+          "#CB4C91",
+          "#F371B5",
+          "#FEADD3",
+          "#FFE7F1"
         ]
       },
-      "rank-s": {
-        "role": "rank",
-        "displayName": "Rank S",
-        "canonical": "#FACC15",
-        "cssVar": "RANKS[5].c",
-        "purpose": "Rank S badge (gold).",
+      "arcade-green": {
+        "role": "secondary",
+        "displayName": "Arcade Green",
+        "canonical": "#34D399",
+        "oklch": "oklch(77.3% 0.153 163.2)",
+        "cssVar": "--c-green / --good",
+        "purpose": "Steps and recovery quests and VIT; done sets, food dots, water glasses, verdicts.",
         "tonalRamp": [
-          "#322801",
-          "#645002",
-          "#A08003",
-          "#DCB105",
-          "#FACF23",
-          "#FCDC5F",
-          "#FDE99B",
-          "#FEF6D7"
+          "#000F07",
+          "#022D1D",
+          "#064F36",
+          "#0F7350",
+          "#18996D",
+          "#0EC289",
+          "#51E8AD",
+          "#C3FEE1"
         ]
       },
-      "night-field": {
+      "arcade-amber": {
+        "role": "secondary",
+        "displayName": "Arcade Amber",
+        "canonical": "#FBBF24",
+        "oklch": "oklch(83.7% 0.164 84.4)",
+        "cssVar": "--c-amber / --gold / --warn",
+        "purpose": "Training quest and END; gold for the bonus XP and LEVEL UP; warn.",
+        "tonalRamp": [
+          "#110A00",
+          "#312201",
+          "#553E02",
+          "#7B5C07",
+          "#A47B0F",
+          "#CE9C1E",
+          "#FBBF23",
+          "#FFEDC9"
+        ]
+      },
+      "grad-indigo": {
+        "role": "primary",
+        "displayName": "Gradient Indigo",
+        "canonical": "#818CF8",
+        "oklch": "oklch(68.0% 0.158 276.9)",
+        "cssVar": "(in --grad, 45%)",
+        "purpose": "Second stop of the brand gradient.",
+        "tonalRamp": [
+          "#07012F",
+          "#1C046F",
+          "#322F93",
+          "#4E52B8",
+          "#6C75DF",
+          "#8F9BFD",
+          "#BBC5FE",
+          "#EAEDFF"
+        ]
+      },
+      "grad-orchid": {
+        "role": "primary",
+        "displayName": "Gradient Orchid",
+        "canonical": "#C084FC",
+        "oklch": "oklch(72.2% 0.177 305.5)",
+        "cssVar": "(in --grad, 70%)",
+        "purpose": "Third stop of the brand gradient.",
+        "tonalRamp": [
+          "#130024",
+          "#360058",
+          "#59148A",
+          "#7A3DAF",
+          "#9C60D5",
+          "#C084FC",
+          "#D9B9FE",
+          "#F3EAFF"
+        ]
+      },
+      "arcade-ink": {
+        "role": "primary",
+        "displayName": "Arcade Ink",
+        "canonical": "#14082E",
+        "oklch": "oklch(18.1% 0.072 292.3)",
+        "cssVar": "--accent-ink / --go-ink",
+        "purpose": "Text and icons on the gradient and on solid arcade colours.",
+        "tonalRamp": [
+          "#0E0226",
+          "#271D44",
+          "#433A65",
+          "#625A87",
+          "#837BAA",
+          "#A69DCF",
+          "#CAC1F5",
+          "#EEECFF"
+        ]
+      },
+      "go-lavender": {
+        "role": "primary",
+        "displayName": "Go Lavender",
+        "canonical": "#C4B5FD",
+        "oklch": "oklch(81.1% 0.101 293.6)",
+        "cssVar": "--go",
+        "purpose": "Solid primary on rope surfaces and the onboarding footer; HIIT work phase.",
+        "tonalRamp": [
+          "#0F0029",
+          "#291650",
+          "#463572",
+          "#645595",
+          "#8576B9",
+          "#A899DF",
+          "#CBBFFD",
+          "#EFECFE"
+        ]
+      },
+      "violet-soft": {
+        "role": "tertiary",
+        "displayName": "Violet Soft",
+        "canonical": "#2A1F5C",
+        "oklch": "oklch(29.2% 0.104 286.3)",
+        "cssVar": "--accent-soft",
+        "purpose": "Training days, selected options, banners, OK notes, list hover, tool icon tiles, medal disc.",
+        "tonalRamp": [
+          "#0C002C",
+          "#241754",
+          "#3F3776",
+          "#5D5799",
+          "#7D78BE",
+          "#A09BE4",
+          "#C4C2FF",
+          "#EDECFF"
+        ]
+      },
+      "pink-soft": {
+        "role": "tertiary",
+        "displayName": "Pink Soft",
+        "canonical": "#3D1638",
+        "oklch": "oklch(27.5% 0.079 332.7)",
+        "cssVar": "--hot-soft",
+        "purpose": "Hot chips, notes, onboarding feature tiles.",
+        "tonalRamp": [
+          "#1A0017",
+          "#3A1335",
+          "#5A3154",
+          "#7C5075",
+          "#9F7197",
+          "#C393BB",
+          "#E9B7E0",
+          "#FEE6F9"
+        ]
+      },
+      "aurora-violet": {
+        "role": "tertiary",
+        "displayName": "Aurora Violet",
+        "canonical": "#7C3AED",
+        "oklch": "oklch(54.1% 0.247 293.0)",
+        "cssVar": "(literal, 38%)",
+        "purpose": "Top-left background bloom.",
+        "tonalRamp": [
+          "#0F002A",
+          "#2C0461",
+          "#4D0D9F",
+          "#6F25DC",
+          "#8D57FE",
+          "#AA90FD",
+          "#CBBFFE",
+          "#EFECFF"
+        ]
+      },
+      "aurora-pink": {
+        "role": "tertiary",
+        "displayName": "Aurora Pink",
+        "canonical": "#EC4899",
+        "oklch": "oklch(65.6% 0.212 354.3)",
+        "cssVar": "(literal, 22%)",
+        "purpose": "Bottom-right background bloom.",
+        "tonalRamp": [
+          "#1D000D",
+          "#490028",
+          "#7A0047",
+          "#AE0368",
+          "#DA368A",
+          "#FC69AD",
+          "#FFADCD",
+          "#FEE7F0"
+        ]
+      },
+      "night": {
         "role": "neutral",
-        "displayName": "Night Field",
-        "canonical": "#060A14",
+        "displayName": "Night",
+        "canonical": "#0A0718",
+        "oklch": "oklch(14.4% 0.037 289.8)",
         "cssVar": "--bg",
-        "purpose": "Page ground, safe-area strip, theme-color.",
+        "purpose": "Page ground, safe-area strip, nav cut-out ring, theme-color.",
         "tonalRamp": [
-          "#0C1427",
-          "#18274E",
-          "#263F7E",
-          "#3456AD",
-          "#5275CB",
-          "#819BD9",
-          "#B1C0E7",
-          "#E0E6F6"
+          "#0B0819",
+          "#252236",
+          "#413F54",
+          "#605E75",
+          "#817F97",
+          "#A4A2BB",
+          "#C8C6E0",
+          "#EEECFE"
         ]
       },
-      "night-glow": {
+      "glass": {
         "role": "neutral",
-        "displayName": "Night Glow",
-        "canonical": "#10284D",
+        "displayName": "Glass",
+        "canonical": "rgba(30,22,66,0.58)",
+        "oklch": "oklch(23.9% 0.080 287.1)",
+        "cssVar": "--glass-bg",
+        "purpose": "Fill of every plain card, tip, tool tile and the hero, over a 16px blur.",
+        "tonalRamp": [
+          "#0C012A",
+          "#241C49",
+          "#403A6A",
+          "#5E5A8C",
+          "#7F7BB0",
+          "#A19ED5",
+          "#C5C2FB",
+          "#EDECFF"
+        ]
+      },
+      "glass-line": {
+        "role": "neutral",
+        "displayName": "Glass Line",
+        "canonical": "rgba(196,181,253,0.16)",
+        "oklch": "oklch(81.1% 0.101 293.6)",
+        "cssVar": "--glass-line / --card-line",
+        "purpose": "1px rim of glass cards, buttons, inputs, nav, toast, rest bar.",
+        "tonalRamp": [
+          "#0F0029",
+          "#291650",
+          "#463572",
+          "#645595",
+          "#8576B9",
+          "#A899DF",
+          "#CBBFFD",
+          "#EFECFE"
+        ]
+      },
+      "frame-top": {
+        "role": "neutral",
+        "displayName": "Frame Top",
+        "canonical": "rgba(24,17,54,0.92)",
+        "oklch": "oklch(21.1% 0.069 287.6)",
         "cssVar": "(literal)",
-        "purpose": "Fixed radial bloom at the top of the field.",
+        "purpose": "Top of the fill inside gradient-bordered game cards and modals.",
         "tonalRamp": [
-          "#09162A",
-          "#122C54",
-          "#1C4687",
-          "#2761BA",
-          "#457FD8",
-          "#78A2E3",
-          "#ABC5ED",
-          "#DDE8F8"
+          "#0C0326",
+          "#241E44",
+          "#403C65",
+          "#5F5B87",
+          "#807CAA",
+          "#A29FCF",
+          "#C6C3F5",
+          "#EDECFF"
         ]
       },
-      "window-top": {
+      "frame-bottom": {
         "role": "neutral",
-        "displayName": "Window Top",
-        "canonical": "#111E39",
-        "cssVar": "(literal, 95%)",
-        "purpose": "Top of the system-window gradient.",
+        "displayName": "Frame Bottom",
+        "canonical": "rgba(18,12,42,0.92)",
+        "oklch": "oklch(18.3% 0.058 288.4)",
+        "cssVar": "(literal)",
+        "purpose": "Bottom of the fill inside gradient-bordered game cards and modals.",
         "tonalRamp": [
-          "#0C1527",
-          "#17294F",
-          "#25427E",
-          "#345BAD",
-          "#527ACB",
-          "#819EDA",
-          "#B0C2E8",
-          "#E0E7F6"
+          "#0B0522",
+          "#242040",
+          "#413D5F",
+          "#605C81",
+          "#807DA4",
+          "#A3A0C8",
+          "#C7C4EE",
+          "#EDECFF"
         ]
       },
-      "window-bottom": {
+      "top-glass": {
         "role": "neutral",
-        "displayName": "Window Bottom",
-        "canonical": "#080E1C",
-        "cssVar": "(literal, 95%)",
-        "purpose": "Bottom of the system-window gradient.",
+        "displayName": "Top Glass",
+        "canonical": "rgba(10,7,24,0.78)",
+        "oklch": "oklch(14.4% 0.037 289.8)",
+        "cssVar": "--glass",
+        "purpose": "Sticky top bar.",
         "tonalRamp": [
-          "#0B1428",
-          "#17284F",
-          "#243F7F",
-          "#3257AF",
-          "#5076CD",
-          "#809BDB",
-          "#B0C1E8",
-          "#DFE6F6"
+          "#0B0819",
+          "#252236",
+          "#413F54",
+          "#605E75",
+          "#817F97",
+          "#A4A2BB",
+          "#C8C6E0",
+          "#EEECFE"
         ]
       },
-      "surface": {
+      "nav-glass": {
         "role": "neutral",
-        "displayName": "Surface",
-        "canonical": "#0E1628",
-        "cssVar": "--surface / --hero",
-        "purpose": "Base panel colour; toast fill.",
+        "displayName": "Nav Glass",
+        "canonical": "rgba(14,10,32,0.82)",
+        "oklch": "oklch(16.5% 0.045 288.9)",
+        "cssVar": "(literal)",
+        "purpose": "Floating nav bar.",
         "tonalRamp": [
-          "#0D1526",
-          "#1A2A4C",
-          "#2A4279",
-          "#3A5BA6",
-          "#597AC5",
-          "#869ED5",
-          "#B3C3E5",
-          "#E1E7F4"
-        ]
-      },
-      "sunk": {
-        "role": "neutral",
-        "displayName": "Sunk",
-        "canonical": "#0B1426",
-        "cssVar": "--sunk",
-        "purpose": "Chips, week days, target tiles, bar tracks.",
-        "tonalRamp": [
-          "#0B1528",
-          "#172A4F",
-          "#25437F",
-          "#325CAE",
-          "#517ACD",
-          "#809EDA",
-          "#B0C3E8",
-          "#DFE7F6"
+          "#0B071C",
+          "#242139",
+          "#413E59",
+          "#605D7A",
+          "#817E9C",
+          "#A3A1C0",
+          "#C7C5E5",
+          "#EDECFE"
         ]
       },
       "well": {
         "role": "neutral",
         "displayName": "Well",
-        "canonical": "#081226",
-        "cssVar": "(literal)",
-        "purpose": "XP and quest tracks; input fields.",
+        "canonical": "rgba(10,7,24,0.55)",
+        "oklch": "oklch(14.4% 0.037 289.8)",
+        "cssVar": "(literal) / --figbg",
+        "purpose": "Input fields and figure panels.",
         "tonalRamp": [
-          "#09142A",
-          "#122854",
-          "#1C4087",
-          "#2758B9",
-          "#4676D8",
-          "#789CE3",
-          "#ABC1ED",
-          "#DDE6F8"
+          "#0B0819",
+          "#252236",
+          "#413F54",
+          "#605E75",
+          "#817F97",
+          "#A4A2BB",
+          "#C8C6E0",
+          "#EEECFE"
+        ]
+      },
+      "wash": {
+        "role": "neutral",
+        "displayName": "Wash",
+        "canonical": "rgba(255,255,255,0.05)",
+        "oklch": "oklch(100.0% 0.000 89.9)",
+        "cssVar": "(literal, 4-7%)",
+        "purpose": "Quiet white tints: quest rows, bonus, title tiles, week days, coach line, default buttons.",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#A5A5A5",
+          "#C9C9C9",
+          "#EEEEEE"
+        ]
+      },
+      "track": {
+        "role": "neutral",
+        "displayName": "Track",
+        "canonical": "rgba(255,255,255,0.08)",
+        "oklch": "oklch(100.0% 0.000 89.9)",
+        "cssVar": "(literal)",
+        "purpose": "Progress tracks and the unearned title pill.",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#A5A5A5",
+          "#C9C9C9",
+          "#EEEEEE"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface",
+        "canonical": "#171134",
+        "oklch": "oklch(20.8% 0.066 287.1)",
+        "cssVar": "--surface / --hero",
+        "purpose": "Base panel colour: desktop tabs, segments, option cards, recovery code.",
+        "tonalRamp": [
+          "#0B0425",
+          "#241F43",
+          "#403C63",
+          "#5F5B85",
+          "#7F7DA8",
+          "#A29FCD",
+          "#C6C3F3",
+          "#EDECFF"
+        ]
+      },
+      "sunk": {
+        "role": "neutral",
+        "displayName": "Sunk",
+        "canonical": "#120C2A",
+        "oklch": "oklch(18.3% 0.058 288.4)",
+        "cssVar": "--sunk",
+        "purpose": "Chips, target tiles, bar tracks; bottom of the medal disc.",
+        "tonalRamp": [
+          "#0B0522",
+          "#242040",
+          "#413D5F",
+          "#605C81",
+          "#807DA4",
+          "#A3A0C8",
+          "#C7C4EE",
+          "#EDECFF"
+        ]
+      },
+      "toast": {
+        "role": "neutral",
+        "displayName": "Toast",
+        "canonical": "#1E1640",
+        "oklch": "oklch(23.7% 0.077 287.9)",
+        "cssVar": "(literal)",
+        "purpose": "Toast fill; end of the rest-bar gradient.",
+        "tonalRamp": [
+          "#0C0229",
+          "#241D47",
+          "#403B68",
+          "#5F5A8A",
+          "#807BAE",
+          "#A29ED3",
+          "#C6C2F9",
+          "#EDECFF"
         ]
       },
       "rope": {
         "role": "neutral",
         "displayName": "Rope",
-        "canonical": "#070C18",
+        "canonical": "#0F0A24",
+        "oklch": "oklch(16.9% 0.052 288.4)",
         "cssVar": "--rope",
         "purpose": "Rest timer card and HIIT overlay.",
         "tonalRamp": [
-          "#0C1427",
-          "#17274F",
-          "#253F7E",
-          "#3357AE",
-          "#5175CC",
-          "#819BDA",
-          "#B0C0E8",
-          "#DFE6F6"
+          "#0B061F",
+          "#24203D",
+          "#413D5C",
+          "#605D7D",
+          "#817EA0",
+          "#A3A0C4",
+          "#C7C4EA",
+          "#EDECFE"
         ]
       },
       "rope-line": {
         "role": "neutral",
         "displayName": "Rope Line",
-        "canonical": "#24365A",
+        "canonical": "#3A2F6B",
+        "oklch": "oklch(35.1% 0.101 288.5)",
         "cssVar": "--rope-line",
-        "purpose": "Button outlines and figure props on rope.",
+        "purpose": "Button outlines and figure props on rope and in the hero figure.",
         "tonalRamp": [
-          "#0F1624",
-          "#1D2C49",
-          "#2F4675",
-          "#4060A0",
-          "#5F7FBF",
-          "#8AA2D0",
-          "#B6C5E2",
-          "#E2E8F3"
+          "#0D002C",
+          "#251852",
+          "#413773",
+          "#5F5797",
+          "#8078BB",
+          "#A29BE1",
+          "#C6C1FF",
+          "#EDECFF"
         ]
       },
       "rope-track": {
         "role": "neutral",
         "displayName": "Rope Track",
-        "canonical": "#13213B",
+        "canonical": "#231A47",
+        "oklch": "oklch(25.7% 0.081 288.6)",
         "cssVar": "--rope-track",
         "purpose": "HIIT progress track.",
         "tonalRamp": [
-          "#0C1627",
-          "#192B4D",
-          "#28457B",
-          "#375FAA",
-          "#557EC8",
-          "#84A1D7",
-          "#B2C4E6",
-          "#E0E7F5"
+          "#0D012A",
+          "#251C49",
+          "#413A6A",
+          "#5F598C",
+          "#807AB0",
+          "#A39DD5",
+          "#C6C1FB",
+          "#EDECFF"
         ]
       },
       "ink": {
         "role": "neutral",
         "displayName": "Ink",
-        "canonical": "#E6F0FF",
+        "canonical": "#F3EEFF",
+        "oklch": "oklch(95.8% 0.023 299.4)",
         "cssVar": "--ink / --fig",
-        "purpose": "Text; figure strokes.",
+        "purpose": "Text and figure strokes.",
         "tonalRamp": [
-          "#001433",
-          "#002966",
-          "#0041A3",
-          "#005AE0",
-          "#1F78FF",
-          "#5C9DFF",
-          "#99C2FF",
-          "#D6E7FF"
+          "#0D0914",
+          "#27232F",
+          "#443F4D",
+          "#635F6D",
+          "#847F8F",
+          "#A7A2B2",
+          "#CBC6D7",
+          "#F0EBFC"
         ]
       },
       "muted": {
         "role": "neutral",
         "displayName": "Muted",
-        "canonical": "#A3B3CE",
+        "canonical": "#B8AED6",
+        "oklch": "oklch(77.2% 0.057 296.5)",
         "cssVar": "--muted / --rope-fg / --hero-muted",
-        "purpose": "Secondary text; 7.8:1 or better on windows.",
+        "purpose": "Secondary text; 7.5:1 or better on glass.",
         "tonalRamp": [
-          "#121821",
-          "#232F43",
-          "#394B6A",
-          "#4E6792",
-          "#6D86B1",
-          "#95A7C6",
-          "#BCC8DC",
-          "#E4E9F1"
+          "#0E0420",
+          "#281E3D",
+          "#453B5D",
+          "#645B7E",
+          "#857CA1",
+          "#A89EC5",
+          "#CCC2EB",
+          "#F0EBFF"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Line",
+        "canonical": "#2E2556",
+        "oklch": "oklch(30.3% 0.085 288.7)",
+        "cssVar": "--line",
+        "purpose": "Hairlines between rows and table cells.",
+        "tonalRamp": [
+          "#0D002C",
+          "#251B4B",
+          "#41396C",
+          "#60598F",
+          "#807AB3",
+          "#A39DD8",
+          "#C6C1FE",
+          "#EDECFF"
         ]
       },
       "white": {
         "role": "neutral",
         "displayName": "White",
         "canonical": "#FFFFFF",
+        "oklch": "oklch(100.0% 0.000 89.9)",
         "cssVar": "#fff (literal)",
-        "purpose": "Active nav label; text on rope (rest timer, HIIT).",
+        "purpose": "Active nav label; text on rope.",
         "tonalRamp": [
-          "#1A1A1A",
-          "#333333",
-          "#525252",
-          "#707070",
-          "#8F8F8F",
-          "#ADADAD",
-          "#CCCCCC",
-          "#EBEBEB"
-        ]
-      },
-      "line": {
-        "role": "neutral",
-        "displayName": "Line",
-        "canonical": "#1F2F4D",
-        "cssVar": "--line",
-        "purpose": "Hairlines between rows and table cells.",
-        "tonalRamp": [
-          "#0F1624",
-          "#1D2C49",
-          "#2F4774",
-          "#4062A0",
-          "#5F80BF",
-          "#8BA3D0",
-          "#B6C5E2",
-          "#E2E8F3"
-        ]
-      },
-      "good": {
-        "role": "semantic",
-        "displayName": "Good",
-        "canonical": "#4ADE80",
-        "cssVar": "--good",
-        "purpose": "Done sets, food, water, verdicts.",
-        "tonalRamp": [
-          "#082B15",
-          "#105629",
-          "#198A42",
-          "#23BE5B",
-          "#41DC7A",
-          "#75E69E",
-          "#A9EFC2",
-          "#DCF9E7"
-        ]
-      },
-      "warn": {
-        "role": "semantic",
-        "displayName": "Warn",
-        "canonical": "#FBBF24",
-        "cssVar": "--warn",
-        "purpose": "Over-target bars, caution lines, demo chip.",
-        "tonalRamp": [
-          "#322401",
-          "#644902",
-          "#A07403",
-          "#DCA004",
-          "#FBBF23",
-          "#FCD05F",
-          "#FDE29B",
-          "#FEF3D7"
+          "#0B0B0B",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#A5A5A5",
+          "#C9C9C9",
+          "#EEEEEE"
         ]
       },
       "bad": {
         "role": "semantic",
         "displayName": "Bad",
-        "canonical": "#F87171",
+        "canonical": "#FB7185",
+        "oklch": "oklch(71.9% 0.169 13.4)",
         "cssVar": "--bad",
         "purpose": "Danger button, myth prefix.",
         "tonalRamp": [
-          "#310202",
-          "#610505",
-          "#9C0808",
-          "#D60B0B",
-          "#F42929",
-          "#F76363",
-          "#FA9E9E",
-          "#FDD8D8"
+          "#1E0005",
+          "#4A0316",
+          "#7C092B",
+          "#AB2644",
+          "#D34D64",
+          "#FC7286",
+          "#FFB1B8",
+          "#FEE8EA"
         ]
       },
       "figure-prop": {
         "role": "neutral",
         "displayName": "Figure Prop",
-        "canonical": "#3B5378",
+        "canonical": "#4B3F80",
+        "oklch": "oklch(41.3% 0.105 289.4)",
         "cssVar": "--prop",
         "purpose": "Stick-figure props and ground line.",
         "tonalRamp": [
-          "#111822",
-          "#222F44",
-          "#364C6D",
-          "#4A6896",
-          "#6987B5",
-          "#92A7C9",
-          "#BBC8DD",
-          "#E4E9F2"
+          "#0D002C",
+          "#261653",
+          "#423575",
+          "#605599",
+          "#8177BD",
+          "#A39AE3",
+          "#C7C0FE",
+          "#EEECFF"
         ]
       },
-      "figure-bg": {
-        "role": "neutral",
-        "displayName": "Figure Bg",
-        "canonical": "#0A1324",
-        "cssVar": "--figbg",
-        "purpose": "Panel behind figure demos.",
+      "rank-e": {
+        "role": "rank",
+        "displayName": "Rank E",
+        "canonical": "#A3B3CE",
+        "oklch": "oklch(76.3% 0.043 260.9)",
+        "cssVar": "RANKS[].c",
+        "purpose": "Medal letter and glow at rank E (steel).",
         "tonalRamp": [
-          "#0B1528",
-          "#162A50",
-          "#234380",
-          "#315DB0",
-          "#4F7BCE",
-          "#7F9FDC",
-          "#AFC3E9",
-          "#DFE7F6"
+          "#030A1D",
+          "#19253A",
+          "#354259",
+          "#54627A",
+          "#74839D",
+          "#96A6C0",
+          "#BACAE6",
+          "#E6EFFF"
+        ]
+      },
+      "rank-d": {
+        "role": "rank",
+        "displayName": "Rank D",
+        "canonical": "#4ADE80",
+        "oklch": "oklch(80.0% 0.182 151.7)",
+        "cssVar": "RANKS[].c",
+        "purpose": "Medal letter and glow at rank D (green).",
+        "tonalRamp": [
+          "#001004",
+          "#012E13",
+          "#035026",
+          "#0A753A",
+          "#129C50",
+          "#23C468",
+          "#58EA8B",
+          "#C7FFD4"
+        ]
+      },
+      "rank-c": {
+        "role": "rank",
+        "displayName": "Rank C",
+        "canonical": "#38BDF8",
+        "oklch": "oklch(75.4% 0.139 232.7)",
+        "cssVar": "RANKS[].c",
+        "purpose": "Medal letter and glow at rank C (sky).",
+        "tonalRamp": [
+          "#000D16",
+          "#02293A",
+          "#064863",
+          "#0E6A8F",
+          "#188DBD",
+          "#28B3ED",
+          "#86D4FE",
+          "#DDF2FF"
+        ]
+      },
+      "rank-b": {
+        "role": "rank",
+        "displayName": "Rank B",
+        "canonical": "#A78BFA",
+        "oklch": "oklch(70.9% 0.159 293.5)",
+        "cssVar": "RANKS[].c",
+        "purpose": "Medal letter and glow at rank B (violet).",
+        "tonalRamp": [
+          "#0F0029",
+          "#2D0262",
+          "#4A258C",
+          "#6849B1",
+          "#896BD7",
+          "#AB8FFE",
+          "#CBBFFD",
+          "#EFECFE"
+        ]
+      },
+      "rank-a": {
+        "role": "rank",
+        "displayName": "Rank A",
+        "canonical": "#FB923C",
+        "oklch": "oklch(75.8% 0.159 55.9)",
+        "cssVar": "RANKS[].c",
+        "purpose": "Medal letter and glow at rank A (orange).",
+        "tonalRamp": [
+          "#170600",
+          "#3B1B01",
+          "#653303",
+          "#924C09",
+          "#C16711",
+          "#EE872E",
+          "#FEB785",
+          "#FFEADC"
+        ]
+      },
+      "rank-s": {
+        "role": "rank",
+        "displayName": "Rank S",
+        "canonical": "#FACC15",
+        "oklch": "oklch(86.1% 0.173 91.9)",
+        "cssVar": "RANKS[].c",
+        "purpose": "Medal letter and glow at rank S (gold).",
+        "tonalRamp": [
+          "#100A00",
+          "#2E2401",
+          "#514002",
+          "#755F07",
+          "#9C7F0E",
+          "#C5A11D",
+          "#F0C422",
+          "#FFEEBA"
         ]
       }
     },
@@ -600,17 +760,29 @@
         "displayName": "Level Up",
         "purpose": "LEVEL UP! headline in gold with glow."
       },
+      "medal-letter": {
+        "displayName": "Medal Letter",
+        "purpose": "Rank letter in the medal (3.4rem on the level-up medal)."
+      },
+      "medal-letter-big": {
+        "displayName": "Medal Letter Big",
+        "purpose": "Rank letter in the 140px level-up medal."
+      },
       "status-name": {
         "displayName": "Status Name",
-        "purpose": "Player name in the status window."
+        "purpose": "Player name in the status card."
       },
       "wordmark": {
         "displayName": "Wordmark",
-        "purpose": "MewFit wordmark in the top bar."
+        "purpose": "MewFit wordmark; \"Fit\" in gradient text."
       },
       "title": {
         "displayName": "Title",
         "purpose": "Card h2."
+      },
+      "card-header": {
+        "displayName": "Card Header",
+        "purpose": "Title row of the status, quest and titles cards."
       },
       "title-player": {
         "displayName": "Title Player",
@@ -624,13 +796,9 @@
         "displayName": "Title Sm",
         "purpose": "h3, option titles, buttons."
       },
-      "window-header": {
-        "displayName": "Window Header",
-        "purpose": "Cyan title row of every system window."
-      },
       "hud-label": {
         "displayName": "Hud Label",
-        "purpose": "XP captions, quest counts, +XP."
+        "purpose": "XP caption, quest counts, +XP."
       },
       "stat-key": {
         "displayName": "Stat Key",
@@ -643,6 +811,10 @@
       "body": {
         "displayName": "Body",
         "purpose": "All reading text in Sarabun."
+      },
+      "quest-text": {
+        "displayName": "Quest Text",
+        "purpose": "Quest titles in the quest list."
       },
       "small": {
         "displayName": "Small",
@@ -666,7 +838,7 @@
       },
       "numeral-stat": {
         "displayName": "Numeral Stat",
-        "purpose": "Stat values in the status window."
+        "purpose": "Stat values in the status card."
       },
       "numeral-restbar": {
         "displayName": "Numeral Restbar",
@@ -689,53 +861,101 @@
         "purpose": "Full-screen HIIT clock."
       }
     },
+    "gradients": [
+      {
+        "name": "brand",
+        "cssVar": "--grad",
+        "value": "linear-gradient(120deg,#22D3EE 0%,#818CF8 45%,#C084FC 70%,#F472B6 100%)",
+        "purpose": "Logo, wordmark \"Fit\", primary/hot buttons, nav go button, game-card and modal borders, medal ring (conic), quest progress, title pill, completed bonus, done week days, move numbers."
+      },
+      {
+        "name": "aurora",
+        "value": "radial-gradient(60vmax 45vmax at 0% -5%,rgba(124,58,237,.38),transparent 60%), radial-gradient(50vmax 40vmax at 100% 10%,rgba(34,211,238,.18),transparent 60%), radial-gradient(60vmax 50vmax at 80% 110%,rgba(236,72,153,.22),transparent 60%) fixed, #0A0718",
+        "purpose": "Page background."
+      },
+      {
+        "name": "game-frame",
+        "value": "linear-gradient(rgba(24,17,54,.92),rgba(18,12,42,.92)) padding-box, var(--grad) border-box",
+        "purpose": "Status card, quest card, modals (1px transparent border)."
+      },
+      {
+        "name": "medal-ring",
+        "value": "conic-gradient(from -90deg,transparent calc(var(--p) * 1%),rgba(255,255,255,.09) 0), conic-gradient(from -90deg,#22D3EE,#818CF8,#C084FC,#F472B6,#22D3EE)",
+        "purpose": "Medal ring; --p is the XP percent to the next level."
+      },
+      {
+        "name": "medal-disc",
+        "value": "radial-gradient(circle at 50% 35%,#2A1F5C,#120C2A 70%)",
+        "purpose": "Medal inner disc."
+      },
+      {
+        "name": "rest-bar",
+        "value": "linear-gradient(90deg,#2A1F5C,#1E1640)",
+        "purpose": "Floating rest bar."
+      }
+    ],
+    "materials": {
+      "glass": {
+        "value": "rgba(30,22,66,.58); backdrop-filter blur(16px) saturate(1.3); 1px rgba(196,181,253,.16); radius 20px",
+        "appliesTo": "card, tip, tool, hero; game cards and modals swap the rim for the gradient frame"
+      },
+      "top-bar": {
+        "value": "rgba(10,7,24,.78); blur(16px) saturate(1.4); bottom 1px rgba(196,181,253,.1)"
+      },
+      "nav": {
+        "value": "rgba(14,10,32,.82); blur(18px) saturate(1.4); 1px glass line; radius 22px"
+      },
+      "scrim": {
+        "value": "rgba(8,10,16,.55); blur(4px)"
+      }
+    },
     "shadows": [
       {
-        "name": "window-glow",
-        "value": "0 0 0 1px rgba(56,189,248,.06), 0 0 26px -12px rgba(56,189,248,.6)",
-        "purpose": "Every card, window, tip, tool tile, modal, hero, toast."
+        "name": "glass-drop",
+        "value": "0 18px 40px -24px rgba(0,0,0,.9)",
+        "purpose": "Cards, game cards, tips, tools, modals, hero, active desktop tab."
       },
       {
-        "name": "action-glow",
-        "value": "0 0 24px -8px #38BDF8",
-        "purpose": "Start and go buttons; primary buttons use 0 0 20px -8px."
+        "name": "gradient-lift",
+        "value": "0 8px 22px -10px rgba(192,132,252,.9), inset 0 1px 0 rgba(255,255,255,.45)",
+        "purpose": "Gradient primary and hot buttons."
       },
       {
-        "name": "nav-glow",
-        "value": "0 0 30px -12px rgba(56,189,248,.5)",
+        "name": "nav-drop",
+        "value": "0 16px 40px -16px rgba(0,0,0,.9)",
         "purpose": "Floating nav bar."
       },
       {
         "name": "nav-go",
-        "value": "0 0 0 5px var(--bg), 0 0 22px -4px #38BDF8",
-        "purpose": "Raised train button, cut out of the bar."
+        "value": "0 0 0 5px var(--bg), 0 10px 26px -6px rgba(192,132,252,.9)",
+        "purpose": "Raised gradient train button, cut out of the bar."
       },
       {
-        "name": "rank-glow",
-        "value": "0 0 22px -4px var(--rk), inset 0 0 14px -6px var(--rk)",
-        "purpose": "Rank badge; letter text-shadow 0 0 12px var(--rk)."
+        "name": "medal-halo",
+        "value": "filter: drop-shadow(0 6px 18px rgba(168,85,247,.45))",
+        "purpose": "Rank medal; letter text-shadow 0 0 18px of the rank colour at 70%."
+      },
+      {
+        "name": "quest-glow",
+        "value": "0 0 18px -4px var(--qc)",
+        "purpose": "Completed quest icon tile; stat bars use 0 0 12px -2px var(--sc)."
       },
       {
         "name": "reward-glow",
-        "value": "0 0 22px -10px #FACC15",
-        "purpose": "Completed quest bonus strip; LEVEL UP text-shadow 0 0 18px rgba(250,204,21,.7)."
+        "value": "text-shadow: 0 0 22px rgba(251,191,36,.65)",
+        "purpose": "LEVEL UP headline."
       },
       {
-        "name": "tick-glow",
-        "value": "0 0 12px -2px #38BDF8",
-        "purpose": "Checked quest box; window-header diamond 0 0 10px; XP fill 0 0 12px."
-      },
-      {
-        "name": "base-drop",
-        "value": "0 10px 30px -18px rgba(0,0,0,.9)",
-        "purpose": "Active desktop tab only."
+        "name": "rest-drop",
+        "value": "0 14px 30px -14px rgba(0,0,0,.5)",
+        "purpose": "Floating rest bar."
       }
     ],
     "motion": [
       {
-        "name": "sys-scan-in",
-        "value": "500ms cubic-bezier(.16,1,.3,1), clip-path inset(0 0 100% 0) to inset(0), opacity .001 to 1; second window +80ms",
-        "purpose": "The one authored motion: system windows scan in as a view opens. Off under reduced motion."
+        "name": "card-rise",
+        "value": "550ms cubic-bezier(.16,1,.3,1), translateY 10px + scale .985 to none, fade; second game card +70ms",
+        "purpose": "The one authored entrance: game cards rise as a view opens."
       },
       {
         "name": "view-in",
@@ -748,19 +968,24 @@
         "purpose": "Level-up window entrance."
       },
       {
-        "name": "xp-fill",
-        "value": "width 900ms cubic-bezier(.16,1,.3,1)",
-        "purpose": "XP bar fill."
+        "name": "medal-spin",
+        "value": "1s cubic-bezier(.16,1,.3,1), rotate(-200deg) scale(.6) to none",
+        "purpose": "Medal in the level-up window."
+      },
+      {
+        "name": "quest-progress",
+        "value": "width 800ms cubic-bezier(.16,1,.3,1)",
+        "purpose": "Gradient quest progress bar."
       },
       {
         "name": "quest-fill",
         "value": "width 600ms",
-        "purpose": "Quest progress bar fill."
+        "purpose": "Per-quest bars."
       },
       {
         "name": "bar-fill",
         "value": "width 300ms",
-        "purpose": "Metric progress bars."
+        "purpose": "Metric and stat bars."
       },
       {
         "name": "press",
@@ -808,13 +1033,20 @@
     "themes": {
       "dark": "Only scheme. color-scheme: dark; no light mode, no prefers-color-scheme or data-theme switch."
     },
-    "field": {
-      "value": "radial-gradient(900px 520px at 50% -160px, #10284D 0%, transparent 65%) fixed, #060A14",
-      "purpose": "Page ground with the night-glow bloom."
+    "questColors": {
+      "train": "#FBBF24",
+      "recover": "#34D399",
+      "water": "#22D3EE",
+      "protein": "#F472B6",
+      "steps": "#34D399",
+      "sleep": "#A78BFA"
     },
-    "cornerBrackets": {
-      "value": "::after at inset -1px; eight #38BDF8 linear-gradient strokes, 14px x 2px and 2px x 14px, two per corner",
-      "appliesTo": "cards, system windows, hero, modal"
+    "statColors": {
+      "STR": "#F472B6",
+      "AGI": "#22D3EE",
+      "VIT": "#34D399",
+      "END": "#FBBF24",
+      "INT": "#A78BFA"
     },
     "rankLadder": [
       {
@@ -856,123 +1088,124 @@
         "apple-touch-icon.png",
         "icon.svg"
       ],
-      "concept": "A kettlebell whose handle forms a cat's ears, front view, off-white on orange-red #FB4620.",
-      "provenance": "Generated with ChatGPT image generation on 2026-10-29 at the owner's request (replaced a leaping-cat mark rejected as too close to Puma), then resized into each size locally. icon.svg wraps the PNG in a 64x64 viewBox clipped to 15px radius.",
-      "usage": "34px top-bar mark and 72px onboarding mark; manifest icons and apple-touch-icon for install. Stays orange in the HUD world; not a palette token."
+      "concept": "A kettlebell whose handle forms a cat's ears, with negative-space eyes, nose and whiskers; filled with the cyan-violet-pink brand gradient on a deep indigo field with a soft glow.",
+      "provenance": "Shape first generated with ChatGPT image generation on 2026-10-29 at the owner's request (off-white on orange-red; it replaced a leaping-cat mark rejected as too close to Puma). For the neon arcade skin the same shape was rebuilt locally from the ChatGPT mark's outline, re-coloured to the brand gradient on deep indigo with a soft glow, and exported locally to every size. icon.svg wraps the PNG in a 64x64 viewBox clipped to a 15px radius.",
+      "usage": "34px top-bar mark and 72px onboarding mark (10px radius); manifest icons and apple-touch-icon for install. theme_color and background_color #0A0718."
     }
   },
   "components": [
     {
-      "name": "System Window",
+      "name": "Glass Card",
       "kind": "card",
-      "refersTo": "system-window",
-      "description": "Signature: every panel. Gradient fill, cyan rim and glow, corner brackets, cyan header with diamond; scans in on view open.",
-      "html": "<section class=\"ds-sys ds-scan\"><div class=\"ds-sys-h\"><span>เควสประจำวัน</span><span class=\"ds-sys-sub\">พฤหัส 29 ต.ค. · เหลือ 6 ชม. 12 นาที</span></div><p class=\"ds-sys-p\">วันนี้เน้นท่าช้าๆ คุมจังหวะ</p></section>",
-      "css": ".ds-sys{position:relative;background:linear-gradient(180deg,rgba(17,30,57,.95),rgba(8,14,28,.95));border:1px solid rgba(56,189,248,.38);border-radius:8px;box-shadow:0 0 0 1px rgba(56,189,248,.06),0 0 26px -12px rgba(56,189,248,.6);color:#E6F0FF;font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif;padding:16px 16px 18px;display:flex;flex-direction:column;gap:12px}.ds-sys::after{content:\"\";position:absolute;inset:-1px;pointer-events:none;border-radius:8px;background:linear-gradient(#38BDF8,#38BDF8) left top/14px 2px no-repeat,linear-gradient(#38BDF8,#38BDF8) left top/2px 14px no-repeat,linear-gradient(#38BDF8,#38BDF8) right top/14px 2px no-repeat,linear-gradient(#38BDF8,#38BDF8) right top/2px 14px no-repeat,linear-gradient(#38BDF8,#38BDF8) left bottom/14px 2px no-repeat,linear-gradient(#38BDF8,#38BDF8) left bottom/2px 14px no-repeat,linear-gradient(#38BDF8,#38BDF8) right bottom/14px 2px no-repeat,linear-gradient(#38BDF8,#38BDF8) right bottom/2px 14px no-repeat}.ds-sys-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:2px 10px;font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-weight:700;font-size:1rem;letter-spacing:.08em;color:#38BDF8;border-bottom:1px solid rgba(56,189,248,.38);padding-bottom:8px}.ds-sys-h>span:first-child{white-space:nowrap}.ds-sys-h>span:first-child::before{content:\"\";display:inline-block;width:8px;height:8px;margin-right:8px;background:#38BDF8;box-shadow:0 0 10px #38BDF8;transform:rotate(45deg) translateY(-1px)}.ds-sys-sub{font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif;font-weight:500;font-size:.86rem;letter-spacing:0;color:#A3B3CE}.ds-sys-p{margin:0;color:#A3B3CE}.ds-scan{animation:ds-sys-in .5s cubic-bezier(.16,1,.3,1) both}@keyframes ds-sys-in{from{opacity:.001;clip-path:inset(0 0 100% 0)}to{opacity:1;clip-path:inset(0 0 0 0)}}@media (prefers-reduced-motion:reduce){.ds-scan{animation:none}}"
+      "refersTo": "glass-card",
+      "description": "Default container: frosted glass over the aurora.",
+      "html": "<div class=\"ds-glass\"><h2 class=\"ds-t\">สัปดาห์นี้</h2><p class=\"ds-m\">ฝึกแล้ว 2 จาก 3 ครั้ง ครบติดกัน 4 สัปดาห์</p></div>",
+      "css": ".ds-glass{position:relative;background:rgba(30,22,66,.58);-webkit-backdrop-filter:blur(16px) saturate(1.3);backdrop-filter:blur(16px) saturate(1.3);border:1px solid rgba(196,181,253,.16);border-radius:20px;box-shadow:0 18px 40px -24px rgba(0,0,0,.9);color:#F3EEFF;font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif;padding:18px;display:flex;flex-direction:column;gap:14px}.ds-t{margin:0;font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-size:1.25rem;font-weight:700}.ds-m{margin:0;color:#B8AED6}"
     },
     {
-      "name": "Status Window",
+      "name": "Status Card",
       "kind": "custom",
-      "refersTo": "rank-badge",
-      "description": "Signature: rank badge, name, gold title, level, XP bar, five stats. Rank colour via --rk.",
-      "html": "<section class=\"ds-sys\" style=\"--rk:#38BDF8\"><div class=\"ds-sys-h\"><span>สถานะผู้เล่น</span><span class=\"ds-sys-sub\">ต่อเนื่อง 6 วัน</span></div><div class=\"ds-st-top\"><div class=\"ds-rank\" role=\"img\" aria-label=\"แรงค์ C\"><span>C</span></div><div class=\"ds-st-id\"><b class=\"ds-st-name\">มิว</b><span class=\"ds-st-title\">ฉายา: วินัยเหล็ก</span><span class=\"ds-st-lv\">Lv. <b>12</b> · แรงค์ C นักล่ามีฝีมือ</span></div></div><div class=\"ds-xp\" role=\"progressbar\" aria-valuenow=\"62\" aria-valuemin=\"0\" aria-valuemax=\"100\"><i style=\"width:62%\"></i></div><div class=\"ds-xp-l\"><span>620 / 1,020 XP ถึง Lv. 13</span><span>แรงค์ B ที่ Lv. 20</span></div><div class=\"ds-stats5\"><div><span>STR</span><b>24</b></div><div><span>AGI</span><b>18</b></div><div><span>VIT</span><b>21</b></div><div><span>END</span><b>27</b></div><div><span>INT</span><b>15</b></div></div></section>",
-      "css": ".ds-sys{position:relative;background:linear-gradient(180deg,rgba(17,30,57,.95),rgba(8,14,28,.95));border:1px solid rgba(56,189,248,.38);border-radius:8px;box-shadow:0 0 0 1px rgba(56,189,248,.06),0 0 26px -12px rgba(56,189,248,.6);color:#E6F0FF;font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif;padding:16px 16px 18px;display:flex;flex-direction:column;gap:12px}.ds-sys::after{content:\"\";position:absolute;inset:-1px;pointer-events:none;border-radius:8px;background:linear-gradient(#38BDF8,#38BDF8) left top/14px 2px no-repeat,linear-gradient(#38BDF8,#38BDF8) left top/2px 14px no-repeat,linear-gradient(#38BDF8,#38BDF8) right top/14px 2px no-repeat,linear-gradient(#38BDF8,#38BDF8) right top/2px 14px no-repeat,linear-gradient(#38BDF8,#38BDF8) left bottom/14px 2px no-repeat,linear-gradient(#38BDF8,#38BDF8) left bottom/2px 14px no-repeat,linear-gradient(#38BDF8,#38BDF8) right bottom/14px 2px no-repeat,linear-gradient(#38BDF8,#38BDF8) right bottom/2px 14px no-repeat}.ds-sys-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:2px 10px;font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-weight:700;font-size:1rem;letter-spacing:.08em;color:#38BDF8;border-bottom:1px solid rgba(56,189,248,.38);padding-bottom:8px}.ds-sys-h>span:first-child{white-space:nowrap}.ds-sys-h>span:first-child::before{content:\"\";display:inline-block;width:8px;height:8px;margin-right:8px;background:#38BDF8;box-shadow:0 0 10px #38BDF8;transform:rotate(45deg) translateY(-1px)}.ds-sys-sub{font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif;font-weight:500;font-size:.86rem;letter-spacing:0;color:#A3B3CE}.ds-rank{--sz:64px;flex:none;width:var(--sz);height:var(--sz);margin:6px;display:grid;place-items:center;transform:rotate(45deg);border:2px solid var(--rk);background:color-mix(in srgb,var(--rk) 16%,transparent);box-shadow:0 0 22px -4px var(--rk),inset 0 0 14px -6px var(--rk);border-radius:6px}.ds-rank span{transform:rotate(-45deg);font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-weight:700;font-size:calc(var(--sz) * .5);line-height:1;color:var(--rk);text-shadow:0 0 12px var(--rk)}.ds-st-top{display:flex;gap:18px;align-items:center}.ds-st-id{display:flex;flex-direction:column;gap:2px;min-width:0}.ds-st-name{font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-size:1.45rem;font-weight:700;line-height:1.15}.ds-st-title{font-size:.93rem;color:#FACC15}.ds-st-lv{font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;color:#A3B3CE}.ds-st-lv b{color:#E6F0FF;font-size:1.3rem}.ds-xp{height:12px;border:1px solid rgba(56,189,248,.38);background:#081226;border-radius:3px;overflow:hidden}.ds-xp i{display:block;height:100%;background:linear-gradient(90deg,#0EA5E9,#7DD3FC);box-shadow:0 0 12px #38BDF8;transition:width .9s cubic-bezier(.16,1,.3,1)}.ds-xp-l{display:flex;justify-content:space-between;gap:10px;font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-size:.86rem;color:#A3B3CE}.ds-stats5{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.ds-stats5 div{border:1px solid rgba(56,189,248,.38);border-radius:4px;padding:6px 4px;text-align:center;background:rgba(56,189,248,.05)}.ds-stats5 span{display:block;font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-size:.74rem;letter-spacing:.08em;color:#38BDF8}.ds-stats5 b{font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-size:1.3rem;font-weight:700;font-variant-numeric:tabular-nums}"
+      "refersTo": "rank-medal",
+      "description": "Signature: gradient-framed card with the rank medal (ring = XP), name, level, title pill, XP caption and five coloured stats.",
+      "html": "<section class=\"ds-game ds-rise\"><div class=\"ds-top\"><div class=\"ds-medal\" style=\"--p:62;--rk:#38BDF8\" role=\"img\" aria-label=\"แรงค์ C ค่าประสบการณ์ 62 เปอร์เซ็นต์\"><div class=\"ds-medal-in\"><b>C</b><span>RANK</span></div></div><div class=\"ds-id\"><b class=\"ds-name\">มิว</b><span class=\"ds-lv\">Lv. <b>12</b> · นักล่ามีฝีมือ</span><span class=\"ds-title\">วินัยเหล็ก</span></div></div><div class=\"ds-xpl\"><span>620 / 1,020 XP ถึง Lv. 13</span><span>ต่อเนื่อง 6 วัน</span></div><div class=\"ds-s5\"><div style=\"--sc:#F472B6\"><span>STR</span><b>24</b></div><div style=\"--sc:#22D3EE\"><span>AGI</span><b>18</b></div><div style=\"--sc:#34D399\"><span>VIT</span><b>21</b></div><div style=\"--sc:#FBBF24\"><span>END</span><b>27</b></div><div style=\"--sc:#A78BFA\"><span>INT</span><b>15</b></div></div></section>",
+      "css": ".ds-game{position:relative;border:1px solid transparent;background:linear-gradient(rgba(24,17,54,.92),rgba(18,12,42,.92)) padding-box,linear-gradient(120deg,#22D3EE 0%,#818CF8 45%,#C084FC 70%,#F472B6 100%) border-box;border-radius:20px;box-shadow:0 18px 40px -24px rgba(0,0,0,.9);color:#F3EEFF;font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif;padding:18px;display:flex;flex-direction:column;gap:14px}.ds-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:2px 10px}.ds-h>span:first-child{font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-weight:700;font-size:1.15rem;white-space:nowrap}.ds-sub{font-size:.9rem;color:#B8AED6}.ds-rise{animation:ds-rise .55s cubic-bezier(.16,1,.3,1) both}@keyframes ds-rise{from{opacity:.001;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}@media (prefers-reduced-motion:reduce){.ds-rise{animation:none}}.ds-medal{--p:0;--rk:#fff;flex:none;width:112px;height:112px;border-radius:50%;padding:7px;background:conic-gradient(from -90deg,transparent calc(var(--p) * 1%),rgba(255,255,255,.09) 0),conic-gradient(from -90deg,#22D3EE,#818CF8,#C084FC,#F472B6,#22D3EE);filter:drop-shadow(0 6px 18px rgba(168,85,247,.45))}.ds-medal-in{width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 50% 35%,#2A1F5C,#120C2A 70%);display:grid;place-items:center;align-content:center}.ds-medal-in b{font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-weight:700;font-size:2.7rem;line-height:1;color:var(--rk);text-shadow:0 0 18px color-mix(in srgb,var(--rk) 70%,transparent)}.ds-medal-in span{font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-size:.7rem;letter-spacing:.18em;color:#B8AED6}.ds-medal.ds-big{width:140px;height:140px;margin:6px auto}.ds-medal.ds-big b{font-size:3.4rem}.ds-top{display:flex;gap:18px;align-items:center}.ds-id{display:flex;flex-direction:column;gap:4px;min-width:0}.ds-name{font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-size:1.5rem;font-weight:700;line-height:1.15}.ds-lv{font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;color:#B8AED6}.ds-lv b{font-size:1.35rem;color:#F3EEFF}.ds-title{align-self:flex-start;font-size:.86rem;font-weight:600;color:#1A0B33;background:linear-gradient(120deg,#22D3EE 0%,#818CF8 45%,#C084FC 70%,#F472B6 100%);border-radius:999px;padding:2px 10px}.ds-xpl{display:flex;justify-content:space-between;gap:10px;font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-size:.86rem;color:#B8AED6}.ds-s5{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.ds-s5 div{border-radius:12px;padding:7px 4px 6px;text-align:center;background:color-mix(in srgb,var(--sc) 14%,transparent);border:1px solid color-mix(in srgb,var(--sc) 35%,transparent)}.ds-s5 span{display:block;font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-size:.72rem;font-weight:600;letter-spacing:.08em;color:var(--sc)}.ds-s5 b{font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-size:1.3rem;font-weight:700;font-variant-numeric:tabular-nums}"
     },
     {
       "name": "Daily Quest List",
       "kind": "custom",
       "refersTo": "quest-row",
-      "description": "Signature: check box, quest text, progress, gold +XP; bonus strip below.",
-      "html": "<ul class=\"ds-qlist\"><li class=\"ds-q ds-done\"><span class=\"ds-q-box\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M5 12.5l4.5 4.5L19 7.5\"/></svg></span><div class=\"ds-q-main\"><span class=\"ds-q-t\">ชั่งน้ำหนักตอนเช้า</span></div><span class=\"ds-q-xp\">+20 XP</span></li><li class=\"ds-q\"><span class=\"ds-q-box\"></span><div class=\"ds-q-main\"><span class=\"ds-q-t\">ดื่มน้ำ 8 แก้ว</span><div class=\"ds-q-bar\"><i style=\"width:50%\"></i></div><span class=\"ds-q-n\">4 / 8</span></div><span class=\"ds-q-xp\">+30 XP</span></li></ul><div class=\"ds-q-bonus\">ทำครบ 4 เควส รับโบนัส <b>+50 XP</b> · ตอนนี้ 1/4</div>",
-      "css": ".ds-qlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px;font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif;color:#E6F0FF}.ds-q{display:grid;grid-template-columns:26px 1fr auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px dashed rgba(56,189,248,.18)}.ds-q:last-child{border-bottom:0}.ds-q-box{width:22px;height:22px;border:2px solid #38BDF8;border-radius:4px;display:grid;place-items:center}.ds-q-box svg{width:14px;height:14px;stroke:#03121F;stroke-width:3.2;fill:none;stroke-linecap:round;stroke-linejoin:round}.ds-done .ds-q-box{background:#38BDF8;box-shadow:0 0 12px -2px #38BDF8}.ds-q-main{display:flex;flex-direction:column;gap:5px;min-width:0}.ds-q-t{font-weight:600}.ds-done .ds-q-t{color:#A3B3CE}.ds-q-bar{height:6px;background:#081226;border-radius:3px;overflow:hidden}.ds-q-bar i{display:block;height:100%;background:#38BDF8;transition:width .6s}.ds-q-n{font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-size:.86rem;color:#A3B3CE}.ds-q-xp{font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-weight:700;color:#FACC15;white-space:nowrap}.ds-done .ds-q-xp{opacity:.55}.ds-q-bonus{margin-top:10px;border:1px dashed rgba(56,189,248,.38);border-radius:6px;padding:10px 12px;font-size:.95rem;color:#A3B3CE;font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif}.ds-q-bonus b{color:#FACC15;font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif}"
+      "description": "Signature: one colour and icon tile per quest, logged in place; gradient progress and bonus.",
+      "html": "<div class=\"ds-qhead\"><div class=\"ds-qprog\"><i style=\"width:40%\"></i></div><span class=\"ds-qcount\">2/5</span></div><ul class=\"ds-ql\"><li class=\"ds-q ds-done\" style=\"--qc:#FBBF24\"><span class=\"ds-qic\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M5 12.5l4.5 4.5L19 7.5\"/></svg></span><div class=\"ds-qm\"><span class=\"ds-qt\">ภารกิจหลัก: ร่างกายส่วนบน</span><div class=\"ds-qs\"><span>สำเร็จ</span></div></div><div class=\"ds-qside\"><span class=\"ds-qxp\">+100 XP</span></div></li><li class=\"ds-q\" style=\"--qc:#22D3EE\"><span class=\"ds-qic\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 3c3.5 4.2 6 7.4 6 10.5A6 6 0 0 1 6 13.5C6 10.4 8.5 7.2 12 3z\"/></svg></span><div class=\"ds-qm\"><span class=\"ds-qt\">ดื่มน้ำ 8 แก้ว</span><div class=\"ds-qs\"><div class=\"ds-qbar\"><i style=\"width:50%\"></i></div><span>4/8</span></div></div><div class=\"ds-qside\"><span class=\"ds-qxp\">+30 XP</span><div class=\"ds-qctl\"><button class=\"ds-btn\" aria-label=\"ลดน้ำหนึ่งแก้ว\">−</button><button class=\"ds-btn ds-pri\" aria-label=\"เพิ่มน้ำหนึ่งแก้ว\">+1</button></div></div></li><li class=\"ds-q\" style=\"--qc:#A78BFA\"><span class=\"ds-qic\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z\"/></svg></span><div class=\"ds-qm\"><span class=\"ds-qt\">นอน 7–9 ชั่วโมง</span></div><div class=\"ds-qside\"><span class=\"ds-qxp\">+30 XP</span><div class=\"ds-qctl\"><input type=\"number\" placeholder=\"ชม.\" aria-label=\"ชั่วโมงนอนเมื่อคืน\"></div></div></li></ul><div class=\"ds-bonus\">ทำครบ 5 เควส รับโบนัส <b>+100 XP</b> · ตอนนี้ 2/5</div>",
+      "css": ".ds-btn{appearance:none;border:1px solid rgba(196,181,253,.16);background:rgba(255,255,255,.06);color:#F3EEFF;border-radius:14px;font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-weight:600;letter-spacing:.005em;padding:10px 16px;min-height:44px;line-height:1.2;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:transform .12s,filter .12s,border-color .12s}.ds-btn:hover{border-color:#A78BFA}.ds-btn:active{transform:scale(.97)}.ds-btn:focus-visible{outline:2px solid #A78BFA;outline-offset:2px}.ds-pri{background:linear-gradient(120deg,#22D3EE 0%,#818CF8 45%,#C084FC 70%,#F472B6 100%);border:0;color:#14082E;box-shadow:0 8px 22px -10px rgba(192,132,252,.9),inset 0 1px 0 rgba(255,255,255,.45)}.ds-pri:hover{filter:brightness(1.07)}.ds-qhead{display:flex;align-items:center;gap:12px;margin-bottom:12px;color:#F3EEFF}.ds-qprog{flex:1;height:8px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}.ds-qprog i{display:block;height:100%;background:linear-gradient(120deg,#22D3EE 0%,#818CF8 45%,#C084FC 70%,#F472B6 100%);border-radius:inherit;transition:width .8s cubic-bezier(.16,1,.3,1)}.ds-qcount{font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-weight:700}.ds-ql{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif;color:#F3EEFF}.ds-q{--qc:#A78BFA;display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center;padding:10px 12px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}.ds-qic{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;background:color-mix(in srgb,var(--qc) 18%,transparent);color:var(--qc)}.ds-qic svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.ds-done{background:color-mix(in srgb,var(--qc) 12%,transparent);border-color:color-mix(in srgb,var(--qc) 40%,transparent)}.ds-done .ds-qic{background:var(--qc);color:#14082E;box-shadow:0 0 18px -4px var(--qc)}.ds-qm{display:flex;flex-direction:column;gap:5px;min-width:0}.ds-qt{font-weight:600;line-height:1.35}.ds-qs{display:flex;align-items:center;gap:8px;font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-size:.86rem;color:#B8AED6}.ds-qbar{flex:1;height:6px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}.ds-qbar i{display:block;height:100%;background:var(--qc);border-radius:inherit;transition:width .6s}.ds-qside{display:flex;flex-direction:column;align-items:flex-end;gap:6px}.ds-qxp{font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-weight:700;font-size:.86rem;color:var(--qc);white-space:nowrap}.ds-done .ds-qxp{color:#B8AED6}.ds-qctl{display:flex;gap:6px;align-items:center}.ds-qctl .ds-btn{min-height:34px;min-width:34px;padding:4px 10px;border-radius:10px}.ds-qctl input{width:84px;min-height:34px;padding:4px 8px;font-size:16px;text-align:center;background:rgba(10,7,24,.55);border:1px solid rgba(196,181,253,.16);border-radius:12px;color:#F3EEFF}.ds-qctl input:focus-visible{outline:2px solid #A78BFA;outline-offset:2px}.ds-bonus{margin-top:12px;border-radius:14px;padding:10px 14px;font-size:.95rem;color:#B8AED6;background:rgba(255,255,255,.04);font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif}.ds-bonus b{font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;color:#FBBF24}"
+    },
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-start",
+      "description": "Brand-gradient action with dark ink: start, go, save.",
+      "html": "<button class=\"ds-btn ds-pri ds-start\">รับภารกิจ: เริ่มฝึก</button>",
+      "css": ".ds-btn{appearance:none;border:1px solid rgba(196,181,253,.16);background:rgba(255,255,255,.06);color:#F3EEFF;border-radius:14px;font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-weight:600;letter-spacing:.005em;padding:10px 16px;min-height:44px;line-height:1.2;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:transform .12s,filter .12s,border-color .12s}.ds-btn:hover{border-color:#A78BFA}.ds-btn:active{transform:scale(.97)}.ds-btn:focus-visible{outline:2px solid #A78BFA;outline-offset:2px}.ds-pri{background:linear-gradient(120deg,#22D3EE 0%,#818CF8 45%,#C084FC 70%,#F472B6 100%);border:0;color:#14082E;box-shadow:0 8px 22px -10px rgba(192,132,252,.9),inset 0 1px 0 rgba(255,255,255,.45)}.ds-pri:hover{filter:brightness(1.07)}.ds-start{width:100%;min-height:60px;font-size:1.3rem;padding:14px 22px;border-radius:16px}"
     },
     {
       "name": "Default Button",
       "kind": "button",
       "refersTo": "button",
-      "description": "Secondary actions.",
+      "description": "Secondary actions on a white wash with a glass rim.",
       "html": "<button class=\"ds-btn\">ดูทั้งหมด</button>",
-      "css": ".ds-btn{appearance:none;border:1px solid rgba(56,189,248,.38);background:rgba(8,16,32,.6);color:#E6F0FF;border-radius:6px;font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-weight:600;letter-spacing:.005em;padding:10px 16px;min-height:44px;line-height:1.2;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:transform .12s,filter .12s,border-color .12s}.ds-btn:hover{border-color:#38BDF8}.ds-btn:active{transform:scale(.97)}.ds-btn:focus-visible{outline:2px solid #38BDF8;outline-offset:2px}"
-    },
-    {
-      "name": "Start / Primary Button",
-      "kind": "button",
-      "refersTo": "button-start",
-      "description": "Cyan action with glow: start, go, save.",
-      "html": "<button class=\"ds-btn-go\">เริ่มภารกิจหลัก</button>",
-      "css": ".ds-btn-go{appearance:none;border:1px solid rgba(56,189,248,.38);background:rgba(8,16,32,.6);color:#E6F0FF;border-radius:6px;font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-weight:600;letter-spacing:.005em;padding:10px 16px;min-height:44px;line-height:1.2;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:transform .12s,filter .12s,border-color .12s;background:#38BDF8;border-color:#38BDF8;color:#03121F;box-shadow:0 0 24px -8px #38BDF8;border-radius:8px;font-size:1.3rem;padding:14px 22px;min-height:60px;width:100%}.ds-btn-go:hover{filter:brightness(1.08)}.ds-btn-go:active{transform:scale(.97)}.ds-btn-go:focus-visible{outline:2px solid #38BDF8;outline-offset:2px}"
+      "css": ".ds-btn{appearance:none;border:1px solid rgba(196,181,253,.16);background:rgba(255,255,255,.06);color:#F3EEFF;border-radius:14px;font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-weight:600;letter-spacing:.005em;padding:10px 16px;min-height:44px;line-height:1.2;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:transform .12s,filter .12s,border-color .12s}.ds-btn:hover{border-color:#A78BFA}.ds-btn:active{transform:scale(.97)}.ds-btn:focus-visible{outline:2px solid #A78BFA;outline-offset:2px}"
     },
     {
       "name": "Chip",
       "kind": "chip",
       "refersTo": "chip",
-      "description": "4px tags; pressed chips go cyan.",
+      "description": "Pill tags; pressed chips go violet.",
       "html": "<span class=\"ds-chip\">20 นาที</span> <span class=\"ds-chip ds-chip-hot\">ใหม่</span> <button class=\"ds-chip ds-chip-btn\" aria-pressed=\"true\">ทั้งหมด</button>",
-      "css": ".ds-chip{display:inline-flex;align-items:center;gap:4px;font-size:.86rem;font-weight:600;padding:4px 10px;border-radius:4px;background:#0B1426;color:#A3B3CE;white-space:nowrap;font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif}.ds-chip-hot{background:#3A1430;color:#F472B6}.ds-chip-btn{border:1px solid transparent;cursor:pointer;min-height:34px;padding:4px 12px}.ds-chip-btn[aria-pressed=true]{background:#38BDF8;color:#03121F}.ds-chip-btn:focus-visible{outline:2px solid #38BDF8;outline-offset:2px}"
+      "css": ".ds-chip{display:inline-flex;align-items:center;gap:4px;font-size:.86rem;font-weight:600;padding:4px 10px;border-radius:999px;background:#120C2A;color:#B8AED6;white-space:nowrap;font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif}.ds-chip-hot{background:#3D1638;color:#F472B6}.ds-chip-btn{border:1px solid transparent;cursor:pointer;min-height:34px;padding:4px 12px}.ds-chip-btn[aria-pressed=true]{background:#A78BFA;color:#14082E}.ds-chip-btn:focus-visible{outline:2px solid #A78BFA;outline-offset:2px}"
     },
     {
       "name": "Text Input",
       "kind": "input",
       "refersTo": "input",
-      "description": "Well fill, cyan rim; 16px text.",
+      "description": "Dark well, glass rim, 12px radius; 16px text.",
       "html": "<label class=\"ds-f\">น้ำหนัก (กก.)<input class=\"ds-input\" type=\"number\" value=\"62.5\"></label>",
-      "css": ".ds-f{display:flex;flex-direction:column;gap:5px;font-size:.88rem;font-weight:500;font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif;color:#E6F0FF}.ds-input{width:100%;border:1px solid rgba(56,189,248,.38);background:#081226;color:#E6F0FF;border-radius:6px;padding:11px 13px;min-height:46px;font-size:16px;font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif}.ds-input:focus-visible{outline:2px solid #38BDF8;outline-offset:2px}"
+      "css": ".ds-f{display:flex;flex-direction:column;gap:5px;font-size:.88rem;font-weight:500;font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif;color:#F3EEFF}.ds-input{width:100%;border:1px solid rgba(196,181,253,.16);background:rgba(10,7,24,.55);color:#F3EEFF;border-radius:12px;padding:11px 13px;min-height:46px;font-size:16px;font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif}.ds-input:focus-visible{outline:2px solid #A78BFA;outline-offset:2px}"
     },
     {
       "name": "Floating Nav",
       "kind": "nav",
       "refersTo": "nav-bottom",
-      "description": "Phone nav: glowing rimmed bar, raised cyan train button.",
+      "description": "Phone nav: glass bar, cyan active icon, raised gradient train button.",
       "html": "<nav class=\"ds-nav\"><a aria-current=\"page\"><svg viewBox=\"0 0 24 24\"><path d=\"M3 11l9-7 9 7v9H3z\"/></svg>วันนี้</a><a><svg viewBox=\"0 0 24 24\"><path d=\"M4 6h16M4 12h16M4 18h10\"/></svg>แผน</a><a class=\"ds-mid\"><span class=\"ds-ic\"><svg viewBox=\"0 0 24 24\"><path d=\"M7 5v14l12-7z\"/></svg></span>ฝึก</a><a><svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"8\"/></svg>กิน</a><a><svg viewBox=\"0 0 24 24\"><path d=\"M4 19l5-6 4 3 7-9\"/></svg>สถานะ</a></nav>",
-      "css": ".ds-nav{margin-top:36px;background:rgba(5,9,18,.94);border:1px solid rgba(56,189,248,.38);box-shadow:0 0 30px -12px rgba(56,189,248,.5);border-radius:14px;display:grid;grid-template-columns:repeat(5,1fr);align-items:end;padding:0 4px;max-width:520px;font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif}.ds-nav a{display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 0 8px;min-height:58px;justify-content:flex-end;color:#A3B3CE;font-size:.8rem;font-weight:500;cursor:pointer}.ds-nav svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}.ds-nav a[aria-current=page]{color:#fff;font-weight:600}.ds-nav a[aria-current=page] svg{color:#38BDF8}.ds-nav .ds-ic{width:56px;height:56px;margin-top:-28px;border-radius:12px;background:#38BDF8;color:#03121F;display:grid;place-items:center;box-shadow:0 0 0 5px #060A14,0 0 22px -4px #38BDF8;transition:transform .15s}.ds-nav .ds-mid:active .ds-ic{transform:scale(.94)}.ds-nav .ds-mid svg{width:25px;height:25px}"
+      "css": ".ds-nav{margin-top:36px;background:rgba(14,10,32,.82);-webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);border:1px solid rgba(196,181,253,.16);box-shadow:0 16px 40px -16px rgba(0,0,0,.9);border-radius:22px;display:grid;grid-template-columns:repeat(5,1fr);align-items:end;padding:0 4px;max-width:520px;font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif}.ds-nav a{display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 0 8px;min-height:58px;justify-content:flex-end;color:#B8AED6;font-size:.8rem;font-weight:500;cursor:pointer}.ds-nav svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}.ds-nav a[aria-current=page]{color:#fff;font-weight:600}.ds-nav a[aria-current=page] svg{color:#22D3EE}.ds-nav .ds-ic{width:56px;height:56px;margin-top:-28px;border-radius:50%;background:linear-gradient(120deg,#22D3EE 0%,#818CF8 45%,#C084FC 70%,#F472B6 100%);color:#14082E;display:grid;place-items:center;box-shadow:0 0 0 5px #0A0718,0 10px 26px -6px rgba(192,132,252,.9);transition:transform .15s}.ds-nav .ds-mid:active .ds-ic{transform:scale(.94)}.ds-nav .ds-mid svg{width:25px;height:25px}"
     },
     {
       "name": "Titles Grid",
       "kind": "custom",
       "refersTo": "title-tile",
-      "description": "Earned titles in gold; locked dashed at 45%.",
+      "description": "Earned title names in gradient text; locked at 50%.",
       "html": "<ul class=\"ds-titles\"><li><b>วินัยเหล็ก</b><span>ทำเควสติดกัน 30 วัน</span></li><li class=\"ds-locked\"><b>ตำนาน</b><span>ถึงแรงค์ S (Lv. 55)</span></li></ul>",
-      "css": ".ds-titles{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif;color:#E6F0FF}.ds-titles li{border:1px solid rgba(56,189,248,.38);border-radius:6px;padding:10px;display:flex;flex-direction:column;gap:2px}.ds-titles b{font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;color:#FACC15}.ds-titles span{font-size:.86rem;color:#A3B3CE}.ds-titles li.ds-locked{opacity:.45;border-style:dashed}.ds-titles li.ds-locked b{color:#A3B3CE}"
+      "css": ".ds-titles{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif;color:#F3EEFF}.ds-titles li{border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;background:rgba(255,255,255,.05)}.ds-titles b{font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;background:linear-gradient(120deg,#22D3EE 0%,#818CF8 45%,#C084FC 70%,#F472B6 100%);-webkit-background-clip:text;background-clip:text;color:transparent}.ds-titles span{font-size:.86rem;color:#B8AED6}.ds-titles li.ds-locked{opacity:.5}.ds-titles li.ds-locked b{background:none;color:#B8AED6}"
     },
     {
       "name": "Level-Up Window",
       "kind": "custom",
       "refersTo": "level-up",
-      "description": "Modal: system notice, gold LEVEL UP!, rank badge on rank change.",
-      "html": "<div class=\"ds-sys ds-lvup\" style=\"--rk:#A78BFA\"><div class=\"ds-sys-h\"><span>แจ้งเตือนจากระบบ</span></div><p class=\"ds-lv-big\">LEVEL UP!</p><p>Lv. 19 → <b>Lv. 20</b></p><div class=\"ds-rank ds-big\" role=\"img\" aria-label=\"แรงค์ B\"><span>B</span></div><p>เลื่อนแรงค์ <b>C → B</b> · นักล่าชั้นยอด</p><button class=\"ds-btn-ok\">รับทราบ</button></div>",
-      "css": ".ds-sys{position:relative;background:linear-gradient(180deg,rgba(17,30,57,.95),rgba(8,14,28,.95));border:1px solid rgba(56,189,248,.38);border-radius:8px;box-shadow:0 0 0 1px rgba(56,189,248,.06),0 0 26px -12px rgba(56,189,248,.6);color:#E6F0FF;font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif;padding:16px 16px 18px;display:flex;flex-direction:column;gap:12px}.ds-sys::after{content:\"\";position:absolute;inset:-1px;pointer-events:none;border-radius:8px;background:linear-gradient(#38BDF8,#38BDF8) left top/14px 2px no-repeat,linear-gradient(#38BDF8,#38BDF8) left top/2px 14px no-repeat,linear-gradient(#38BDF8,#38BDF8) right top/14px 2px no-repeat,linear-gradient(#38BDF8,#38BDF8) right top/2px 14px no-repeat,linear-gradient(#38BDF8,#38BDF8) left bottom/14px 2px no-repeat,linear-gradient(#38BDF8,#38BDF8) left bottom/2px 14px no-repeat,linear-gradient(#38BDF8,#38BDF8) right bottom/14px 2px no-repeat,linear-gradient(#38BDF8,#38BDF8) right bottom/2px 14px no-repeat}.ds-sys-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:2px 10px;font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-weight:700;font-size:1rem;letter-spacing:.08em;color:#38BDF8;border-bottom:1px solid rgba(56,189,248,.38);padding-bottom:8px}.ds-sys-h>span:first-child{white-space:nowrap}.ds-sys-h>span:first-child::before{content:\"\";display:inline-block;width:8px;height:8px;margin-right:8px;background:#38BDF8;box-shadow:0 0 10px #38BDF8;transform:rotate(45deg) translateY(-1px)}.ds-sys-sub{font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif;font-weight:500;font-size:.86rem;letter-spacing:0;color:#A3B3CE}.ds-rank{--sz:64px;flex:none;width:var(--sz);height:var(--sz);margin:6px;display:grid;place-items:center;transform:rotate(45deg);border:2px solid var(--rk);background:color-mix(in srgb,var(--rk) 16%,transparent);box-shadow:0 0 22px -4px var(--rk),inset 0 0 14px -6px var(--rk);border-radius:6px}.ds-rank span{transform:rotate(-45deg);font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-weight:700;font-size:calc(var(--sz) * .5);line-height:1;color:var(--rk);text-shadow:0 0 12px var(--rk)}.ds-lvup{text-align:center;gap:8px;padding:22px;max-width:460px;animation:ds-lv-in .6s cubic-bezier(.16,1,.3,1)}.ds-lvup p{margin:0}.ds-big{--sz:92px;margin:16px auto}.ds-lv-big{font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-weight:700;font-size:2.6rem;letter-spacing:.06em;color:#FACC15;text-shadow:0 0 18px rgba(250,204,21,.7)}.ds-btn-ok{appearance:none;width:100%;min-height:54px;border:1px solid #38BDF8;background:#38BDF8;color:#03121F;border-radius:8px;font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-weight:600;font-size:1.06rem;box-shadow:0 0 24px -8px #38BDF8;cursor:pointer}.ds-btn-ok:active{transform:scale(.97)}.ds-btn-ok:focus-visible{outline:2px solid #38BDF8;outline-offset:2px}@keyframes ds-lv-in{from{opacity:.001;transform:scale(.86)}to{opacity:1;transform:none}}@media (prefers-reduced-motion:reduce){.ds-lvup{animation:none}}"
+      "description": "Gradient-framed modal: gold LEVEL UP!, spinning 140px medal, gradient button.",
+      "html": "<div class=\"ds-game ds-lvup\"><div class=\"ds-h\"><span>แจ้งเตือนจากระบบ</span></div><p class=\"ds-lvbig\">LEVEL UP!</p><p>Lv. 19 → <b>Lv. 20</b></p><div class=\"ds-medal ds-big\" style=\"--p:4;--rk:#A78BFA\" role=\"img\" aria-label=\"แรงค์ B ค่าประสบการณ์ 4 เปอร์เซ็นต์\"><div class=\"ds-medal-in\"><b>B</b><span>RANK</span></div></div><p>เลื่อนแรงค์ <b>C → B</b> · นักล่าชั้นยอด</p><button class=\"ds-btn ds-pri ds-ok\">รับทราบ</button></div>",
+      "css": ".ds-game{position:relative;border:1px solid transparent;background:linear-gradient(rgba(24,17,54,.92),rgba(18,12,42,.92)) padding-box,linear-gradient(120deg,#22D3EE 0%,#818CF8 45%,#C084FC 70%,#F472B6 100%) border-box;border-radius:20px;box-shadow:0 18px 40px -24px rgba(0,0,0,.9);color:#F3EEFF;font-family:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif;padding:18px;display:flex;flex-direction:column;gap:14px}.ds-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:2px 10px}.ds-h>span:first-child{font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-weight:700;font-size:1.15rem;white-space:nowrap}.ds-sub{font-size:.9rem;color:#B8AED6}.ds-rise{animation:ds-rise .55s cubic-bezier(.16,1,.3,1) both}@keyframes ds-rise{from{opacity:.001;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}@media (prefers-reduced-motion:reduce){.ds-rise{animation:none}}.ds-medal{--p:0;--rk:#fff;flex:none;width:112px;height:112px;border-radius:50%;padding:7px;background:conic-gradient(from -90deg,transparent calc(var(--p) * 1%),rgba(255,255,255,.09) 0),conic-gradient(from -90deg,#22D3EE,#818CF8,#C084FC,#F472B6,#22D3EE);filter:drop-shadow(0 6px 18px rgba(168,85,247,.45))}.ds-medal-in{width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 50% 35%,#2A1F5C,#120C2A 70%);display:grid;place-items:center;align-content:center}.ds-medal-in b{font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-weight:700;font-size:2.7rem;line-height:1;color:var(--rk);text-shadow:0 0 18px color-mix(in srgb,var(--rk) 70%,transparent)}.ds-medal-in span{font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-size:.7rem;letter-spacing:.18em;color:#B8AED6}.ds-medal.ds-big{width:140px;height:140px;margin:6px auto}.ds-medal.ds-big b{font-size:3.4rem}.ds-btn{appearance:none;border:1px solid rgba(196,181,253,.16);background:rgba(255,255,255,.06);color:#F3EEFF;border-radius:14px;font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-weight:600;letter-spacing:.005em;padding:10px 16px;min-height:44px;line-height:1.2;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:transform .12s,filter .12s,border-color .12s}.ds-btn:hover{border-color:#A78BFA}.ds-btn:active{transform:scale(.97)}.ds-btn:focus-visible{outline:2px solid #A78BFA;outline-offset:2px}.ds-pri{background:linear-gradient(120deg,#22D3EE 0%,#818CF8 45%,#C084FC 70%,#F472B6 100%);border:0;color:#14082E;box-shadow:0 8px 22px -10px rgba(192,132,252,.9),inset 0 1px 0 rgba(255,255,255,.45)}.ds-pri:hover{filter:brightness(1.07)}.ds-lvup{text-align:center;gap:8px;padding:22px;max-width:460px;animation:ds-lv-in .6s cubic-bezier(.16,1,.3,1)}.ds-lvup p{margin:0}.ds-lvup .ds-medal{animation:ds-spin 1s cubic-bezier(.16,1,.3,1)}.ds-lvbig{font-family:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;font-weight:700;font-size:2.7rem;letter-spacing:.05em;color:#FBBF24;text-shadow:0 0 22px rgba(251,191,36,.65)}.ds-ok{width:100%;min-height:54px;font-size:1.06rem;border-radius:16px}@keyframes ds-lv-in{from{opacity:.001;transform:scale(.86)}to{opacity:1;transform:none}}@keyframes ds-spin{from{transform:rotate(-200deg) scale(.6)}to{transform:none}}@media (prefers-reduced-motion:reduce){.ds-lvup,.ds-lvup .ds-medal{animation:none}}"
     }
   ],
   "narrative": {
-    "northStar": "The System Window",
-    "overview": "MewFit plays like a game's quest system. The page is a night-blue field (night-field, with a soft night-glow bloom at the top), and every panel is a glowing system window: a faint navy gradient (window-top to window-bottom), a thin cyan rim, a cyan halo, and four short cyan corner brackets. The system speaks in cyan. It hands out daily quests, measures progress and offers the start action. It pays you in gold: XP, earned titles and the LEVEL UP call. Your standing is a rank from E to S, shown in its own colour on a rotated-square badge. The spirit is the \"daily quest\" status screens of hunter-ranking manhwa, but none of that IP's names or text are used. Every label is MewFit's own Thai.\n\nThe Today view opens on two windows. First is the status window: rank badge, player name, title, level, an XP bar, and five stats (STR, AGI, VIT, END, INT). Below it is the daily-quest window: the coach's line, the strip of today's moves, the quest checklist with +XP rewards, the bonus strip and the start button. Everything else (food, plan, body tracking, knowledge) sits in the same windows lower down. Hierarchy comes from scale and from the cyan/gold split, not from extra chrome. Live numbers (reps, rest, interval clock) are huge tabular numerals in Chakra Petch.\n\nThe app is dark only. Light mode was removed and `color-scheme` is `dark`. The layout is built for phones first (390px design width, safe down to 360px), with 16px gutters, a 14px rhythm between blocks, and touch targets of at least 44px (36px for small chips and buttons).\n\n**Identity asset.** The logo and every app icon (`icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, `apple-touch-icon.png`, `icon.svg`, which wraps the PNG in a 15/64-radius clip) were generated with ChatGPT image generation on 2026-10-29 at the owner's request. The mark is a kettlebell whose handle forms a cat's ears, with negative-space eyes, nose and whiskers, in off-white on orange-red #FB4620. It replaced a first leaping-cat mark that the owner rejected as too close to Puma. The images were then resized locally into each size. The logo stays orange in the HUD world: it is an identity asset, not a palette token. It shows as the 34px mark in the top bar and the 72px mark in the onboarding hero (10px radius). The wordmark \"Mew**Fit**\" is set in Chakra Petch with \"Fit\" in system-cyan. The page `theme-color` is night-field.",
+    "northStar": "The Neon Arcade",
+    "overview": "MewFit plays like an arcade RPG. The page is a deep violet-black night with an aurora behind it: a violet bloom in the top-left corner, a faint cyan one at the top right, and a pink one rising from the bottom right. Every panel is a pane of frosted glass that the aurora glows through. The brand is one four-stop gradient, cyan through indigo and orchid to pink. It is the logo, the \"Fit\" of the wordmark, the primary action and the frame of the cards that carry the game. Five arcade colours (cyan, violet, pink, green, amber) give each daily quest and each stat its own colour, so the screen reads at a glance. Amber also serves as gold, the colour of the bonus XP and LEVEL UP. Your standing is a rank from E to S, shown as a round medal whose gradient ring is your XP progress to the next level. The spirit is the daily-quest status screens of hunter-ranking manhwa, but none of that IP's names or text are used. Every label is MewFit's own Thai.\n\nThe Today view opens on two gradient-framed cards. The status card holds the rank medal, the player name, level and rank name, a title pill, the XP caption and the five stats (STR, AGI, VIT, END, INT). Below it, the daily-quest card holds a gradient progress bar and count, the coach's line, the strip of today's moves, the quest list, the bonus strip and the start button. Each quest is logged in place: water with − and +1, steps and sleep with number inputs, protein with a link to the Eat view. Everything else (food, plan, body tracking, knowledge) sits in plain glass cards lower down. Live numbers (reps, rest, interval clock) are huge tabular numerals in Chakra Petch.\n\nThe app is dark only. `color-scheme` is `dark` and the page `theme-color` is night. The layout is built for phones first (390px design width, safe down to 360px), with 16px gutters, a 14px rhythm between blocks, and touch targets of at least 44px. Compact chips and inline quest controls are 34px.\n\n**Identity asset.** The logo and every app icon (`icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, `apple-touch-icon.png`, and `icon.svg`, which wraps the PNG in a 15/64-radius clip) show a kettlebell whose handle forms a cat's ears, with eyes, nose and whiskers cut out as negative space. The shape was first generated with ChatGPT image generation on 2026-10-29 at the owner's request, replacing a leaping-cat mark the owner rejected as too close to Puma. That first mark was off-white on orange-red. For the neon arcade skin the same shape was rebuilt locally from the ChatGPT mark's outline and re-coloured: the kettlebell-cat is filled with the cyan-violet-pink brand gradient, sits on a deep indigo field and has a soft glow. It was then exported locally to every size. The logo shows as the 34px mark in the top bar and the 72px mark in the onboarding hero, both with a 10px radius. The wordmark \"Mew**Fit**\" is set in Chakra Petch, with \"Fit\" filled with the brand gradient.",
     "keyCharacteristics": [
-      "Every panel is a glowing system window with cyan corner brackets on a night-blue field.",
-      "Cyan is the system's voice (quests, progress, selection, focus, start). Gold is the reward (XP, titles, LEVEL UP). Rank colours mark standing.",
+      "Aurora night (violet, cyan and pink blooms on night) behind frosted-glass cards.",
+      "One brand gradient (cyan, indigo, orchid, pink) for the logo, the wordmark's \"Fit\", primary actions, the frames of the game cards and modals, and the medal ring.",
+      "Five arcade colours, one per quest and stat, each with its own tinted icon tile. Gold (amber) for the bonus XP and LEVEL UP.",
+      "The rank is a round medal whose ring is the XP progress.",
       "Chakra Petch sets headings, numerals and HUD labels. Sarabun, a looped Thai face, carries every sentence.",
-      "Corners are tight and squarish (4-8px). The rank badge is a square turned 45 degrees.",
-      "One authored motion: windows scan in from the top as a view opens.",
-      "Animated stick-figure demos in ink on dark panels, with pink props."
+      "Soft, rounded forms: 20px cards, 12-16px controls, pills and circles.",
+      "Animated stick-figure demos in ink on dark glass, with pink props."
     ],
     "rules": [
       {
-        "name": "The System Voice Rule",
-        "body": "Cyan is the system speaking: quests, progress, selection, focus and the start action. Nothing decorative is cyan except the window frame itself.",
+        "name": "The Gradient Is The Brand Rule",
+        "body": "The four-stop gradient means MewFit itself or the main thing to do next: the logo, the wordmark, the primary action, the game cards' frames and the medal ring. It is not a decoration for ordinary cards, lists or body text.",
         "section": "colors"
       },
       {
-        "name": "The Gold Is Earned Rule",
-        "body": "Gold appears only on something the player has earned or is about to earn: XP amounts, titles, the bonus and LEVEL UP. It is never a button, a link or a selection state.",
+        "name": "The One Colour Per Quest Rule",
+        "body": "Each quest and stat owns one arcade colour, and every mark for it (icon tile, bar, +XP, stat key, done tint) uses that colour. Colour identifies the quest. Done state is also shown by the check icon and the muted +XP, never by colour alone.",
         "section": "colors"
       },
       {
-        "name": "The Rank Owns Its Colour Rule",
-        "body": "Rank colours appear only through `--rk` on the rank badge and the window that carries it. They never stand in for status, data or actions.",
+        "name": "The Rank Lights The Letter Rule",
+        "body": "The rank colour appears only on the medal letter and its glow. The ring is always the brand gradient, because it shows XP, not rank.",
         "section": "colors"
       },
       {
         "name": "The Two Voices Rule",
-        "body": "Chakra Petch is the system (headings, numbers, HUD labels, buttons). Sarabun is the coach (sentences). Never set a paragraph in Chakra Petch.",
+        "body": "Chakra Petch is the system (headings, numbers, HUD labels, buttons). Sarabun is the coach (sentences and quest text). Never set a paragraph in Chakra Petch.",
         "section": "typography"
       },
       {
@@ -981,27 +1214,36 @@
         "section": "typography"
       },
       {
-        "name": "The Glow Means Live Rule",
-        "body": "A glow appears only on a system window frame, an action, or something the player earned. A glow is never added to plain text, a list row or a secondary control.",
+        "name": "The Two Gradient Words Rule",
+        "body": "Gradient-clipped text is used for exactly two things: \"Fit\" in the wordmark and earned title names. Everything else that reads is set in solid colour.",
+        "section": "typography"
+      },
+      {
+        "name": "The Light Means Live Rule",
+        "body": "Coloured light appears only on the primary action, the medal, a completed quest, a stat bar or LEVEL UP. Plain text, list rows and secondary controls never glow.",
         "section": "elevation"
       }
     ],
     "dos": [
-      "**Do** frame every new panel as a system window: window gradient, 1px system-line rim, window glow, 8px radius and the four cyan corner brackets.",
-      "**Do** keep cyan (#38BDF8) for the system's voice (quests, progress, selection, focus, the start action) and gold (#FACC15) for what is earned (XP, titles, LEVEL UP).",
-      "**Do** show standing only through the rank badge and `--rk`, using the ladder E #A3B3CE, D #4ADE80, C #38BDF8, B #A78BFA, A #FB923C, S #FACC15.",
+      "**Do** put new panels in a glass card: glass fill, 16px backdrop blur, 1px glass-line rim, 20px radius and the glass drop. Use the gradient-bordered game card only for the status card, the quest card and modals.",
+      "**Do** keep the brand gradient (#22D3EE → #818CF8 → #C084FC → #F472B6) for the logo, the wordmark's \"Fit\", primary actions, the game-card frames, the medal ring, quest progress and earned titles, with #14082E text on it.",
+      "**Do** give every quest and stat exactly one arcade colour (cyan #22D3EE, violet #A78BFA, pink #F472B6, green #34D399, amber #FBBF24) and use it for its icon tile, bar, +XP and stat key.",
+      "**Do** show standing only through the rank medal: the letter in the rank colour, the ring as XP progress, using the ladder E #A3B3CE, D #4ADE80, C #38BDF8, B #A78BFA, A #FB923C, S #FACC15.",
+      "**Do** let quests be logged where they are listed, with 34px inline controls and 16px input text.",
       "**Do** set headings, numerals and HUD labels in Chakra Petch with tabular figures for numbers, and every sentence in Sarabun.",
-      "**Do** keep muted text at #A3B3CE or lighter (7.8:1 or better on windows), body at 16.5px, small text at 0.86rem or larger, and the 0.74rem stat key for Latin codes only.",
-      "**Do** keep touch targets at 44px or more (36px for small chips and buttons) and form inputs at 16px text.",
-      "**Do** keep all motion behind `prefers-reduced-motion: no-preference`. The window scan-in is the one authored entrance."
+      "**Do** keep muted text at #B8AED6 or lighter (7.5:1 or better on glass over the brightest bloom), body at 16.5px, small text at 0.86rem or larger, and the 0.72rem stat key for Latin codes only.",
+      "**Do** keep touch targets at 44px or more (34-36px for compact chips, small buttons and inline quest controls) and form inputs at 16px text.",
+      "**Do** keep all motion behind `prefers-reduced-motion: no-preference`. The game-card rise is the one authored entrance."
     ],
     "donts": [
       "**Don't** reintroduce a light theme or theme-dependent tokens. The world is a single dark scheme.",
-      "**Don't** use gold for buttons, links or selection, or cyan for rewards.",
-      "**Don't** glow plain text, list rows or secondary controls. Glow marks windows, actions and earned things.",
+      "**Don't** bring back the retired system-window skin: corner brackets, cyan rims and cyan window glows.",
+      "**Don't** clip the gradient into any text other than the wordmark's \"Fit\" and earned title names.",
+      "**Don't** let two quests on the same day share a colour, or use a quest colour for anything but its own quest and stat.",
+      "**Don't** glow plain text, list rows or secondary controls. Light marks the primary action, the medal, completed quests, stat bars and LEVEL UP.",
       "**Don't** copy names, terms or text from Solo Leveling or any other IP. The labels are MewFit's own Thai (\"สถานะผู้เล่น\", \"เควสประจำวัน\", \"แจ้งเตือนจากระบบ\").",
-      "**Don't** set paragraphs in Chakra Petch or put Thai in the 0.74rem stat-key size.",
-      "**Don't** recolour the kettlebell-cat logo to fit the HUD palette. It stays orange."
+      "**Don't** set paragraphs in Chakra Petch or put Thai in the 0.72rem stat-key size.",
+      "**Don't** use the retired orange-red mark or flatten the kettlebell-cat logo to one hue. It carries the brand gradient on deep indigo."
     ]
   }
 }

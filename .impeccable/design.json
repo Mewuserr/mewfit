@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-29T08:42:15+00:00",
+  "generatedAt": "2026-10-29T15:00:00+07:00",
   "title": "Design System: MewFit",
   "extensions": {
     "colorMeta": {
@@ -59,6 +59,43 @@
           "#C6998A",
           "#E7BFB1",
           "#FFE6DA"
+        ]
+      },
+      "hero-pill": {
+        "role": "primary",
+        "displayName": "Hero Pill",
+        "canonical": "rgba(255,255,255,0.9)",
+        "dark": "rgba(255,255,255,0.9)",
+        "cssVar": "(literal)",
+        "purpose": "Near-white pill under every piece of small text on the corner-red hero: coach line, round chips.",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#A5A5A5",
+          "#C9C9C9",
+          "#EEEEEE"
+        ]
+      },
+      "ink-on-light": {
+        "role": "primary",
+        "displayName": "Ink On Light",
+        "canonical": "#121318",
+        "oklch": "oklch(18.8% 0.010 276.4)",
+        "dark": "#121318",
+        "cssVar": "--ink-on-light",
+        "purpose": "Text on hero pills; fixed across themes.",
+        "tonalRamp": [
+          "#0A0B0E",
+          "#242528",
+          "#414246",
+          "#606167",
+          "#808289",
+          "#A3A5AB",
+          "#C8C9CE",
+          "#EDEEF3"
         ]
       },
       "ember": {
@@ -178,9 +215,9 @@
       "rope-fg": {
         "role": "neutral",
         "displayName": "Rope Fg",
-        "canonical": "#9EA2AC",
-        "oklch": "oklch(71.2% 0.015 268.4)",
-        "dark": "#8C909A",
+        "canonical": "#B4B8C2",
+        "oklch": "oklch(78.2% 0.015 268.5)",
+        "dark": "#ABAFB9",
         "cssVar": "--rope-fg",
         "purpose": "Secondary text and inactive nav labels on rope.",
         "tonalRamp": [
@@ -192,6 +229,44 @@
           "#A1A5AE",
           "#C6C9D1",
           "#ECEEF5"
+        ]
+      },
+      "rope-line": {
+        "role": "neutral",
+        "displayName": "Rope Line",
+        "canonical": "#3A3C44",
+        "oklch": "oklch(35.7% 0.014 274.5)",
+        "dark": "#3A3C44",
+        "cssVar": "--rope-line",
+        "purpose": "Button outlines and figure props on rope.",
+        "tonalRamp": [
+          "#0A0B0E",
+          "#242528",
+          "#414246",
+          "#606166",
+          "#808288",
+          "#A3A5AB",
+          "#C8C9CE",
+          "#EDEEF3"
+        ]
+      },
+      "rope-track": {
+        "role": "neutral",
+        "displayName": "Rope Track",
+        "canonical": "#2A2C34",
+        "oklch": "oklch(29.4% 0.015 274.4)",
+        "dark": "#2A2C34",
+        "cssVar": "--rope-track",
+        "purpose": "HIIT progress track on rope.",
+        "tonalRamp": [
+          "#0A0B0E",
+          "#242528",
+          "#414246",
+          "#606166",
+          "#808288",
+          "#A3A5AB",
+          "#C8C9CE",
+          "#EDEEF3"
         ]
       },
       "canvas": {
@@ -273,11 +348,11 @@
       "muted": {
         "role": "neutral",
         "displayName": "Muted",
-        "canonical": "#5B5F69",
-        "oklch": "oklch(48.6% 0.017 268.3)",
-        "dark": "#A3A7B2",
+        "canonical": "#454952",
+        "oklch": "oklch(40.5% 0.016 266.5)",
+        "dark": "#BEC2CC",
         "cssVar": "--muted",
-        "purpose": "Secondary text.",
+        "purpose": "Secondary text; at least 7.5:1 on its ground.",
         "tonalRamp": [
           "#090B0F",
           "#23252B",
@@ -409,33 +484,81 @@
         "displayName": "Display",
         "purpose": "Session or day name inside the corner-red hero."
       },
+      "greeting": {
+        "displayName": "Greeting",
+        "purpose": "Greeting, name and date line above the hero display."
+      },
       "headline": {
         "displayName": "Headline",
         "purpose": "Page h1 on every other view."
+      },
+      "headline-onboarding": {
+        "displayName": "Onboarding Headline",
+        "purpose": "Onboarding step h1."
+      },
+      "wordmark": {
+        "displayName": "Wordmark",
+        "purpose": "MewFit wordmark in the top bar."
       },
       "title": {
         "displayName": "Title",
         "purpose": "Card and section h2."
       },
+      "title-player": {
+        "displayName": "Title Player",
+        "purpose": "Move name in the workout player."
+      },
+      "title-hiit": {
+        "displayName": "Title HIIT",
+        "purpose": "Move name on the full-screen HIIT overlay."
+      },
       "title-sm": {
         "displayName": "Title Small",
         "purpose": "h3, option titles, button labels."
       },
+      "button-start": {
+        "displayName": "Start Slab",
+        "purpose": "Label of the full-width start button on the hero."
+      },
       "body": {
         "displayName": "Body",
-        "purpose": "All reading text in IBM Plex Sans Thai."
+        "purpose": "All reading text in Sarabun."
+      },
+      "small": {
+        "displayName": "Small",
+        "purpose": "Small text and the eyebrow subline under headings."
       },
       "label": {
         "displayName": "Label",
-        "purpose": "Chips, nav labels, field labels, table heads; never uppercase."
+        "purpose": "Chips, small buttons, tile captions, table heads; never uppercase."
+      },
+      "label-nav": {
+        "displayName": "Nav Label",
+        "purpose": "Floating nav labels."
+      },
+      "mono-data": {
+        "displayName": "Data",
+        "purpose": "Backup/restore JSON textarea only."
       },
       "numeral": {
         "displayName": "Numeral",
         "purpose": "Metric values, legends, times; Kanit tabular."
       },
+      "numeral-restbar": {
+        "displayName": "Rest Bar Numeral",
+        "purpose": "Countdown in the floating corner-red rest bar."
+      },
+      "numeral-kpi": {
+        "displayName": "KPI Numeral",
+        "purpose": "Ruled stat row values."
+      },
       "numeral-live": {
         "displayName": "Live Numeral",
-        "purpose": "Rep stepper (3.2rem); rest timer steps to 4.2rem."
+        "purpose": "Rep stepper."
+      },
+      "numeral-timer": {
+        "displayName": "Timer",
+        "purpose": "Rest timer countdown on rope."
       },
       "numeral-clock": {
         "displayName": "Clock",
@@ -526,7 +649,7 @@
     ],
     "themes": {
       "light": "default",
-      "dark": "prefers-color-scheme: dark unless data-theme=light; or data-theme=dark. Corner-red, its ink and muted do not change."
+      "dark": "prefers-color-scheme: dark unless data-theme=light; or data-theme=dark. Corner-red, its ink and muted, hero-pill, ink-on-light, rope-line and rope-track do not change."
     },
     "identityAssets": {
       "files": [
@@ -572,7 +695,7 @@
       "refersTo": "chip",
       "description": "Status and filter pills; pressed chips go blue.",
       "html": "<span class=\"ds-chip\">20 นาที</span> <span class=\"ds-chip ds-chip-hot\">วันนี้</span> <button class=\"ds-chip ds-chip-btn\" aria-pressed=\"true\">ทั้งหมด</button>",
-      "css": ".ds-chip{display:inline-flex;align-items:center;gap:4px;font-size:.8rem;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--sunk);color:var(--muted);white-space:nowrap;font-family:var(--fb)}.ds-chip-hot{background:var(--hot-soft);color:var(--hot)}.ds-chip-btn{border:1px solid transparent;cursor:pointer;min-height:34px;padding:4px 12px}.ds-chip-btn[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}.ds-chip-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}"
+      "css": ".ds-chip{display:inline-flex;align-items:center;gap:4px;font-size:.86rem;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--sunk);color:var(--muted);white-space:nowrap;font-family:var(--fb)}.ds-chip-hot{background:var(--hot-soft);color:var(--hot)}.ds-chip-btn{border:1px solid transparent;cursor:pointer;min-height:34px;padding:4px 12px}.ds-chip-btn[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}.ds-chip-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}"
     },
     {
       "name": "Card",
@@ -594,17 +717,25 @@
       "name": "Floating Rope Nav",
       "kind": "nav",
       "refersTo": "nav-rope",
-      "description": "Phone nav: ink bar, five items, raised corner-red train button.",
+      "description": "Phone nav: ink bar, five items, raised corner-red train button. Hidden during a workout.",
       "html": "<nav class=\"ds-nav\"><a aria-current=\"page\"><svg viewBox=\"0 0 24 24\"><path d=\"M3 11l9-7 9 7v9H3z\"/></svg>วันนี้</a><a><svg viewBox=\"0 0 24 24\"><path d=\"M4 6h16M4 12h16M4 18h10\"/></svg>แผน</a><a class=\"ds-mid\"><span class=\"ds-ic\"><svg viewBox=\"0 0 24 24\"><path d=\"M7 5v14l12-7z\"/></svg></span>ฝึก</a><a><svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"8\"/></svg>กิน</a><a><svg viewBox=\"0 0 24 24\"><path d=\"M4 19l5-6 4 3 7-9\"/></svg>ผล</a></nav>",
-      "css": ".ds-nav{margin-top:36px;background:var(--rope);border-radius:24px;box-shadow:0 14px 34px -14px rgba(0,0,0,.55);display:grid;grid-template-columns:repeat(5,1fr);align-items:end;padding:0 4px;max-width:520px;font-family:var(--fb)}.ds-nav a{display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 0 8px;min-height:58px;justify-content:flex-end;color:var(--rope-fg);font-size:.72rem;font-weight:500;cursor:pointer}.ds-nav svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}.ds-nav a[aria-current=page]{color:#fff;font-weight:600}.ds-nav a[aria-current=page] svg{color:var(--go)}.ds-nav .ds-ic{width:56px;height:56px;margin-top:-28px;border-radius:19px;background:var(--go);color:var(--go-ink);display:grid;place-items:center;box-shadow:0 0 0 5px var(--bg),0 10px 18px -10px rgba(0,0,0,.45);transition:transform .15s}.ds-nav .ds-mid:active .ds-ic{transform:scale(.94)}.ds-nav .ds-mid svg{width:25px;height:25px}"
+      "css": ".ds-nav{margin-top:36px;background:var(--rope);border-radius:24px;box-shadow:0 14px 34px -14px rgba(0,0,0,.55);display:grid;grid-template-columns:repeat(5,1fr);align-items:end;padding:0 4px;max-width:520px;font-family:var(--fb)}.ds-nav a{display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 0 8px;min-height:58px;justify-content:flex-end;color:var(--rope-fg);font-size:.8rem;font-weight:500;cursor:pointer}.ds-nav svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}.ds-nav a[aria-current=page]{color:#fff;font-weight:600}.ds-nav a[aria-current=page] svg{color:var(--go)}.ds-nav .ds-ic{width:56px;height:56px;margin-top:-28px;border-radius:19px;background:var(--go);color:var(--go-ink);display:grid;place-items:center;box-shadow:0 0 0 5px var(--bg),0 10px 18px -10px rgba(0,0,0,.45);transition:transform .15s}.ds-nav .ds-mid:active .ds-ic{transform:scale(.94)}.ds-nav .ds-mid svg{width:25px;height:25px}"
     },
     {
       "name": "The Bout (today hero)",
       "kind": "custom",
       "refersTo": "hero-bout",
-      "description": "Signature: corner-red fight card with session name, round strip and the start bell.",
-      "html": "<section class=\"ds-bout\"><h1>ร่างกายส่วนบน A</h1><span class=\"ds-sub\">5 ท่า · 25 นาที</span><ol class=\"ds-rounds\"><li><b>1</b>วิดพื้น</li><li><b>2</b>สควอต</li><li><b>3</b>แพลงก์</li><li><b>4</b>ลันจ์</li></ol><button class=\"ds-bell\">เริ่มฝึก</button></section>",
-      "css": ".ds-bout{background:var(--go);color:var(--go-ink);border-radius:28px;padding:22px;display:flex;flex-direction:column;gap:10px;font-family:var(--fb)}.ds-bout h1{margin:0;font-family:var(--fd);font-weight:800;font-size:clamp(2rem,9vw,2.8rem);line-height:1.08;letter-spacing:-.01em}.ds-sub{color:var(--hero-muted);font-size:.9rem}.ds-rounds{list-style:none;margin:4px 0 0;padding:0;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent)}.ds-rounds li{flex:none;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.24);border-radius:999px;padding:5px 12px 5px 5px;font-size:.88rem;font-weight:500;white-space:nowrap}.ds-rounds b{width:26px;height:26px;border-radius:50%;background:var(--go-ink);color:var(--go);display:grid;place-items:center;font-family:var(--fd);font-size:.85rem;font-weight:700}.ds-bell{appearance:none;width:100%;border:1px solid var(--go-ink);background:var(--go-ink);color:#fff;border-radius:16px;font-family:var(--fd);font-weight:600;font-size:1.06rem;padding:14px 22px;min-height:54px;cursor:pointer;transition:transform .12s}.ds-bell:active{transform:scale(.97)}.ds-bell:focus-visible{outline:2px solid var(--accent);outline-offset:2px}"
+      "description": "Signature: corner-red fight card with greeting, session name, coach line and round strip on near-white pills, and the full-width start slab.",
+      "html": "<section class=\"ds-bout\"><div class=\"ds-hi\">สวัสดีตอนเช้า · จันทร์ 29 ต.ค.</div><h1>ร่างกายส่วนบน A</h1><span class=\"ds-sub\">5 ท่า · 25 นาที</span><p class=\"ds-coach\">วันนี้เน้นท่าช้าๆ คุมจังหวะ</p><ol class=\"ds-rounds\"><li><b>1</b>วิดพื้น</li><li><b>2</b>สควอต</li><li><b>3</b>แพลงก์</li><li><b>4</b>ลันจ์</li></ol><button class=\"ds-bell\">เริ่มฝึก</button><button class=\"ds-link\">ดูท่าทั้งหมด</button></section>",
+      "css": ".ds-bout{background:var(--go);color:var(--go-ink);border-radius:28px;padding:22px;display:flex;flex-direction:column;gap:10px;font-family:var(--fb)}.ds-hi{font-family:var(--fd);font-weight:600;font-size:1.02rem}.ds-bout h1{margin:0;font-family:var(--fd);font-weight:800;font-size:clamp(2.4rem,11vw,3.4rem);line-height:1.05;letter-spacing:-.01em}.ds-sub{font-size:1rem;font-weight:500}.ds-coach{margin:0;color:#121318;background:rgba(255,255,255,.9);border-radius:16px;padding:10px 14px;font-weight:500;max-width:52ch}.ds-rounds{list-style:none;margin:4px 0 0;padding:0 0 2px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent)}.ds-rounds li{flex:none;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.9);color:#121318;border-radius:999px;padding:5px 13px 5px 5px;font-size:.95rem;font-weight:600;white-space:nowrap}.ds-rounds b{width:28px;height:28px;border-radius:50%;background:var(--go-ink);color:#fff;display:grid;place-items:center;font-family:var(--fd);font-size:.85rem;font-weight:700}.ds-bell{appearance:none;width:100%;border:1px solid var(--go-ink);background:var(--go-ink);color:#fff;border-radius:16px;font-family:var(--fd);font-weight:600;font-size:1.3rem;padding:14px 22px;min-height:60px;cursor:pointer;transition:transform .12s}.ds-bell:active{transform:scale(.97)}.ds-bell:focus-visible,.ds-link:focus-visible{outline:2px solid var(--accent);outline-offset:2px}.ds-link{appearance:none;border:0;background:none;color:var(--go-ink);font-family:var(--fd);font-weight:600;min-height:40px;text-decoration:underline;text-underline-offset:4px;cursor:pointer}"
+    },
+    {
+      "name": "KPI Stat Row",
+      "kind": "custom",
+      "refersTo": "kpi-stat",
+      "description": "Ruled stat row: hairline above, big tabular numeral, muted caption, no fill.",
+      "html": "<div class=\"ds-kpis\"><div class=\"ds-kpi\"><b>62.5</b><span>น้ำหนัก กก.</span></div><div class=\"ds-kpi\"><b>12</b><span>ครั้งที่ฝึก</span></div><div class=\"ds-kpi\"><b>1,850</b><span>แคลอรี่วันนี้</span></div></div>",
+      "css": ".ds-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:0 20px;color:var(--ink)}.ds-kpi{border-top:1px solid var(--line);padding:10px 0 12px;display:flex;flex-direction:column;gap:2px}.ds-kpi b{font-family:var(--fm);font-size:2.1rem;font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums}.ds-kpi span{font-family:var(--fb);font-size:.88rem;color:var(--muted)}"
     },
     {
       "name": "Rest Timer",
@@ -621,7 +752,7 @@
     "keyCharacteristics": [
       "Full-bleed corner-red \"today\" block on phones, its bottom corners rounded 30px, flowing out of a red top bar.",
       "Three-corner colour roles: red = today and go, blue = information, ink = in-session.",
-      "Kanit upright for display, buttons and all numerals (tabular); IBM Plex Sans Thai for reading.",
+      "Kanit upright for display, buttons and all numerals (tabular); Sarabun (a looped Thai face, easier for long reading) for body text.",
       "Flat colour fields with one soft ambient shadow; no decorative gradients.",
       "Animated stick-figure demos tinted by the current surface (ink on canvas, near-black on red, white on rope)."
     ],
@@ -648,7 +779,7 @@
       },
       {
         "name": "The Two Voices Rule",
-        "body": "Kanit speaks (headings, buttons, numbers); Plex explains (sentences). Don't set paragraphs in Kanit or headings in Plex.",
+        "body": "Kanit speaks (headings, buttons, numbers); Sarabun explains (sentences). Don't set paragraphs in Kanit or headings in Sarabun.",
         "section": "typography"
       },
       {
@@ -668,7 +799,7 @@
     "donts": [
       "**Don't** use gradients as decoration. The only gradient in the system is the fade mask at the end of the round strip.",
       "**Don't** put red on informational or selected states, or blue on the today/go action.",
-      "**Don't** set body copy in Kanit or headings in Plex Sans Thai.",
+      "**Don't** set body copy in Kanit or headings in Sarabun.",
       "**Don't** add deeper shadows to resting cards; only floating elements cast real shadows.",
       "**Don't** recolour corner-red for dark mode; the brand red is the same in both themes."
     ]

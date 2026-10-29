@@ -5,18 +5,22 @@ colors:
   corner-red: "#FB4620"
   corner-red-ink: "#170A05"
   corner-red-muted: "#3D1608"
+  hero-pill: "rgba(255,255,255,0.9)"
+  ink-on-light: "#121318"
   ember: "#C2380F"
   ember-soft: "#FFE8DF"
   blue-corner: "#2343D8"
   blue-corner-ink: "#FFFFFF"
   blue-corner-soft: "#E6EBFF"
   rope: "#15161B"
-  rope-fg: "#9EA2AC"
+  rope-fg: "#B4B8C2"
+  rope-line: "#3A3C44"
+  rope-track: "#2A2C34"
   canvas: "#F1F2F4"
   surface: "#FFFFFF"
   sunk: "#EBECEF"
   ink: "#121318"
-  muted: "#5B5F69"
+  muted: "#454952"
   line: "#E0E2E7"
   good: "#11774A"
   warn: "#975A00"
@@ -26,45 +30,107 @@ colors:
 typography:
   display:
     fontFamily: "Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
-    fontSize: "clamp(2rem, 9vw, 2.8rem)"
+    fontSize: "clamp(2.4rem, 11vw, 3.4rem)"
     fontWeight: 800
-    lineHeight: 1.08
+    lineHeight: 1.05
     letterSpacing: "-0.01em"
+  greeting:
+    fontFamily: "Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
+    fontSize: "1.02rem"
+    fontWeight: 600
   headline:
     fontFamily: "Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
     fontSize: "clamp(1.8rem, 7.4vw, 2.5rem)"
     fontWeight: 800
     lineHeight: 1.2
     letterSpacing: "-0.005em"
+  headline-onboarding:
+    fontFamily: "Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
+    fontSize: "clamp(1.9rem, 7vw, 2.6rem)"
+    fontWeight: 700
+    lineHeight: 1.2
+    letterSpacing: "-0.02em"
+  wordmark:
+    fontFamily: "Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
+    fontSize: "1.36rem"
+    fontWeight: 800
+    lineHeight: 1
+    letterSpacing: "-0.01em"
   title:
     fontFamily: "Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
     fontSize: "1.25rem"
     fontWeight: 700
     lineHeight: 1.2
     letterSpacing: "-0.005em"
+  title-player:
+    fontFamily: "Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
+    fontSize: "clamp(1.4rem, 5vw, 1.9rem)"
+    fontWeight: 700
+    lineHeight: 1.2
+  title-hiit:
+    fontFamily: "Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
+    fontSize: "clamp(1.4rem, 5vw, 2.2rem)"
+    fontWeight: 700
+    lineHeight: 1.2
   title-sm:
     fontFamily: "Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
     fontSize: "1.05rem"
     fontWeight: 600
     lineHeight: 1.2
+  button-start:
+    fontFamily: "Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
+    fontSize: "1.3rem"
+    fontWeight: 600
+    lineHeight: 1.2
   body:
-    fontFamily: "IBM Plex Sans Thai, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
-    fontSize: "15.5px"
+    fontFamily: "Sarabun, Leelawadee UI, Noto Sans Thai Looped, Noto Sans Thai, system-ui, sans-serif"
+    fontSize: "16.5px"
     fontWeight: 400
-    lineHeight: 1.65
+    lineHeight: 1.7
+  small:
+    fontFamily: "Sarabun, Leelawadee UI, Noto Sans Thai Looped, Noto Sans Thai, system-ui, sans-serif"
+    fontSize: "0.93rem"
+    fontWeight: 400
+    lineHeight: 1.7
   label:
-    fontFamily: "IBM Plex Sans Thai, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
-    fontSize: "0.8rem"
+    fontFamily: "Sarabun, Leelawadee UI, Noto Sans Thai Looped, Noto Sans Thai, system-ui, sans-serif"
+    fontSize: "0.86rem"
     fontWeight: 600
     lineHeight: 1.4
+  label-nav:
+    fontFamily: "Sarabun, Leelawadee UI, Noto Sans Thai Looped, Noto Sans Thai, system-ui, sans-serif"
+    fontSize: "0.8rem"
+    fontWeight: 500
+    lineHeight: 1.4
+  mono-data:
+    fontFamily: "ui-monospace, Menlo, Consolas, monospace"
+    fontSize: "0.8rem"
+    fontWeight: 400
   numeral:
     fontFamily: "Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
     fontSize: "1.05rem"
     fontWeight: 600
     fontFeature: "tnum"
+  numeral-restbar:
+    fontFamily: "Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
+    fontSize: "1.5rem"
+    fontWeight: 700
+    fontFeature: "tnum"
+  numeral-kpi:
+    fontFamily: "Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
+    fontSize: "2.1rem"
+    fontWeight: 800
+    lineHeight: 1.1
+    fontFeature: "tnum"
   numeral-live:
     fontFamily: "Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
     fontSize: "3.2rem"
+    fontWeight: 800
+    lineHeight: 1
+    fontFeature: "tnum"
+  numeral-timer:
+    fontFamily: "Kanit, Leelawadee UI, Noto Sans Thai, system-ui, sans-serif"
+    fontSize: "4.2rem"
     fontWeight: 800
     lineHeight: 1
     fontFeature: "tnum"
@@ -76,15 +142,21 @@ typography:
     letterSpacing: "-0.01em"
     fontFeature: "tnum"
 rounded:
+  segment: "3px"
+  status: "8px"
   xs: "10px"
+  button-sm: "11px"
   sm: "12px"
   md: "14px"
   lg: "16px"
+  option: "18px"
+  go: "19px"
   xl: "20px"
   card: "22px"
   nav: "24px"
   modal: "26px"
   hero: "28px"
+  hero-bleed: "30px"
   pill: "999px"
 spacing:
   xxs: "4px"
@@ -116,14 +188,17 @@ components:
     rounded: "{rounded.lg}"
     padding: "14px 22px"
     height: "54px"
-  button-on-hero:
+  button-start:
     backgroundColor: "{colors.corner-red-ink}"
     textColor: "{colors.surface}"
+    typography: "{typography.button-start}"
     rounded: "{rounded.lg}"
     padding: "14px 22px"
-    height: "54px"
+    height: "60px"
+    width: "100%"
   button-sm:
-    rounded: "{rounded.sm}"
+    typography: "{typography.label}"
+    rounded: "{rounded.button-sm}"
     padding: "7px 12px"
     height: "36px"
   chip:
@@ -148,31 +223,54 @@ components:
     textColor: "{colors.corner-red-ink}"
     rounded: "{rounded.hero}"
     padding: "22px"
+  hero-coach-line:
+    backgroundColor: "{colors.hero-pill}"
+    textColor: "{colors.ink-on-light}"
+    rounded: "{rounded.lg}"
+    padding: "10px 14px"
+  hero-round-chip:
+    backgroundColor: "{colors.hero-pill}"
+    textColor: "{colors.ink-on-light}"
+    rounded: "{rounded.pill}"
+    padding: "5px 13px 5px 5px"
   input:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.ink}"
     rounded: "{rounded.md}"
     padding: "11px 13px"
     height: "46px"
+  option-card:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.option}"
+    padding: "14px 16px"
   nav-rope:
     backgroundColor: "{colors.rope}"
     textColor: "{colors.rope-fg}"
+    typography: "{typography.label-nav}"
     rounded: "{rounded.nav}"
     height: "58px"
   nav-go-button:
     backgroundColor: "{colors.corner-red}"
     textColor: "{colors.corner-red-ink}"
+    rounded: "{rounded.go}"
     size: "56px"
-  kpi-tile:
-    backgroundColor: "{colors.sunk}"
+  kpi-stat:
     textColor: "{colors.ink}"
-    rounded: "{rounded.lg}"
-    padding: "12px 14px"
+    typography: "{typography.numeral-kpi}"
+    padding: "10px 0 12px"
   rest-timer:
     backgroundColor: "{colors.rope}"
     textColor: "{colors.surface}"
+    typography: "{typography.numeral-timer}"
     rounded: "{rounded.card}"
     padding: "18px"
+  rest-bar:
+    backgroundColor: "{colors.corner-red}"
+    textColor: "{colors.corner-red-ink}"
+    typography: "{typography.numeral-restbar}"
+    rounded: "{rounded.xl}"
+    padding: "10px 12px"
 ---
 
 # Design System: MewFit
@@ -192,7 +290,7 @@ Density is phone-first (390px design width, safe down to 360px) with 16px gutter
 **Key Characteristics:**
 - Full-bleed corner-red "today" block on phones, its bottom corners rounded 30px, flowing out of a red top bar.
 - Three-corner colour roles: red = today and go, blue = information, ink = in-session.
-- Kanit upright for display, buttons and all numerals (tabular); IBM Plex Sans Thai for reading.
+- Kanit upright for display, buttons and all numerals (tabular); Sarabun (a looped Thai face, easier for long reading) for body text.
 - Flat colour fields with one soft ambient shadow; no decorative gradients.
 - Animated stick-figure demos tinted by the current surface (ink on canvas, near-black on red, white on rope).
 
@@ -212,11 +310,12 @@ Three solid corners on a cool grey canvas: an orange-red that is the logo's own 
 ### Neutral
 - **Canvas** (canvas): page ground, and the sticky top bar's 86% frosted glass.
 - **Surface** (surface): cards, tool tiles, tips, inputs, the default button, modals.
-- **Sunk** (sunk): recessed fills for chips, KPI tiles, target tiles, week days, bar tracks and the "why" boxes in onboarding.
+- **Sunk** (sunk): recessed fills for chips, target tiles, week days, bar tracks and the "why" boxes in onboarding.
 - **Ink** (ink): text, and the toast background (inverted).
-- **Muted** (muted): secondary text, inactive top tabs, axis labels.
+- **Muted** (muted): secondary text, inactive top tabs, axis labels. Dark mode lifts it to #BEC2CC.
 - **Line** (line): input strokes, hairline dividers between list rows, the default button border.
-- **Rope** (rope) / **Rope Fg** (rope-fg): the floating nav, rest timer card and HIIT screen; rope-fg is their secondary text and inactive nav labels. Dark mode rope is pure #000000.
+- **Rope** (rope) / **Rope Fg** (rope-fg): the floating nav, rest timer card and HIIT screen; rope-fg is their secondary text and inactive nav labels (#ABAFB9 in dark). Dark mode rope is pure black. **Rope Line** (rope-line) outlines buttons and draws figure props on rope; **Rope Track** (rope-track) is the HIIT progress track.
+- **Ink On Light** (ink-on-light) / **Hero Pill** (hero-pill): fixed ink text on the near-white pills that carry small text across the corner-red hero (coach line, round chips). Neither changes with theme.
 - **Figure Prop** / **Figure Bg**: stick-figure props and ground line, and the panel behind figure demos.
 
 ### Semantic
@@ -232,28 +331,29 @@ Three solid corners on a cool grey canvas: an orange-red that is the logo's own 
 ## Typography
 
 **Display Font:** Kanit (with Leelawadee UI, Noto Sans Thai, system-ui)
-**Body Font:** IBM Plex Sans Thai (with Leelawadee UI, Noto Sans Thai, system-ui)
+**Body Font:** Sarabun (with Leelawadee UI, Noto Sans Thai Looped, Noto Sans Thai, system-ui). Chosen in a readability pass after the owner found the loopless body face hard to read.
 **Numeral Font:** Kanit with tabular figures (the same family as display)
+**Data Font:** the system monospace stack (ui-monospace, Menlo, Consolas), only in the backup/restore JSON textarea at 0.8rem.
 
-**Character:** Kanit set upright and heavy (700-800) gives fight-poster lettering for headings, session names, buttons and every number. Plex Sans Thai is the calm reading voice for coaching copy and instructions.
+**Character:** Kanit set upright and heavy (700-800) gives fight-poster lettering for headings, session names, buttons and every number. Sarabun, a looped Thai face, is the calm reading voice for coaching copy and instructions.
 
 ### Hierarchy
-- **Display** (800, clamp(2rem, 9vw, 2.8rem), 1.08): the session or day name inside the corner-red hero.
+- **Display** (800, clamp(2.4rem, 11vw, 3.4rem), 1.05): the session or day name inside the corner-red hero. The greeting, name and date sit above it as one Kanit 600 line at 1.02rem (Greeting), never as the headline. The top-bar wordmark is Kanit 800 at 1.36rem.
 - **Headline** (800, clamp(1.8rem, 7.4vw, 2.5rem), 1.2): the page `h1` on every other view. Onboarding uses 700 at clamp(1.9rem, 7vw, 2.6rem) with -0.02em tracking.
-- **Title** (700, 1.25rem, 1.2): card and section `h2`. Player move names scale to clamp(1.4rem, 5vw, 1.9rem).
-- **Title Small** (600, 1.05rem, 1.2): `h3`, option titles and buttons (buttons use Kanit 600 at inherited size; big buttons 1.06rem).
-- **Body** (400, 15.5px, 1.65): all reading text, capped at 52-62ch inside heroes and coach notes. Small text is 0.86rem.
-- **Label** (500-600, 0.72-0.92rem): chips (0.8rem 600), nav labels (0.72rem 500), field labels (0.88rem 500), table heads (0.78rem 600, muted). Never uppercase; Thai has no case.
-- **Numerals** (Kanit 600, tabular): metric values, legends, times, KPIs (1.55rem 700). **Live numerals** step up by scale: the rep stepper is 800 at 3.2rem, the rest timer 800 at 4.2rem, the HIIT clock 800 at clamp(4rem, 20vw, 8rem).
+- **Title** (700, 1.25rem, 1.2): card and section `h2`. Player move names scale to clamp(1.4rem, 5vw, 1.9rem) (Title Player); the HIIT move name to clamp(1.4rem, 5vw, 2.2rem) (Title HIIT).
+- **Title Small** (600, 1.05rem, 1.2): `h3`, option titles and buttons (buttons use Kanit 600 at inherited size; big buttons 1.06rem, small buttons 0.86rem, the hero start slab 1.3rem).
+- **Body** (400, 16.5px, 1.7): all reading text, capped at 52-62ch inside heroes and coach notes. Small text is 0.93rem. Muted text is #454952 (light) / #BEC2CC (dark), at least 7.5:1 on its ground.
+- **Label** (500-600, 0.8-0.88rem): chips, small buttons, tile captions and table heads (0.86rem 600, muted where secondary), field labels (0.88rem 500), nav labels (0.8rem 500). Never uppercase; Thai has no case. Context lines go under their heading (`.eyebrow` is a subline), never above it.
+- **Numerals** (Kanit 600, tabular): metric values, legends, times, KPIs as a ruled stat row (2.1rem 800, hairline above, no fill). The floating rest bar countdown is 700 at 1.5rem. **Live numerals** step up by scale: the rep stepper is 800 at 3.2rem, the rest timer 800 at 4.2rem, the HIIT clock 800 at clamp(4rem, 20vw, 8rem).
 
 ### Named Rules
 **The Fight-Poster Numeral Rule.** Every number a user counts, logs or watches is Kanit with tabular figures. The number you are acting on now is the largest thing on screen (3.2rem or more, weight 800).
 
-**The Two Voices Rule.** Kanit speaks (headings, buttons, numbers); Plex explains (sentences). Don't set paragraphs in Kanit or headings in Plex.
+**The Two Voices Rule.** Kanit speaks (headings, buttons, numbers); Sarabun explains (sentences). Don't set paragraphs in Kanit or headings in Sarabun.
 
 ## Layout
 
-One centred column with a 1000px max width and 16px gutters (padding respects `env(safe-area-inset-*)`). Views are vertical flex stacks with a 14px gap. Cards stack singly on phones and become 2- or 3-up grids from 740px. KPI tiles auto-fit at a 118px minimum, and form fields auto-fit at 140px. The tool grid is 3-up, falling to 2-up below 420px with the last tile spanning both columns.
+One centred column with a 1000px max width and 16px gutters (padding respects `env(safe-area-inset-*)`). Views are vertical flex stacks with a 14px gap. Cards stack singly on phones and become 2- or 3-up grids from 740px. KPI stats auto-fit at a 130px minimum with a 20px column gap, and form fields auto-fit at 140px. The tool grid is 3-up, falling to 2-up below 420px with the last tile spanning both columns.
 
 On phones the today hero breaks out of the gutters (-16px margins) to sit edge to edge under the red top bar, with only its bottom corners rounded (30px). From 640px the hero becomes a 1.25fr / 1fr two-column with the figure beside the text. Below that, the figure floats top-right at 148px and 90% opacity behind the text, and the text gets 110px of right padding.
 
@@ -278,7 +378,7 @@ Mostly flat colour, with one soft ambient lift. Cards, tool tiles, tips and the 
 
 ## Shapes
 
-Generously rounded, never sharp. Radius grows with the size of the surface: 10px for icon tiles and the logo, 12px for set dots, list rows and small tiles, 14px for buttons, inputs, notes and week days, 16px for large buttons, KPI tiles and figure panels, 18-20px for options, tool tiles, tips and the rest bar, 22px for cards and the rest timer, 24px for the nav bar, 26px for modals, and 28px for the hero (30px on its full-bleed bottom edge). Chips, segments, round pills, top tabs and progress bars are full pills (999px), and round numbers in the round strip and legend dots are circles. Borders are 1px hairlines in line colour. 1.5px strokes mark a selectable state (option cards, week days, set dots, which are dashed until done).
+Generously rounded, never sharp. Radius grows with the size of the surface: 3px for progress segments (onboarding progress, ladder), 8px for the 28px status squares in the move list, 10px for icon tiles and the logo, 11px for small buttons, 12px for set dots, list rows and small tiles, 14px for buttons, inputs, notes and week days, 16px for large buttons, the hero coach line and figure panels, 18px for option cards, 19px for the raised train button, 20px for tool tiles, tips and the rest bar, 22px for cards and the rest timer, 24px for the nav bar, 26px for modals, and 28px for the hero (30px on its full-bleed bottom edge). Chips, segments, round pills, top tabs and progress bars are full pills (999px), and round numbers in the round strip and legend dots are circles. Borders are 1px hairlines in line colour. 1.5px strokes mark a selectable state (option cards, week days, set dots, which are dashed until done).
 
 ## Components
 
@@ -293,12 +393,12 @@ Upright Kanit labels on soft 14px slabs, with a press that shrinks them slightly
 - **Press:** `scale(.97)` over 0.12s. Focus uses the global 2px blue outline offset 2px.
 
 ### Chips
-- **Style:** full pill, 0.8rem 600, sunk fill and muted text. The `acc` variant is soft blue with ink text; `hot` is ember-soft with ember text. The good, warn and bad variants recolour only the text.
+- **Style:** full pill, 0.86rem 600, sunk fill and muted text. The `acc` variant is soft blue with ink text; `hot` is ember-soft with ember text. The good, warn and bad variants recolour only the text.
 - **State:** a button chip is 34px tall. When pressed it fills blue-corner with white text.
 
 ### Cards / Containers
 - **Corner Style:** 22px.
-- **Background:** surface, with sunk tiles inside for KPIs, targets and "why" boxes.
+- **Background:** surface, with sunk tiles inside for player targets and "why" boxes; KPIs are a ruled stat row, not tiles. The Profile account card (sign-up, log-in, sync status) composes the same parts: chip segment toggle, fields, a full-width go button, and a row of small buttons ending in danger.
 - **Shadow Strategy:** Ambient (see Elevation). Dark mode adds the hairline.
 - **Border:** transparent in light mode, #24262D in dark.
 - **Internal Padding:** 18px, with a 14px column gap.
@@ -309,12 +409,12 @@ Upright Kanit labels on soft 14px slabs, with a press that shrinks them slightly
 - **Focus:** 2px blue-corner outline offset 2px (also drawn on the visible span when the native input is hidden).
 
 ### Navigation
-- **Phone:** a floating rope bar with 24px radius and five columns. Each column is a 23px stroke icon over a 0.72rem label in rope-fg. The active label turns white and its icon corner-red. The centre "train" item is a 56px corner-red square (19px radius) raised 28px above the bar, with a dark icon, a canvas cut-out ring, and a press scale of 0.94.
+- **Phone:** a floating rope bar with 24px radius and five columns. Each column is a 23px stroke icon over a 0.8rem 500 label in rope-fg. The bar is hidden while a workout is running. The active label turns white and its icon corner-red. The centre "train" item is a 56px corner-red square (19px radius) raised 28px above the bar, with a dark icon, a canvas cut-out ring, and a press scale of 0.94.
 - **Desktop (880px and up):** pill tabs in the frosted top bar. Muted text darkens to ink on hover; the active tab gets a surface fill and the ambient shadow.
 - **Top bar:** sticky, 56px, frosted canvas glass (saturate 1.4, blur 16px). On the today view it turns solid corner-red with corner-red-ink text, so the hero reads as one continuous block.
 
 ### The Bout (signature)
-The today hero: corner-red field and corner-red-ink text. It carries a meta line, the session name in Display, an "x moves · y min" line, the **round strip**, the start bell button, and a demo figure tinted near-black. The round strip is a horizontally scrolling row of pills, each on a 24% white wash with a 26px circle numbered in Kanit (corner-red-ink fill, corner-red numeral). The row scroll-snaps and fades at its right edge.
+The today hero: corner-red field and corner-red-ink text. It carries the greeting line, the session name in Display, an "x moves · y min" line, the coach line on a near-white pill, the **round strip**, the full-width start slab with an underlined text link beneath, and a demo figure tinted near-black. The round strip is a horizontally scrolling row of near-white pills (hero-pill fill, ink text, 0.95rem 600), each led by a 28px circle numbered in Kanit (corner-red-ink fill, white numeral). The row scroll-snaps and fades at its right edge.
 
 ### Live counters (signature)
 The rep stepper is a 64px / 1fr / 64px grid with a 3.2rem 800 numeral. Set dots are 40px squares, dashed while pending, solid good when done, and solid blue for the current set. The rest timer is a rope card with a 4.2rem 800 countdown. The HIIT overlay is full-screen rope with a clock up to 8rem and a phase label that turns corner-red during work. A corner-red rest bar floats above the nav while you rest away from the player.
@@ -335,6 +435,9 @@ The week strip is seven sunk tiles: soft blue on training days, solid blue when 
 ### Don't:
 - **Don't** use gradients as decoration. The only gradient in the system is the fade mask at the end of the round strip.
 - **Don't** put red on informational or selected states, or blue on the today/go action.
-- **Don't** set body copy in Kanit or headings in Plex Sans Thai.
+- **Don't** set body copy in Kanit or headings in Sarabun.
 - **Don't** add deeper shadows to resting cards; only floating elements cast real shadows.
 - **Don't** recolour corner-red for dark mode; the brand red is the same in both themes.
+
+## Readability and small text on corner-red (added 2026-10-29)
+Small text never sits directly on corner-red: ink on #FB4620 tops out near 5.5:1, which the owner found hard to read. On the Today hero the coach line and the round chips sit on near-white (rgba(255,255,255,.9)) pills with ink text; only display type, the session meta line and the start slab touch the orange. The start action is a full-width ink slab (60px, 1.3rem) with a plain underlined link below it. During a workout (`body.playing`) the floating nav is hidden so the rep stepper and log button stay clear.

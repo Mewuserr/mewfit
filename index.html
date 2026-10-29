@@ -6,7 +6,7 @@
 <title>MewFit</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="MewFit เทรนเนอร์ส่วนตัวที่บ้าน: ตารางฝึกที่ปรับระดับเอง ท่าเคลื่อนไหวสาธิต แผนอาหารไทยตามแคลอรี่ ตารางชีวิต และความรู้จากงานวิจัย">
-<meta name="theme-color" content="#FB4620">
+<meta name="theme-color" content="#060A14">
 <link rel="manifest" href="manifest.json" data-pages>
 <link rel="icon" href="icon.svg" type="image/svg+xml" data-pages>
 <link rel="icon" href="icon-192.png" type="image/png" sizes="192x192">
@@ -15,39 +15,24 @@
 <meta name="apple-mobile-web-app-title" content="MewFit" data-pages>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;600;700;800&family=Sarabun:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Kanit:wght@500;600;700;800&family=Sarabun:wght@400;500;600&display=swap">
 <style>
-/* World: a Muay Thai camp. Corner-red (the logo's orange) owns today's bout and the go action;
-   blue corner carries info and data; ink ropes hold the floating nav. Kanit sets display and numerals
-   upright like fight-poster lettering; Sarabun (a looped Thai face) carries the reading. */
+/* World: a game "system". Every panel is a glowing system window on a night-blue field; cyan is the
+   system's voice (quests, progress, the start action); rank colours (E grey to S gold) mark standing.
+   Chakra Petch sets headings, numbers and HUD labels; Sarabun (a looped Thai face) carries the reading. */
 :root{
-  --bg:#F1F2F4; --surface:#FFFFFF; --sunk:#EBECEF; --ink:#121318; --muted:#454952; --line:#E0E2E7;
-  --accent:#2343D8; --accent-ink:#FFFFFF; --accent-soft:#E6EBFF; --hot:#C2380F; --hot-soft:#FFE8DF;
-  --go:#FB4620; --go-ink:#170A05; --ink-on-light:#121318; --rope:#15161B; --rope-fg:#B4B8C2; --rope-line:#3A3C44; --rope-track:#2A2C34;
-  --good:#11774A; --warn:#975A00; --bad:#BE2E39;
-  --hero:#FB4620; --hero-fg:#170A05; --hero-muted:#3D1608; --hero-line:rgba(23,10,5,.22);
-  --fig:#121318; --prop:#BDBFC6; --figbg:#F6F7F8;
-  --shadow:0 1px 2px rgba(18,19,24,.05),0 10px 26px -14px rgba(18,19,24,.18);
-  --fd:'Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;
+  --bg:#060A14; --surface:#0E1628; --sunk:#0B1426; --ink:#E6F0FF; --muted:#A3B3CE; --line:#1F2F4D;
+  --accent:#38BDF8; --accent-ink:#03121F; --accent-soft:#0C2740; --hot:#F472B6; --hot-soft:#3A1430;
+  --go:#38BDF8; --go-ink:#03121F; --ink-on-light:#E6F0FF; --rope:#070C18; --rope-fg:#A3B3CE; --rope-line:#24365A; --rope-track:#13213B;
+  --good:#4ADE80; --warn:#FBBF24; --bad:#F87171; --gold:#FACC15;
+  --hero:#0E1628; --hero-fg:#E6F0FF; --hero-muted:#A3B3CE; --hero-line:rgba(56,189,248,.38);
+  --fig:#E6F0FF; --prop:#3B5378; --figbg:#0A1324;
+  --shadow:0 10px 30px -18px rgba(0,0,0,.9);
+  --sys-line:rgba(56,189,248,.38); --sys-glow:0 0 0 1px rgba(56,189,248,.06),0 0 26px -12px rgba(56,189,248,.6);
+  --fd:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;
   --fb:'Sarabun','Leelawadee UI','Noto Sans Thai Looped','Noto Sans Thai',system-ui,sans-serif;
-  --fm:'Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;
-  --r:22px; --glass:rgba(241,242,244,.86); --card-line:transparent;
-}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0C0D10; --surface:#16171C; --sunk:#1E2026; --ink:#F2F3F6; --muted:#BEC2CC; --line:#2A2C34;
-  --accent:#8FA3FF; --accent-ink:#0B1033; --accent-soft:#1E2552; --hot:#FF8259; --hot-soft:#3B1A0F;
-  --rope:#000000; --rope-fg:#ABAFB9;
-  --good:#4FCB8E; --warn:#EAAA4A; --bad:#F2737C;
-  --fig:#F2F3F6; --prop:#464953; --figbg:#111216;
-  --shadow:0 10px 28px -16px rgba(0,0,0,.9); --glass:rgba(12,13,16,.84); --card-line:#24262D; color-scheme:dark;
-}}
-:root[data-theme="dark"]{
-  --bg:#0C0D10; --surface:#16171C; --sunk:#1E2026; --ink:#F2F3F6; --muted:#BEC2CC; --line:#2A2C34;
-  --accent:#8FA3FF; --accent-ink:#0B1033; --accent-soft:#1E2552; --hot:#FF8259; --hot-soft:#3B1A0F;
-  --rope:#000000; --rope-fg:#ABAFB9;
-  --good:#4FCB8E; --warn:#EAAA4A; --bad:#F2737C;
-  --fig:#F2F3F6; --prop:#464953; --figbg:#111216;
-  --shadow:0 10px 28px -16px rgba(0,0,0,.9); --glass:rgba(12,13,16,.84); --card-line:#24262D; color-scheme:dark;
+  --fm:'Chakra Petch','Kanit','Leelawadee UI','Noto Sans Thai',system-ui,sans-serif;
+  --r:8px; --glass:rgba(6,10,20,.84); --card-line:var(--sys-line); color-scheme:dark;
 }
 [hidden]{display:none!important}
 *{box-sizing:border-box}
@@ -168,14 +153,6 @@ body.v-start .top{display:none}
 .rounds::-webkit-scrollbar{display:none}
 .rounds li{flex:none;scroll-snap-align:start;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.9);color:var(--ink-on-light);border-radius:999px;padding:5px 13px 5px 5px;font-size:.95rem;font-weight:600;white-space:nowrap}
 .rounds b{width:28px;height:28px;border-radius:50%;background:var(--hero-fg);color:#fff;display:grid;place-items:center;font-family:var(--fd);font-size:.85rem;font-weight:700}
-body.v-today .top{background:var(--go);-webkit-backdrop-filter:none;backdrop-filter:none}
-body.v-today .top .wm,body.v-today .top .wm em{color:var(--go-ink)}
-body.v-today .top-mini a,body.v-today .tabs a:not([aria-current]){color:var(--hero-fg);font-weight:600}
-body.v-today::before{background:var(--go)}
-@media (max-width:879px){
-  body.v-today main{padding-top:0}
-  body.v-today #v-today>.hero:first-of-type{margin:0 -16px;border-radius:0 0 30px 30px;padding-top:10px;box-shadow:none}
-}
 
 @media (hover:none){.kbd-hint{display:none}}
 /* account forms keep a comfortable line length on wide screens */
@@ -413,6 +390,102 @@ body.resting:not(.v-train) main{padding-bottom:calc(180px + env(safe-area-inset-
 .hiit .btn.pri{background:var(--go);color:var(--go-ink);border-color:var(--go)}
 .modal-bg{position:fixed;inset:0;z-index:55;background:rgba(8,10,16,.55);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);display:grid;place-items:center;padding:16px}
 .modal{background:var(--surface);color:var(--ink);border-radius:26px;padding:22px;max-width:460px;width:100%;display:flex;flex-direction:column;gap:12px;max-height:85vh;overflow:auto}
+/* ---------- game skin: system windows, quests, ranks ---------- */
+body{background:radial-gradient(900px 520px at 50% -160px,#10284D 0%,transparent 65%) fixed,var(--bg)}
+h1,h2,h3{letter-spacing:.01em}
+.card,.sys,.tip,.tool,.modal,.hero{position:relative;background:linear-gradient(180deg,rgba(17,30,57,.95),rgba(8,14,28,.95));border:1px solid var(--sys-line);border-radius:var(--r);box-shadow:var(--sys-glow);color:var(--ink)}
+/* corner brackets: the system-window signature */
+.card::after,.sys::after,.hero::after,.modal::after{content:"";position:absolute;inset:-1px;pointer-events:none;border-radius:var(--r);
+  background:linear-gradient(var(--accent),var(--accent)) left top/14px 2px no-repeat,linear-gradient(var(--accent),var(--accent)) left top/2px 14px no-repeat,
+  linear-gradient(var(--accent),var(--accent)) right top/14px 2px no-repeat,linear-gradient(var(--accent),var(--accent)) right top/2px 14px no-repeat,
+  linear-gradient(var(--accent),var(--accent)) left bottom/14px 2px no-repeat,linear-gradient(var(--accent),var(--accent)) left bottom/2px 14px no-repeat,
+  linear-gradient(var(--accent),var(--accent)) right bottom/14px 2px no-repeat,linear-gradient(var(--accent),var(--accent)) right bottom/2px 14px no-repeat}
+.sys{padding:16px 16px 18px;display:flex;flex-direction:column;gap:12px}
+.sys-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:2px 10px;font-family:var(--fd);font-weight:700;font-size:1rem;letter-spacing:.08em;color:var(--accent);border-bottom:1px solid var(--sys-line);padding-bottom:8px}
+.sys-h>span:first-child{white-space:nowrap}
+.sys-h>span:first-child::before{content:"";display:inline-block;width:8px;height:8px;margin-right:8px;background:var(--accent);box-shadow:0 0 10px var(--accent);transform:rotate(45deg) translateY(-1px)}
+.sys-sub{font-family:var(--fb);font-weight:500;font-size:.86rem;letter-spacing:0;color:var(--muted)}
+@media (prefers-reduced-motion:no-preference){.view:not([hidden]) .sys{animation:sys-in .5s cubic-bezier(.16,1,.3,1) both}.view:not([hidden]) .sys+.sys{animation-delay:.08s}}
+@keyframes sys-in{from{opacity:.001;clip-path:inset(0 0 100% 0)}to{opacity:1;clip-path:inset(0 0 0 0)}}
+/* status window */
+.st-top{display:flex;gap:18px;align-items:center}
+.rank-badge{--sz:64px;flex:none;width:var(--sz);height:var(--sz);margin:6px;display:grid;place-items:center;transform:rotate(45deg);border:2px solid var(--rk);background:color-mix(in srgb,var(--rk) 16%,transparent);box-shadow:0 0 22px -4px var(--rk),inset 0 0 14px -6px var(--rk);border-radius:6px}
+.rank-badge span{transform:rotate(-45deg);font-family:var(--fd);font-weight:700;font-size:calc(var(--sz) * .5);line-height:1;color:var(--rk);text-shadow:0 0 12px var(--rk)}
+.rank-badge.big{--sz:92px;margin:16px auto}
+.st-id{display:flex;flex-direction:column;gap:2px;min-width:0}
+.st-name{font-family:var(--fd);font-size:1.45rem;font-weight:700;line-height:1.15}
+.st-title{font-size:.93rem;color:var(--gold)}
+.st-lv{font-family:var(--fd);font-size:1rem;color:var(--muted)}.st-lv b{color:var(--ink);font-size:1.3rem}
+.xp{height:12px;border:1px solid var(--sys-line);background:#081226;border-radius:3px;overflow:hidden}
+.xp i{display:block;height:100%;background:linear-gradient(90deg,#0EA5E9,#7DD3FC);box-shadow:0 0 12px #38BDF8;transition:width .9s cubic-bezier(.16,1,.3,1)}
+.xp-l{display:flex;justify-content:space-between;gap:10px;font-family:var(--fd);font-size:.86rem;color:var(--muted)}
+.stats5{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.stats5 div{border:1px solid var(--sys-line);border-radius:4px;padding:6px 4px;text-align:center;background:rgba(56,189,248,.05)}
+.stats5 span{display:block;font-family:var(--fd);font-size:.74rem;letter-spacing:.08em;color:var(--accent)}
+.stats5 b{font-family:var(--fd);font-size:1.3rem;font-weight:700}
+.stat-rows{display:flex;flex-direction:column;gap:10px}
+.stat-row{display:grid;grid-template-columns:48px 1fr auto;gap:10px;align-items:center}
+.stat-row .k{font-family:var(--fd);font-weight:700;color:var(--accent);letter-spacing:.06em}
+.stat-row .v{font-family:var(--fd);font-weight:700;font-size:1.25rem}
+.stat-row small{grid-column:2 / 4;color:var(--muted);font-size:.86rem;margin-top:-6px}
+/* daily quests */
+.q-intro{color:var(--muted)}
+.qlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.q{display:grid;grid-template-columns:26px 1fr auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px dashed rgba(56,189,248,.18)}
+.q:last-child{border-bottom:0}
+.q-box{width:22px;height:22px;border:2px solid var(--accent);border-radius:4px;display:grid;place-items:center}
+.q-box svg{width:14px;height:14px;stroke:var(--accent-ink);stroke-width:3.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.q.done .q-box{background:var(--accent);box-shadow:0 0 12px -2px var(--accent)}
+.q-main{display:flex;flex-direction:column;gap:5px;min-width:0}
+.q-t{font-weight:600}
+.q.done .q-t{color:var(--muted)}
+.q-bar{height:6px;background:#081226;border-radius:3px;overflow:hidden}
+.q-bar i{display:block;height:100%;background:var(--accent);transition:width .6s}
+.q-n{font-family:var(--fd);font-size:.86rem;color:var(--muted)}
+.q-xp{font-family:var(--fd);font-weight:700;color:var(--gold);white-space:nowrap}
+.q.done .q-xp{opacity:.55}
+.q-bonus{border:1px dashed var(--sys-line);border-radius:6px;padding:10px 12px;font-size:.95rem;color:var(--muted)}
+.q-bonus b{color:var(--gold);font-family:var(--fd)}
+.q-bonus.done{border-style:solid;border-color:var(--gold);color:var(--ink);box-shadow:0 0 22px -10px var(--gold)}
+.titles{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.titles li{border:1px solid var(--sys-line);border-radius:6px;padding:10px;display:flex;flex-direction:column;gap:2px}
+.titles li b{font-family:var(--fd);color:var(--gold)}
+.titles li span{font-size:.86rem;color:var(--muted)}
+.titles li.locked{opacity:.45;border-style:dashed}.titles li.locked b{color:var(--muted)}
+/* level-up window */
+.lvup{text-align:center;display:flex;flex-direction:column;gap:8px;--rk:var(--accent)}
+.lv-big{font-family:var(--fd);font-weight:700;font-size:2.6rem;letter-spacing:.06em;color:var(--gold);text-shadow:0 0 18px rgba(250,204,21,.7)}
+@media (prefers-reduced-motion:no-preference){.lvup{animation:lv-in .6s cubic-bezier(.16,1,.3,1)}}
+@keyframes lv-in{from{opacity:.001;transform:scale(.86)}to{opacity:1;transform:none}}
+/* the base components in the HUD palette */
+.hero{border-radius:var(--r);box-shadow:var(--sys-glow)}
+.hero p{background:rgba(56,189,248,.08);color:var(--ink);border:1px solid rgba(56,189,248,.2);font-weight:400}
+.hero .eyebrow,.hero-hi,.hero-sess span{color:var(--muted)}
+.hero h1,.hero h2{color:var(--ink)}
+.hero .btn{border-color:var(--sys-line);color:var(--ink)}
+.hero .btn.hot,.hero .btn.pri,.btn.hot{background:var(--go);border-color:var(--go);color:var(--go-ink);box-shadow:0 0 24px -8px var(--go)}
+.hero .btn.link{color:var(--accent)}
+.hero-fig{background:rgba(56,189,248,.06);--fig:var(--ink);--prop:var(--rope-line)}
+.hero h1{font-size:clamp(2rem,8.5vw,2.8rem);line-height:1.12}
+@media (max-width:639px){.hero-fig{background:none}}
+.rounds li{background:rgba(56,189,248,.1);color:var(--ink);border:1px solid var(--sys-line)}
+.rounds b{background:var(--accent);color:var(--accent-ink)}
+.btn{background:rgba(8,16,32,.6);border-color:var(--sys-line);border-radius:6px}
+.btn:hover{border-color:var(--accent)}
+.btn.pri{box-shadow:0 0 20px -8px var(--accent)}
+.btn.sm{border-radius:5px}.btn.big{border-radius:8px}
+.chip{border-radius:4px}
+input:not([type]),input[type=text],input[type=password],input[type=number],input[type=date],input[type=time],input[type=search],select,textarea{background:#081226;border-color:var(--sys-line);border-radius:6px}
+.bottom{background:rgba(5,9,18,.94);border:1px solid var(--sys-line);box-shadow:0 0 30px -12px rgba(56,189,248,.5);border-radius:14px}
+.bottom a.mid .ic{border-radius:12px;box-shadow:0 0 0 5px var(--bg),0 0 22px -4px var(--go)}
+.top{border-bottom:1px solid rgba(56,189,248,.15)}
+.wm em{color:var(--accent)}
+.toast{background:#0E1628;color:var(--ink);border:1px solid var(--sys-line);box-shadow:var(--sys-glow)}
+.kpi{border-top-color:var(--sys-line)}
+.tool .t-ic{background:var(--accent-soft)}
+.restbar{background:linear-gradient(90deg,#0B2A4A,#0E1628);color:var(--ink);border:1px solid var(--sys-line)}
+.restbar .btn{color:var(--ink);border-color:var(--sys-line)}
+.restbar .grow{color:var(--muted)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -420,7 +493,7 @@ body.resting:not(.v-train) main{padding-bottom:calc(180px + env(safe-area-inset-
 <header class="top"><div class="top-in">
   <a class="brand" href="#today" aria-label="MewFit หน้าแรก"><span class="wm">Mew<em>Fit</em></span></a>
   <nav class="tabs" aria-label="เมนูหลัก">
-    <a href="#today">วันนี้</a><a href="#train">ฝึก</a><a href="#eat">กิน</a><a href="#plan">ตารางชีวิต</a><a href="#progress">ความคืบหน้า</a><a href="#learn">ความรู้</a><a href="#profile">โปรไฟล์</a>
+    <a href="#today">เควส</a><a href="#train">ฝึก</a><a href="#eat">กิน</a><a href="#plan">ตารางชีวิต</a><a href="#progress">สถานะ</a><a href="#learn">ความรู้</a><a href="#profile">โปรไฟล์</a>
   </nav>
   <div class="top-mini"><a href="#learn">ความรู้</a><a href="#profile">โปรไฟล์</a></div>
 </div></header>
@@ -438,11 +511,11 @@ body.resting:not(.v-train) main{padding-bottom:calc(180px + env(safe-area-inset-
 </main>
 
 <nav class="bottom" aria-label="เมนูหลัก">
-  <a href="#today"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>วันนี้</a>
+  <a href="#today"><svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z"/><path d="M9 8h6M9 12h4"/></svg>เควส</a>
   <a href="#eat"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="7"/><path d="M12 6V3M9 13h6"/></svg>กิน</a>
   <a href="#train" class="mid"><span class="ic"><svg viewBox="0 0 24 24"><path d="M6 7v10M3 9v6M18 7v10M21 9v6M6 12h12"/></svg></span>ฝึก</a>
   <a href="#plan"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>ตาราง</a>
-  <a href="#progress"><svg viewBox="0 0 24 24"><path d="M3 20h18M5 16l5-5 4 3 6-7"/></svg>ผลลัพธ์</a>
+  <a href="#progress"><svg viewBox="0 0 24 24"><path d="M12 3l8 5v8l-8 5-8-5V8z"/><path d="M12 8v8M8.5 10l7 4M15.5 10l-7 4"/></svg>สถานะ</a>
 </nav>
 
 <div id="restbar" class="restbar" hidden>
@@ -501,7 +574,7 @@ const APP_URL = 'https://mewfit.m3wxuser.workers.dev/';
 const DEMO = { name: '', sex: 'm', age: 28, height: 172, weight: 75, waist: null, activity: 'light', goal: 'cut', level: 'beginner',
   days: [1, 3, 5], minutes: 30, eq: {}, wake: '06:30', bed: '22:30',
   workStart: '09:00', workEnd: '18:00', noWork: false, trainTime: 'evening', whey: false, finisher: true, caution: false, par: [], baseline: {} };
-const fresh = () => ({ v: 2, profile: null, seenDemo: false, guideDone: false, voice: true, levels: {}, calAdjust: 0, workouts: [], weights: [], body: [], food: {}, habits: {}, session: null, mealSeed: 7 });
+const fresh = () => ({ v: 2, profile: null, seenDemo: false, guideDone: false, voice: true, levels: {}, calAdjust: 0, workouts: [], weights: [], body: [], food: {}, habits: {}, cardio: {}, seenLv: null, session: null, mealSeed: 7 });
 let S = load();
 function load() {
   try {
@@ -1044,6 +1117,119 @@ function figLoop(now) {
 }
 if (!reduceMotion) requestAnimationFrame(figLoop);
 
+/* ---------- game: XP, level, rank, daily quests, stats, titles ----------
+   Everything is derived from saved data (workouts, habits, food, weights, cardio), so it syncs and merges
+   with no extra state; only the last celebrated level is remembered (S.seenLv). */
+const RANKS = [
+  { r: 'E', lv: 1, c: '#A3B3CE', n: 'ผู้เริ่มต้น' }, { r: 'D', lv: 5, c: '#4ADE80', n: 'นักสู้หน้าใหม่' }, { r: 'C', lv: 10, c: '#38BDF8', n: 'นักล่ามีฝีมือ' },
+  { r: 'B', lv: 20, c: '#A78BFA', n: 'นักล่าชั้นยอด' }, { r: 'A', lv: 35, c: '#FB923C', n: 'ระดับหัวกะทิ' }, { r: 'S', lv: 55, c: '#FACC15', n: 'ระดับตำนาน' }];
+const xpNeed = L => 300 + 60 * L;   // XP from level L to L+1: D in about a week, S after a year and a half of steady training
+const rankOf = lv => RANKS.reduce((a, r) => lv >= r.lv ? r : a, RANKS[0]);
+const CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+function questsFor(d) {
+  const p = P(), c = calc(p), tid = weekMap(p, d)[parseISO(d).getDay()];
+  const h = (S.habits || {})[d] || {}, tot = dayTotals(d), trained = S.workouts.some(w => w.date === d), cardio = (S.cardio || {})[d] || 0;
+  const q = [tid ? { k: 'train', t: 'ภารกิจหลัก: ' + TPL[tid].n, v: trained ? 1 : 0, max: 1, xp: 100 }
+    : { k: 'recover', t: 'ฟื้นฟู: ยืดเหยียด 8 นาที หรือวงจร 7 นาที', v: Math.min(cardio, 1) || (trained ? 1 : 0), max: 1, xp: 60 },
+    { k: 'water', t: `ดื่มน้ำ ${c.glasses} แก้ว`, v: +h.water || 0, max: c.glasses, xp: 30 },
+    { k: 'protein', t: `กินโปรตีนให้ถึง ${c.protein} g`, v: Math.round(tot.p), max: c.protein, xp: 40 },
+    { k: 'steps', t: `เดิน ${fmt(c.steps)} ก้าว`, v: +h.steps || 0, max: c.steps, xp: 30 },
+    { k: 'sleep', t: 'นอน 7–9 ชั่วโมง', v: (+h.sleep >= 7 && +h.sleep <= 9.5) ? 1 : 0, max: 1, xp: 30 }];
+  q.forEach(x => { x.done = x.v >= x.max; });
+  return q;
+}
+const QBONUS = 100;
+let gameMemo = { key: '', g: null };
+function game() {
+  const key = JSON.stringify([S.workouts.length, S.habits, S.food, S.weights.length, S.cardio, S.profile, iso()]);
+  if (gameMemo.key === key) return gameMemo.g;
+  let xp = 0;
+  S.workouts.forEach(w => { xp += 60 + (w.sets || 0) * 8 + Math.floor(Math.min(w.reps || 0, 400) / 2); });
+  const today = iso();
+  const days = new Set([...Object.keys(S.habits || {}), ...Object.keys(S.food || {}), ...S.workouts.map(w => w.date), ...Object.keys(S.cardio || {})]);
+  const full = new Set();
+  days.forEach(d => {
+    if (d > today) return;
+    const q = questsFor(d), n = q.filter(x => x.done).length;
+    xp += q.filter(x => x.done && x.k !== 'train').reduce((a, x) => a + x.xp, 0);
+    if (n === q.length) { xp += QBONUS; full.add(d); }
+    if (n >= 3) full.add('3:' + d);
+  });
+  xp += S.weights.filter(w => !w.demo).length * 10;
+  let lv = 1, into = xp; while (into >= xpNeed(lv)) { into -= xpNeed(lv); lv++; }
+  // streak: consecutive days (to today, or to yesterday if today is still open) with at least 3 quests done
+  let streak = 0, d = full.has('3:' + today) ? today : addDays(today, -1);
+  while (full.has('3:' + d)) { streak++; d = addDays(d, -1); }
+  const reps = { STR: 0, VIT: 0, END: 0 };
+  S.workouts.forEach(w => (w.ex || []).forEach(x => {
+    const e = EXM[x.id]; if (!e) return;
+    const n = (x.reps || []).filter(v => v !== '').reduce((a, v) => a + +v, 0);
+    if (['push', 'vpush', 'pull', 'vpull', 'dip', 'curl'].includes(e.pt)) reps.STR += n;
+    else if (['squat', 'lunge', 'hinge', 'calf'].includes(e.pt)) reps.VIT += e.t ? n / 3 : n;
+    else reps.END += e.t ? n / 3 : n;
+  }));
+  const steps = Object.values(S.habits || {}).reduce((a, h) => a + (+h.steps || 0), 0);
+  const cardio = Object.values(S.cardio || {}).reduce((a, n) => a + n, 0);
+  const foodDays = Object.keys(S.food || {}).filter(k => (S.food[k] || []).length).length;
+  const waterDays = Object.entries(S.habits || {}).filter(([, h]) => +h.water >= calc().glasses).length;
+  const stats = { STR: 10 + Math.floor(reps.STR / 40), AGI: 10 + Math.floor(steps / 40000) + cardio * 2, VIT: 10 + Math.floor(reps.VIT / 40), END: 10 + Math.floor(reps.END / 40) + Math.min(streak, 30), INT: 10 + foodDays + Math.floor(S.weights.length / 3) };
+  const ctx = { lv, streak, reps, waterDays };
+  const titles = TITLES.map(t => Object.assign({ got: !!t.ok(ctx) }, t));
+  const got = titles.filter(t => t.got);
+  gameMemo = { key, g: { xp, lv, into, need: xpNeed(lv), rank: rankOf(lv), streak, stats, titles, title: got[got.length - 1] || null } };
+  return gameMemo.g;
+}
+const repsOf = pts => S.workouts.reduce((a, w) => a + (w.ex || []).reduce((b, x) => { const e = EXM[x.id]; return e && pts.includes(e.pt) ? b + (x.reps || []).filter(v => v !== '').reduce((c, v) => c + +v, 0) : b; }, 0), 0);
+const TITLES = [
+  { n: 'ผู้ตื่นรู้', d: 'ฝึกครั้งแรก', ok: () => S.workouts.length >= 1 },
+  { n: 'แขนเหล็ก', d: 'วิดพื้นรวม 100 ครั้ง', ok: () => repsOf(['push']) >= 100 },
+  { n: 'ผู้คุมสายน้ำ', d: 'ดื่มน้ำครบเป้า 7 วัน', ok: c => c.waterDays >= 7 },
+  { n: 'ไม่ยอมแพ้', d: 'ทำเควส 3 อย่างขึ้นไปติดกัน 7 วัน', ok: c => c.streak >= 7 },
+  { n: 'นักสู้ตัวจริง', d: 'ฝึกครบ 10 ครั้ง', ok: () => S.workouts.length >= 10 },
+  { n: 'ขาสายฟ้า', d: 'ท่าขารวม 500 ครั้ง', ok: () => repsOf(['squat', 'lunge', 'hinge']) >= 500 },
+  { n: 'ผู้เฝ้ามองตัวเลข', d: 'ชั่งน้ำหนัก 14 ครั้ง', ok: () => S.weights.filter(w => !w.demo).length >= 14 },
+  { n: 'นักล่าระดับ C', d: 'ถึงแรงค์ C (Lv. 10)', ok: c => c.lv >= 10 },
+  { n: 'วินัยเหล็ก', d: 'ทำเควสติดกัน 30 วัน', ok: c => c.streak >= 30 },
+  { n: 'ไม่รู้จักเหนื่อย', d: 'ฝึกครบ 50 ครั้ง', ok: () => S.workouts.length >= 50 },
+  { n: 'นักล่าระดับ A', d: 'ถึงแรงค์ A (Lv. 35)', ok: c => c.lv >= 35 },
+  { n: 'ตำนาน', d: 'ถึงแรงค์ S (Lv. 55)', ok: c => c.lv >= 55 }];
+const STAT_INFO = { STR: 'พลัง: ท่าดัน ดึง หลังแขน หน้าแขน', AGI: 'ความคล่อง: ก้าวเดิน และคาร์ดิโอ', VIT: 'ความทนทานของขา: สควอท ลันจ์ สะโพก น่อง', END: 'ความอึด: แกนกลาง และวันต่อเนื่อง', INT: 'วินัยการกิน: วันที่บันทึกอาหาร และการชั่งน้ำหนัก' };
+function statusPanel(g, full) {
+  const p = P(), r = g.rank, nx = RANKS[RANKS.indexOf(r) + 1], pc = Math.round(g.into / g.need * 100);
+  return `<section class="sys status" style="--rk:${r.c}" aria-label="สถานะผู้เล่น">
+    <div class="sys-h"><span>สถานะผู้เล่น</span><span class="sys-sub">${g.streak ? `ต่อเนื่อง ${g.streak} วัน` : 'เริ่มสะสมวันต่อเนื่อง'}</span></div>
+    <div class="st-top"><div class="rank-badge" role="img" aria-label="แรงค์ ${r.r}"><span>${r.r}</span></div>
+      <div class="st-id"><b class="st-name">${esc(p.name || 'ผู้เล่น')}</b><span class="st-title">${g.title ? 'ฉายา: ' + esc(g.title.n) : 'ยังไม่มีฉายา ฝึกครั้งแรกเพื่อรับ'}</span><span class="st-lv">Lv. <b>${g.lv}</b> · แรงค์ ${r.r} ${r.n}</span></div></div>
+    <div class="xp" role="progressbar" aria-label="ค่าประสบการณ์" aria-valuemin="0" aria-valuemax="${g.need}" aria-valuenow="${g.into}"><i style="width:${pc}%"></i></div>
+    <div class="xp-l"><span>${fmt(g.into)} / ${fmt(g.need)} XP ถึง Lv. ${g.lv + 1}</span><span>${nx ? `แรงค์ ${nx.r} ที่ Lv. ${nx.lv}` : 'แรงค์สูงสุดแล้ว'}</span></div>
+    ${full ? `<div class="stat-rows">${Object.keys(STAT_INFO).map(k => `<div class="stat-row"><span class="k">${k}</span>${bar(g.stats[k] - 10, Math.max(20, Math.ceil((g.stats[k] - 9) / 20) * 20))}<span class="v">${g.stats[k]}</span><small>${STAT_INFO[k]}</small></div>`).join('')}</div>`
+      : `<div class="stats5">${Object.keys(STAT_INFO).map(k => `<div><span>${k}</span><b>${g.stats[k]}</b></div>`).join('')}</div>`}
+  </section>`;
+}
+const questRow = x => { const pc = x.max > 1 ? clamp(x.v / x.max * 100, 0, 100) : 0; return `<li class="q ${x.done ? 'done' : ''}"><span class="q-box">${x.done ? CHECK : ''}</span><div class="q-main"><span class="q-t">${esc(x.t)}</span>${x.max > 1 && !x.done ? `<div class="q-bar"><i style="width:${pc}%"></i></div><span class="q-n">${fmt(Math.min(x.v, x.max))} / ${fmt(x.max)}</span>` : ''}</div><span class="q-xp">+${x.xp} XP</span></li>`; };
+function timeLeftToday() { const n = new Date(), m = 24 * 60 - (n.getHours() * 60 + n.getMinutes()); return `${Math.floor(m / 60)} ชม. ${m % 60} นาที`; }
+// celebrate quests completed since the last look, and level / rank ups
+function questToasts(d, q) {
+  const done = q.filter(x => x.done).map(x => x.k);
+  if (ui.qSeen && ui.qSeen.d === d) { const fresh = q.filter(x => x.done && !ui.qSeen.k.includes(x.k)); if (fresh.length) { toast(`เควสสำเร็จ: ${fresh.map(x => x.t.replace('ภารกิจหลัก: ', '')).join(', ')} +${fresh.reduce((a, x) => a + x.xp, 0)} XP`); try { navigator.vibrate && navigator.vibrate(40); } catch (e) {} } }
+  ui.qSeen = { d, k: done };
+}
+function checkLevelUp() {
+  if (!S.profile || ui.ob || document.querySelector('.modal-bg')) return;
+  const g = game();
+  if (S.seenLv == null) { S.seenLv = g.lv; save(); return; }
+  if (g.lv <= S.seenLv) return;
+  const before = S.seenLv, r0 = rankOf(before), r = g.rank;
+  S.seenLv = g.lv; save();
+  beep(880, .12); setTimeout(() => beep(1175, .14), 140); setTimeout(() => beep(1568, .25), 300);
+  try { navigator.vibrate && navigator.vibrate([60, 40, 120]); } catch (e) {}
+  showModal(`<div class="lvup" style="--rk:${r.c}"><div class="sys-h"><span>แจ้งเตือนจากระบบ</span></div>
+    <p class="lv-big">LEVEL UP!</p><p>Lv. ${before} → <b>Lv. ${g.lv}</b></p>
+    ${r.r !== r0.r ? `<div class="rank-badge big" role="img" aria-label="แรงค์ ${r.r}"><span>${r.r}</span></div><p>เลื่อนแรงค์ <b>${r0.r} → ${r.r}</b> · ${r.n}</p>` : ''}
+    <p class="muted small">ค่าสถานะมาจากการฝึก การกิน และการนอนจริงของคุณ ทำเควสต่อไปเพื่อเลื่อนแรงค์</p>
+    <button class="btn hot big wide" data-act="modal-close">รับทราบ</button></div>`, true);
+}
+
 /* ---------- small UI pieces ---------- */
 const VIEWS = ['start', 'today', 'train', 'moves', 'eat', 'plan', 'progress', 'learn', 'profile'];
 const ui = { learnCat: 'all', planDay: new Date().getDay(), foodQ: '', resetAsk: false, cancelAsk: false, ob: null, stepVal: null, sw: null };
@@ -1081,6 +1267,9 @@ function mergeState(server, local) {
   out.food = Object.assign({}, a.food, b.food);
   out.habits = Object.assign({}, a.habits, b.habits);
   out.levels = Object.assign({}, a.levels, b.levels);
+  out.cardio = Object.assign({}, a.cardio, b.cardio);
+  Object.keys(a.cardio || {}).forEach(d => { out.cardio[d] = Math.max(a.cardio[d] || 0, (b.cardio || {})[d] || 0); });
+  out.seenLv = Math.max(a.seenLv || 0, b.seenLv || 0) || null;
   out.session = b.session || a.session;
   return out;
 }
@@ -1397,6 +1586,7 @@ function render() {
   document.querySelectorAll('.tabs a,.bottom a,.top-mini a').forEach(a => { if (a.getAttribute('href') === '#' + navKey) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   ({ start: rStart, today: rToday, train: rTrain, moves: rMoves, eat: rEat, plan: rPlan, progress: rProgress, learn: rLearn, profile: rProfile })[v]();
   mountFigs($('#v-' + v));
+  checkLevelUp();
   if (v === 'profile' && ui.acct && ui.acct.pair && ui.acct.open === 'pair') drawPairQR();
 }
 
@@ -1619,7 +1809,7 @@ function rToday() {
   else if (done) msg = `เยี่ยมมาก ฝึกเสร็จแล้ว มื้อถัดไปให้มีโปรตีนราว ${c.perMeal} กรัม แล้วนอนให้ได้ 7 ชั่วโมงขึ้นไป`;
   else if (tid) msg = isDeload() ? 'สัปดาห์นี้เป็นสัปดาห์ผ่อน ลดเซตลงหนึ่งเซต ให้ร่างกายฟื้นตัวเต็มที่ก่อนรอบใหม่' : 'กล้ามโตเมื่อทำได้มากกว่าครั้งก่อนนิดเดียว วันนี้ลองเพิ่มอีก 1 ครั้งในแต่ละเซต';
   else msg = `วันพัก กล้ามเนื้อซ่อมแซมตัวเองวันนี้ เดินให้ได้ ${fmt(c.steps)} ก้าว กินโปรตีนให้ถึงเป้า หรือยืดเหยียดเบาๆ 8 นาที`;
-  if (tr && tr.pct != null && adv.delta && !isDemo()) msg += ' · <a href="#progress" style="color:var(--hero-fg)">โค้ชมีคำแนะนำเรื่องแคลอรี่</a>';
+  if (tr && tr.pct != null && adv.delta && !isDemo()) msg += ' · <a href="#progress">โค้ชมีคำแนะนำเรื่องแคลอรี่</a>';
   const tip = TIPS[(Math.floor(Date.now() / 864e5)) % TIPS.length];
   const wkDone = (weekCounts()[mondayOf(d)] || 0), wkNeed = p.days.length;
   const guide = S.profile && !S.guideDone ? `<article class="card"><div class="row between"><h2>ใช้ MewFit ทุกวันแบบนี้</h2><button class="btn sm" data-act="guide-done">เข้าใจแล้ว</button></div>
@@ -1628,20 +1818,22 @@ function rToday() {
     <div><span class="n">กิน</span><div><b>บันทึกอาหารหรือกดใช้แผนทั้งวัน</b><p>สำคัญที่สุดคือให้โปรตีนถึงเป้า วงแหวนสีชมพู</p></div></div>
     <div><span class="n">ค่ำ</span><div><b>ติ๊กน้ำ ก้าวเดิน และชั่วโมงนอน</b><p>นิสัยเล็กๆ เหล่านี้ทำให้ผลออกเร็วขึ้น</p></div></div></div></article>` : '';
   let btns;
-  if (live) btns = '<a class="btn hot big" href="#train">ฝึกต่อ</a>';
-  else if (done) btns = `<span class="chip good" style="background:rgba(255,255,255,.12)">เสร็จแล้ว ${done.mins} นาที · ${done.sets} เซต</span><button class="btn" data-act="stretch">ยืดเหยียด 8 นาที</button>`;
-  else if (tid) btns = `<button class="btn hot big" data-act="start" data-tid="${tid}">เริ่มฝึก</button><a class="btn link" href="#train">ดูท่าวันนี้ทั้งหมด</a>`;
+  if (live) btns = '<a class="btn hot big" href="#train">กลับไปทำภารกิจต่อ</a>';
+  else if (done) btns = `<span class="chip good">ภารกิจหลักสำเร็จ ${done.mins} นาที · ${done.sets} เซต</span><button class="btn" data-act="stretch">ยืดเหยียด 8 นาที</button>`;
+  else if (tid) btns = `<button class="btn hot big" data-act="start" data-tid="${tid}">รับภารกิจ: เริ่มฝึก</button><a class="btn link" href="#train">ดูท่าในภารกิจ</a>`;
   else btns = '<button class="btn pri" data-act="stretch">ยืดเหยียด 8 นาที</button><button class="btn" data-act="seven">วงจร 7 นาที</button>';
+  const g = game(), q = questsFor(d), qDone = q.filter(x => x.done).length;
+  questToasts(d, q);
   $('#v-today').innerHTML = `
   ${demoBanner()}
-  <section class="hero">
-    <div class="hero-txt">
-      <div class="hero-hi">${hi}${name} · ${DAY_L[dow]} ${thDate(d)}${isDeload() ? ' · สัปดาห์ผ่อน' : ''}</div>
-      ${tid ? `<h1>${esc(TPL[tid].n)}</h1><div class="hero-sess"><span>${sess.ex.length} ท่า · ${sess.ex[0].sets} เซต · ราว ${estMin(tid)} นาที</span></div><ol class="rounds" aria-label="ท่าวันนี้">${sess.ex.map((x, i) => `<li><b>${i + 1}</b>${esc(EXM[x.id].n)}</li>`).join('')}</ol>` : '<h1>วันพัก</h1><div class="hero-sess"><span>ฟื้นตัว เดินเยอะๆ</span></div>'}
-      <p>${msg}</p>
-      <div class="row hero-go">${btns}</div>
-    </div>
-    <div class="hero-fig">${figSVG(tid ? ANIM[sess.ex[0].id] : 'bridge')}</div>
+  ${statusPanel(g, false)}
+  <section class="sys quest" aria-label="เควสประจำวัน">
+    <div class="sys-h"><span>เควสประจำวัน</span><span class="sys-sub">${DAY_L[dow]} ${thDate(d)} · เหลือ ${timeLeftToday()}</span></div>
+    <p class="q-intro">${msg}</p>
+    ${tid ? `<ol class="rounds" aria-label="ท่าในภารกิจหลัก">${sess.ex.map((x, i) => `<li><b>${i + 1}</b>${esc(EXM[x.id].n)}</li>`).join('')}</ol>` : ''}
+    <ul class="qlist">${q.map(questRow).join('')}</ul>
+    <div class="q-bonus ${qDone === q.length ? 'done' : ''}">${qDone === q.length ? 'เควสวันนี้ครบแล้ว ได้โบนัส' : `ทำครบ ${q.length} เควส รับโบนัส`} <b>+${QBONUS} XP</b> · ตอนนี้ ${qDone}/${q.length}</div>
+    <div class="row hero-go">${btns}</div>
   </section>
   ${guide}
   <div class="grid g2">
@@ -1701,7 +1893,7 @@ function rTrain() {
   ${tid ? `<section class="hero">
     <div class="hero-txt"><h1>${esc(TPL[tid].n)}</h1><span class="eyebrow">วันนี้${doneToday ? ' · ฝึกแล้ว' : ''}</span>
       <p>${sess.ex.length} ท่า × ${sess.ex[0].sets} เซต · ราว ${estMin(tid)} นาที รวมวอร์มอัพ ${sess.fin ? '· มีคาร์ดิโอท้าย 4 นาที' : ''}</p>
-      <div class="row"><button class="btn hot big" data-act="start" data-tid="${tid}">เริ่มฝึก</button><button class="btn" data-act="warm">วอร์มอัพ 5 นาที</button></div></div>
+      <div class="row"><button class="btn hot big" data-act="start" data-tid="${tid}">รับภารกิจ: เริ่มฝึก</button><button class="btn" data-act="warm">วอร์มอัพ 5 นาที</button></div></div>
     <div class="hero-fig">${figSVG(ANIM[sess.ex[0].id])}</div></section>
   <article class="card"><h2>ท่าวันนี้</h2>
     ${sess.ex.map(x => { const e = EXM[x.id], L = ladder(x.pt), k = L.findIndex(y => y.id === x.id), pv = lastPerf(x.id); return `<div class="mv"><div class="figbox mini">${figSVG(ANIM[x.id])}</div><div><h3>${esc(e.n)}</h3><span class="eyebrow">${PT_L[x.pt]} · ขั้น ${k + 1}/${L.length}</span><p class="small muted">${x.sets} เซต × ${e.r[0]}–${e.r[1]} ${e.t ? 'วินาที' : 'ครั้ง'}${pv ? ' · ครั้งก่อน ' + pv.filter(v => v !== '').join('·') : ''}</p></div></div>`; }).join('')}
@@ -1948,11 +2140,11 @@ function hNext() { H.i++; if (H.i >= H.prog.length) { hStop(true); return; } hPh
 function hStop(done) {
   clearInterval(H.iv); $('#hiit').hidden = true; $('#h-figbox').innerHTML = ''; try { speechSynthesis.cancel(); } catch (e) {}
   if (!S.session) unlockScreen();
-  if (done) { beep(990, .2); setTimeout(() => beep(1320, .3), 250); speak('เสร็จแล้ว เยี่ยมมาก'); toast('จบแล้ว เยี่ยมมาก'); }
+  if (done) { beep(990, .2); setTimeout(() => beep(1320, .3), 250); speak('เสร็จแล้ว เยี่ยมมาก'); const d = iso(); S.cardio = S.cardio || {}; S.cardio[d] = (S.cardio[d] || 0) + 1; save(); toast('จบแล้ว เควสฟื้นฟูสำเร็จ'); render(); }
 }
 
 /* ---------- modal + clipboard ---------- */
-function showModal(html) { const m = document.createElement('div'); m.className = 'modal-bg'; m.innerHTML = `<div class="modal" role="dialog" aria-modal="true">${html}<div class="row"><button class="btn pri" data-act="modal-close">ตกลง</button></div></div>`; document.body.appendChild(m); m.querySelector('[data-act=modal-close]').focus(); }
+function showModal(html, ownClose) { const m = document.createElement('div'); m.className = 'modal-bg'; m.innerHTML = `<div class="modal" role="dialog" aria-modal="true">${html}${ownClose ? '' : '<div class="row"><button class="btn pri" data-act="modal-close">ตกลง</button></div>'}</div>`; document.body.appendChild(m); m.querySelector('[data-act=modal-close]').focus(); }
 function copyText(text, fallbackEl) {
   const fb = () => { if (fallbackEl) { fallbackEl.focus(); fallbackEl.select(); } toast('เลือกข้อความแล้ว กดคัดลอกเองได้เลย'); };
   try { navigator.clipboard.writeText(text).then(() => toast('คัดลอกแล้ว'), fb); } catch (e) { fb(); }
@@ -2176,7 +2368,10 @@ function rProgress() {
   const demoW = ws.length && ws[0].demo;
   $('#v-progress').innerHTML = `
   ${demoBanner()}
-  <div class="view-head"><h1>ความคืบหน้า</h1><span class="eyebrow">ชั่งตอนเช้า หลังเข้าห้องน้ำ ก่อนกิน</span></div>
+  <div class="view-head"><h1>สถานะ</h1><span class="eyebrow">เลเวล แรงค์ ค่าสถานะ ฉายา และความคืบหน้าของร่างกาย</span></div>
+  ${statusPanel(game(), true)}
+  <section class="sys" aria-label="ฉายา"><div class="sys-h"><span>ฉายา</span><span class="sys-sub">ได้แล้ว ${game().titles.filter(t => t.got).length}/${TITLES.length}</span></div>
+    <ul class="titles">${game().titles.map(t => `<li class="${t.got ? '' : 'locked'}"><b>${esc(t.n)}</b><span>${esc(t.d)}</span></li>`).join('')}</ul></section>
   <article class="card">
     <div class="row between"><h2>น้ำหนัก</h2>${demoW ? '<span class="chip warn">ข้อมูลตัวอย่าง</span>' : ''}</div>
     <div class="row"><label class="f" style="flex:1 1 140px">วันที่<input type="date" id="w-d" value="${iso()}" max="${iso()}"></label><label class="f" style="flex:1 1 120px">น้ำหนัก (กก.)<input type="number" id="w-kg" inputmode="decimal" step="0.1" min="25" max="300" placeholder="${p.weight}"></label><button class="btn pri" data-act="w-add" style="align-self:flex-end">บันทึก</button></div>

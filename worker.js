@@ -1,4 +1,5 @@
-// MewFit API: accounts (username + 6-digit PIN, recovery code, device pairing; optional Sign in with Google)
+// MewFit API: accounts created automatically on first use (the device remembers its session), with an optional
+// username + 6-digit PIN, a recovery code, device pairing, and optional Sign in with Google;
 // and one synced state document per user.
 // Everything outside /api/* is served from static assets.
 
@@ -7,7 +8,8 @@ const MAX_FAILS = 5;                  // wrong PINs in a row before the account 
 const LOCK_MS = 15 * 60 * 1000;
 const IP_WINDOW_MS = 60 * 60 * 1000;
 const IP_MAX_FAILS = 30;              // wrong PINs per IP per hour, across all accounts
-const IP_MAX_SIGNUPS = 10;            // new accounts per IP per hour
+const IP_MAX_SIGNUPS = 10;            // new named accounts per IP per hour
+const IP_MAX_ANON = 30;               // automatic accounts per IP per hour (a shared network may hold several phones)
 const SESSION_MS = 365 * 24 * 60 * 60 * 1000;
 const MAX_STATE = 900 * 1024;         // bytes of JSON per user
 const OAUTH_STATE_MS = 10 * 60 * 1000; // time allowed on Google's screen
@@ -49,6 +51,8 @@ async function route(req, env, url) {
   if (path === '/api/auth/google/link' && m === 'POST') return googleLink(req, env, url);
   if (path === '/api/auth/google/callback' && m === 'GET') return googleCallback(env, url);
   if (path === '/api/auth/redeem' && m === 'POST') return redeem(req, env);
+  if (path === '/api/anon' && m === 'POST') return anon(req, env);
+  if (path === '/api/name' && m === 'POST') return setName(req, env);
   if (path === '/api/recover' && m === 'POST') return recover(req, env);
   if (path === '/api/recovery/new' && m === 'POST') return newRecovery(req, env);
   if (path === '/api/pair/start' && m === 'POST') return pairStart(req, env);
@@ -152,7 +156,7 @@ async function auth(req, env) {
 }
 
 // what the page shows and which controls apply: Google accounts have no PIN unless one was set
-const who = u => ({ username: u.email || u.username, google: !!u.google_sub, pin: !!u.pin_hash, recovery: !!u.recovery_hash });
+const who = u => ({ username: u.email || (u.pin_hash ? u.username : null), google: !!u.google_sub, pin: !!u.pin_hash, recovery: !!u.recovery_hash });
 
 /* ---------- PIN verification with lockouts ---------- */
 async function verifyPin(env, req, user, pin, now) {
@@ -393,25 +397,27 @@ async function newRecovery(req, env) {
 // forgot the PIN: username + recovery code sets a new PIN, signs out every other device and signs this one in
 async function recover(req, env) {
   const b = await body(req);
-  const newPin = checkPin(b.newPin, true);
+  const newPin = b.newPin ? checkPin(b.newPin, true) : null;
   const now = Date.now();
   const ipKey = 'fail:' + clientIp(req);
   if (await ipCount(env, ipKey, now) >= IP_MAX_FAILS) throw new HttpError(429, 'ip_limited', 'ลองผิดหลายครั้งเกินไป รอ 1 ชั่วโมงแล้วลองใหม่', { retryAfter: 3600 });
-  let username;
-  try { username = normName(b.username); } catch (e) { username = ''; }
-  const user = username ? await env.DB.prepare('SELECT id, username, email, google_sub, recovery_hash FROM users WHERE username = ?').bind(username).first() : null;
   const given = normRecovery(b.code);
-  if (!user || !user.recovery_hash || given.length !== 16 || !sameHex(await sha256(given), user.recovery_hash)) {
+  const user = given.length === 16 ? await env.DB.prepare('SELECT id, username, email, google_sub, pin_hash, recovery_hash FROM users WHERE recovery_hash = ?').bind(await sha256(given)).first() : null;
+  if (!user) {
     await ipBump(env, ipKey, now);
-    throw new HttpError(401, 'bad_recovery', 'ชื่อผู้ใช้หรือรหัสกู้คืนไม่ถูกต้อง');
+    throw new HttpError(401, 'bad_recovery', 'รหัสกู้คืนไม่ถูกต้อง');
   }
-  const salt = hex(randomBytes(16));
   const fresh = recoveryCode();   // the used code is spent; hand out the next one
+  const rh = await sha256(normRecovery(fresh));
+  const salt = hex(randomBytes(16));
   await env.DB.batch([
-    env.DB.prepare('UPDATE users SET pin_hash = ?, pin_salt = ?, failed = 0, locked_until = 0, recovery_hash = ? WHERE id = ?').bind(await hashPin(newPin, salt), salt, await sha256(normRecovery(fresh)), user.id),
+    newPin
+      ? env.DB.prepare('UPDATE users SET pin_hash = ?, pin_salt = ?, failed = 0, locked_until = 0, recovery_hash = ? WHERE id = ?').bind(await hashPin(newPin, salt), salt, rh, user.id)
+      : env.DB.prepare('UPDATE users SET failed = 0, locked_until = 0, recovery_hash = ? WHERE id = ?').bind(rh, user.id),
     env.DB.prepare('DELETE FROM sessions WHERE user_id = ?').bind(user.id),
   ]);
-  return json(200, { ...(await sessionPayload(env, user.id, { username: user.email || user.username, google: !!user.google_sub, pin: true, recovery: true }, now)), recoveryCode: fresh });
+  const u = { ...user, pin_hash: newPin ? 'set' : user.pin_hash, recovery_hash: rh };
+  return json(200, { ...(await sessionPayload(env, user.id, who(u), now)), recoveryCode: fresh });
 }
 
 /* ---------- pairing a new device from a signed-in one ---------- */
@@ -443,4 +449,38 @@ async function pairRedeem(req, env) {
   const u = await env.DB.prepare('SELECT username, email, google_sub, pin_hash, recovery_hash FROM users WHERE id = ?').bind(r.user_id).first();
   if (!u) throw new HttpError(400, 'bad_pair', 'ไม่พบบัญชีนี้แล้ว');
   return json(200, await sessionPayload(env, r.user_id, who(u), now));
+}
+
+/* ---------- automatic accounts and naming them later ---------- */
+// first use on a device: an account with no name or PIN; the session token is what the device remembers
+async function anon(req, env) {
+  const b = await body(req);
+  const data = stateText(b.data, true);
+  const now = Date.now();
+  const ipKey = 'anon:' + clientIp(req);
+  if (await ipCount(env, ipKey, now) >= IP_MAX_ANON) throw new HttpError(429, 'ip_limited', 'สร้างบัญชีจากเครือข่ายนี้มากเกินไป รอสักพักแล้วลองใหม่', { retryAfter: 3600 });
+  const id = crypto.randomUUID(), recovery = recoveryCode();
+  await env.DB.batch([
+    env.DB.prepare("INSERT INTO users (id, username, pin_hash, pin_salt, created_at, recovery_hash) VALUES (?, ?, '', '', ?, ?)").bind(id, 'u' + hex(randomBytes(6)), now, await sha256(normRecovery(recovery))),
+    env.DB.prepare('INSERT INTO states (user_id, data, version, updated_at) VALUES (?, ?, 1, ?)').bind(id, data, now),
+  ]);
+  await ipBump(env, ipKey, now);
+  const token = await newSession(env, id, now);
+  return json(201, { token, username: null, google: false, pin: false, recovery: true, recoveryCode: recovery, version: 1, updatedAt: now });
+}
+
+// give the current account a username + PIN, so it can also be opened by typing them
+async function setName(req, env) {
+  const a = await auth(req, env);
+  const b = await body(req);
+  const username = normName(b.username);
+  const pin = checkPin(b.pin, true);
+  const salt = hex(randomBytes(16));
+  try {
+    await env.DB.prepare('UPDATE users SET username = ?, pin_hash = ?, pin_salt = ?, failed = 0, locked_until = 0 WHERE id = ?').bind(username, await hashPin(pin, salt), salt, a.userId).run();
+  } catch (e) {
+    if (/UNIQUE/i.test(String(e && e.message))) throw new HttpError(409, 'taken', 'ชื่อผู้ใช้นี้มีคนใช้แล้ว ลองชื่ออื่น');
+    throw e;
+  }
+  return json(200, { username, pin: true });
 }

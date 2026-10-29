@@ -1,5 +1,5 @@
-// Two-device sync check in a real browser: node tests/sync.e2e.cjs [baseUrl] [shotDir]
-// Needs puppeteer-core and a Chrome; set CHROME to its path.
+// Multi-device account and sync check in a real browser: node tests/sync.e2e.cjs [baseUrl] [shotDir]
+// Needs puppeteer-core and a Chrome; set CHROME to its path. Deletes its own account at the end.
 const puppeteer = require('puppeteer-core');
 const path = require('path');
 const BASE = process.argv[2] || 'http://127.0.0.1:8799';
@@ -21,153 +21,137 @@ async function device(browser) {
   return pg;
 }
 const state = pg => pg.evaluate(() => JSON.parse(localStorage.getItem('mewfit.v1') || 'null'));
-const sync = pg => pg.evaluate(() => JSON.parse(localStorage.getItem('mewfit.sync') || 'null'));
+const sync = async pg => (await pg.evaluate(() => JSON.parse(localStorage.getItem('mewfit.sync') || 'null'))) || {};
+const click = async (pg, sel) => { await pg.$eval(sel, el => el.scrollIntoView({ block: 'center' })); await pg.click(sel); };
 async function fillAndSubmit(pg, fields) {
   for (const [name, v] of Object.entries(fields)) {
     await pg.$eval(`#acct form [name="${name}"]`, el => { el.value = ''; });
     await pg.type(`#acct form [name="${name}"]`, v);
   }
   // the floating nav covers the bottom of the screen; bring the button to the middle first, like a thumb scroll
-  await pg.$eval('#acct form button:not([type="button"])', el => el.scrollIntoView({ block: 'center' }));
-  await pg.click('#acct form button:not([type="button"])');
+  await click(pg, '#acct form button:not([type="button"])');
 }
 async function addWeight(pg, d, kg) {
   await pg.evaluate(() => { location.hash = 'progress'; }); await wait(300);
   await pg.$eval('#w-d', (el, v) => { el.value = v; }, d);
   await pg.type('#w-kg', String(kg));
-  await pg.$eval('[data-act="w-add"]', el => el.scrollIntoView({ block: 'center' }));
-  await pg.click('[data-act="w-add"]');
+  await click(pg, '[data-act="w-add"]');
 }
 async function shot(pg, name) { if (SHOTS) await pg.screenshot({ path: path.join(SHOTS, name + '.png') }); }
 
 (async () => {
   const browser = await puppeteer.launch({ executablePath: CHROME, headless: true });
-  // device A: has a local profile before any account exists
-  const A = await device(browser);
-  await A.goto(BASE + '/');
-  await A.evaluate(() => localStorage.setItem('mewfit.v1', JSON.stringify({ v: 2, seenDemo: true, guideDone: true, profile: { name: 'มิว', days: [1, 3, 5], minutes: 30 }, weights: [{ d: '2026-10-20', kg: 76 }] })));
-  await A.goto(BASE + '/#today'); await A.reload(); await wait(500);   // reload: the app reads storage only at start
-  ok(await A.$('.banner a[href="#profile"]') !== null, 'today shows create-account nudge');
-  await A.goto(BASE + '/#profile'); await wait(400);
-  await shot(A, 'acct-signup');
-  // mismatched pins stay local
-  await fillAndSubmit(A, { username: user, pin: PIN, pin2: '583921' });
-  await wait(300);
-  ok((await A.$eval('#acct', el => el.textContent)).includes('ไม่ตรงกัน'), 'pin mismatch message');
-  await fillAndSubmit(A, { username: user, pin: PIN, pin2: PIN });
-  await wait(1500);
-  let sy = await sync(A);
-  ok(sy && sy.token && sy.user === user && sy.version === 1 && !sy.dirty, 'A signed up', sy);
-  const rc = await A.$eval('#acct .rc-box code', el => el.textContent).catch(() => '');
-  ok(/^[A-Z2-9]{4}(-[A-Z2-9]{4}){3}$/.test(rc), 'recovery code shown after sign-up', rc);
-  await A.$eval('#acct', el => el.scrollIntoView());
-  await shot(A, 'acct-signedin');
-  await A.$eval('[data-act="acct-rc-done"]', el => el.click()); await wait(200);
-  ok(await A.$('#acct .rc-box') === null, 'recovery code hidden after "จดไว้แล้ว"');
+  let lastToken = null;
+  try {
+    // a phone that only browses the demo gets no account
+    const G = await device(browser);
+    await G.goto(BASE + '/'); await wait(1500);
+    ok(!(await sync(G)).token, 'no account for an empty device');
 
-  // A logs a weight -> pushed
-  await addWeight(A, '2026-10-25', 75.4);
-  await wait(2600);
-  sy = await sync(A);
-  ok(sy.version === 2 && !sy.dirty, 'A change pushed', sy);
+    // device A: has a local profile -> account appears by itself, nothing typed
+    const A = await device(browser);
+    await A.goto(BASE + '/');
+    await A.evaluate(() => localStorage.setItem('mewfit.v1', JSON.stringify({ v: 2, seenDemo: true, guideDone: true, profile: { name: 'มิว', days: [1, 3, 5], minutes: 30 }, weights: [{ d: '2026-10-20', kg: 76 }] })));
+    await A.reload();
+    ok(await until(async () => (await sync(A)).token), 'A got an automatic account', await sync(A));
+    let sy = await sync(A);
+    lastToken = sy.token;
+    ok(/^[A-Z2-9]{4}(-[A-Z2-9]{4}){3}$/.test(sy.rcPending) && !sy.pin && !sy.user, 'recovery code kept to show, no name or PIN', sy);
+    const rc = sy.rcPending;
+    await A.evaluate(() => { location.hash = 'today'; }); await wait(400);
+    ok(await A.$('.banner a[href="#profile"]') !== null, 'today reminds to keep the recovery code');
+    await A.evaluate(() => { location.hash = 'profile'; }); await wait(500);
+    ok(((await A.$eval('#acct .rc-box code', el => el.textContent).catch(() => '')) === rc), 'profile shows the recovery code');
+    await A.$eval('#acct', el => el.scrollIntoView());
+    await shot(A, 'acct-auto');
+    await A.$eval('[data-act="acct-rc-done"]', el => el.click()); await wait(200);
+    ok(!(await sync(A)).rcPending && await A.$('#acct .rc-box') === null, 'recovery code put away');
 
-  // device B: fresh phone, logs in from the welcome screen
-  const B = await device(browser);
-  await B.goto(BASE + '/'); await wait(400);
-  await B.click('[data-act="acct-login"]'); await wait(400);
-  ok(B.url().endsWith('#profile'), 'welcome login button goes to profile', B.url());
-  await fillAndSubmit(B, { username: user.toUpperCase(), pin: PIN });
-  await until(async () => { const x = await state(B); return x && x.profile; });
-  let sB = await state(B);
-  ok(sB && sB.profile && sB.profile.name === 'มิว' && sB.weights.length === 2, 'B got A data', sB && sB.weights);
-  ok(B.url().endsWith('#profile') || B.url().endsWith('#today'), 'B on app after login', B.url());
+    // A logs a weight -> pushed
+    await addWeight(A, '2026-10-25', 75.4);
+    ok(await until(async () => { const x = await sync(A); return x.version === 2 && !x.dirty; }), 'A change pushed', await sync(A));
 
-  // both edit while A is offline -> merge keeps both
-  await A.setOfflineMode(true);
-  await addWeight(A, '2026-10-26', 75.1);
-  await wait(2600);
-  sy = await sync(A);
-  ok(sy.dirty === true, 'A offline change kept dirty', sy);
-  await addWeight(B, '2026-10-27', 74.9);
-  await wait(2600);
-  ok(!(await sync(B)).dirty, 'B pushed', await sync(B));
-  await A.setOfflineMode(false);
-  await A.evaluate(() => window.dispatchEvent(new Event('online')));
-  await wait(3000);
-  const sA = await state(A);
-  ok(sA.weights.map(w => w.d).join() === '2026-10-20,2026-10-25,2026-10-26,2026-10-27', 'A merged both offline edits', sA.weights);
-  ok(!(await sync(A)).dirty, 'A clean after merge', await sync(A));
-  // B picks up A's merged change when it comes back to the foreground
-  await B.evaluate(() => document.dispatchEvent(new Event('visibilitychange')));
-  await wait(2000);
-  sB = await state(B);
-  ok(sB.weights.length === 4, 'B pulled merged data', sB.weights);
+    // A optionally sets a username + PIN
+    await A.evaluate(() => { location.hash = 'profile'; }); await wait(300);
+    await A.$eval('[data-act="acct-open"][data-o="name"]', el => el.click()); await wait(200);
+    await fillAndSubmit(A, { username: user, pin: PIN, pin2: '583921' }); await wait(300);
+    ok((await A.$eval('#acct', el => el.textContent)).includes('ไม่ตรงกัน'), 'pin mismatch message');
+    await fillAndSubmit(A, { username: user, pin: PIN, pin2: PIN });
+    ok(await until(async () => (await sync(A)).user === user), 'A named the account', await sync(A));
 
-  // wrong pin on a third device shows the server message
-  const C = await device(browser);
-  await C.goto(BASE + '/#profile'); await wait(1200);   // let the Google-config check re-render the card first
-  await C.$eval('[data-act="acct-mode"][data-m="login"]', el => el.scrollIntoView({ block: 'center' }));
-  await C.click('[data-act="acct-mode"][data-m="login"]'); await wait(300);
-  await fillAndSubmit(C, { username: user, pin: '000000' });
-  await wait(1200);
-  ok((await C.$eval('#acct', el => el.textContent)).includes('ไม่ถูกต้อง'), 'wrong pin message shown');
-  await shot(C, 'acct-wrongpin');
+    // device B: logs in by name + PIN from the welcome screen
+    const B = await device(browser);
+    await B.goto(BASE + '/'); await wait(1200);
+    await click(B, '[data-act="acct-login"]'); await wait(800);
+    ok(B.url().endsWith('#profile'), 'welcome sign-in button goes to profile', B.url());
+    await click(B, '[data-act="acct-mode"][data-m="login"]'); await wait(200);
+    await fillAndSubmit(B, { username: user.toUpperCase(), pin: PIN });
+    ok(await until(async () => { const x = await state(B); return x && x.profile && x.weights.length === 2; }), 'B got A data', await state(B));
 
-  // logout on B clears that phone only
-  await B.goto(BASE + '/#profile'); await wait(400);
-  await B.$eval('[data-act="acct-open"][data-o="logout"]', el => el.scrollIntoView({ block: 'center' }));
-  await B.click('[data-act="acct-open"][data-o="logout"]'); await wait(200);
-  await B.$eval('[data-act="acct-logout"]', el => el.scrollIntoView({ block: 'center' }));
-  await B.click('[data-act="acct-logout"]');
-  await until(async () => !(await sync(B)).token);
-  ok((await state(B)).profile === null && !(await sync(B)).token, 'B logged out and cleared', await sync(B));
-  ok(B.url().endsWith('#start'), 'B back at welcome', B.url());
-  const sA2 = await state(A);
-  ok(sA2.profile && sA2.weights.length === 4, 'A untouched by B logout');
+    // both edit while A is offline -> merge keeps both
+    await A.setOfflineMode(true);
+    await addWeight(A, '2026-10-26', 75.1);
+    await wait(2600);
+    ok((await sync(A)).dirty === true, 'A offline change kept dirty', await sync(A));
+    await addWeight(B, '2026-10-27', 74.9);
+    ok(await until(async () => !(await sync(B)).dirty), 'B pushed', await sync(B));
+    await A.setOfflineMode(false);
+    await A.evaluate(() => window.dispatchEvent(new Event('online')));
+    ok(await until(async () => (await state(A)).weights.length === 4 && !(await sync(A)).dirty), 'A merged both offline edits', (await state(A)).weights);
+    await B.evaluate(() => document.dispatchEvent(new Event('visibilitychange')));
+    ok(await until(async () => (await state(B)).weights.length === 4), 'B pulled merged data', (await state(B)).weights);
 
-  // pair a new device from A: the 6 digits, and the QR link
-  await A.goto(BASE + '/#profile'); await wait(800);
-  await A.$eval('[data-act="acct-pair"]', el => el.click()); await until(() => A.$('#acct .pair-code'));
-  await wait(800);   // QR library load
-  const pc = (await A.$eval('#acct .pair-code', el => el.textContent).catch(() => '')).replace(/\D/g, '');
-  ok(/^\d{6}$/.test(pc), 'pair code shown on A', pc);
-  ok(await A.$('#pair-qr svg') !== null, 'pair QR drawn');
-  await A.$eval('#acct .pair-box', el => el.scrollIntoView({ block: 'center' }));
-  await shot(A, 'acct-pair');
-  const D = await device(browser);
-  await D.goto(BASE + '/?pair=' + pc + '#profile'); await until(async () => ((await sync(D)) || {}).token);
-  await until(async () => ((await state(D)) || {}).profile);
-  const sD = await state(D), syD = await sync(D);
-  ok(syD && syD.token && syD.user === user && sD.weights.length === 4, 'QR link signs the new device in with the data', syD);
-  ok(!D.url().includes('pair='), 'pair code removed from the address bar', D.url());
-  await A.$eval('[data-act="acct-pair"]', el => el.click());
-  await until(async () => { const t = await A.$eval('#acct .pair-code', el => el.textContent).catch(() => ''); return t && t.replace(/\D/g, '') !== pc; });
-  const pc2 = (await A.$eval('#acct .pair-code', el => el.textContent)).replace(/\D/g, '');
-  const E = await device(browser);
-  await E.goto(BASE + '/#profile'); await wait(1200);
-  await E.$eval('[data-act="acct-mode"][data-m="pair"]', el => el.click()); await wait(300);
-  await fillAndSubmit(E, { code: pc2 });
-  await until(async () => ((await state(E)) || {}).profile);
-  ok(((await sync(E)) || {}).token && (await state(E)).weights.length === 4, 'typing the 6 digits signs the device in', await sync(E));
+    // wrong pin on a third device shows the server message
+    const C = await device(browser);
+    await C.goto(BASE + '/#profile'); await wait(1200);
+    await click(C, '[data-act="acct-mode"][data-m="login"]'); await wait(300);
+    await fillAndSubmit(C, { username: user, pin: '000000' });
+    ok(await until(async () => (await C.$eval('#acct', el => el.textContent)).includes('ไม่ถูกต้อง'), 4000), 'wrong pin message shown');
 
-  // forgot the PIN on a fifth device: recovery code sets a new one
-  const F = await device(browser);
-  await F.goto(BASE + '/#profile'); await wait(1200);
-  await F.$eval('[data-act="acct-mode"][data-m="recover"]', el => el.click()); await wait(300);
-  await shot(F, 'acct-recover');
-  await fillAndSubmit(F, { username: user, code: rc.toLowerCase(), newPin: '274915', pin2: '274915' });
-  await until(async () => ((await state(F)) || {}).profile);
-  await until(() => F.$('#acct .rc-box code'), 4000);
-  const syF = await sync(F);
-  ok(syF && syF.token && (await state(F)).weights.length === 4, 'recovery code signs in with all data', syF);
-  const rc2 = await F.$eval('#acct .rc-box code', el => el.textContent).catch(() => '');
-  ok(rc2 && rc2 !== rc, 'a fresh recovery code is shown', rc2);
+    // pair a new device from A: QR link, then the 6 digits
+    await A.evaluate(() => { location.hash = 'profile'; }); await wait(500);
+    await A.$eval('[data-act="acct-pair"]', el => el.click());
+    await until(() => A.$('#acct .pair-code'));
+    await wait(800);   // QR library load
+    const pc = (await A.$eval('#acct .pair-code', el => el.textContent)).replace(/\D/g, '');
+    ok(/^\d{6}$/.test(pc) && await A.$('#pair-qr svg') !== null, 'pair code and QR shown on A', pc);
+    await A.$eval('#acct .pair-box', el => el.scrollIntoView({ block: 'center' }));
+    await shot(A, 'acct-pair');
+    const D = await device(browser);
+    await D.goto(BASE + '/?pair=' + pc + '#profile');
+    ok(await until(async () => { const x = await state(D); return x && x.weights && x.weights.length === 4; }), 'QR link signs the new device in with the data', await sync(D));
+    ok(!D.url().includes('pair='), 'pair code removed from the address bar', D.url());
+    await A.$eval('[data-act="acct-pair"]', el => el.click());
+    await until(async () => { const t = await A.$eval('#acct .pair-code', el => el.textContent).catch(() => ''); return t && t.replace(/\D/g, '') !== pc; });
+    const pc2 = (await A.$eval('#acct .pair-code', el => el.textContent)).replace(/\D/g, '');
+    const E = await device(browser);
+    await E.goto(BASE + '/#profile'); await wait(1200);
+    await fillAndSubmit(E, { code: pc2 });   // pairing is the default way in
+    ok(await until(async () => { const x = await state(E); return x && x.weights && x.weights.length === 4; }), 'typing the 6 digits signs the device in', await sync(E));
 
-  for (const [n, p] of [['A', A], ['B', B], ['C', C], ['D', D], ['E', E], ['F', F]]) ok(p.errs.length === 0, n + ' no page errors', p.errs);
+    // lost phone: the recovery code alone gets back in
+    const F = await device(browser);
+    await F.goto(BASE + '/#profile'); await wait(1200);
+    await click(F, '[data-act="acct-mode"][data-m="recover"]'); await wait(300);
+    await shot(F, 'acct-recover');
+    await fillAndSubmit(F, { code: rc.toLowerCase() });
+    ok(await until(async () => { const x = await state(F); return x && x.weights && x.weights.length === 4; }), 'recovery code alone signs in with all data', await sync(F));
+    const syF = await sync(F);
+    ok(syF.rcPending && syF.rcPending !== rc && syF.user === user, 'a fresh recovery code is shown, name kept', syF);
+    lastToken = syF.token;
+
+    // the recovery signed the other devices out
+    await B.reload(); await wait(1500);
+    ok(!(await sync(B)).token, 'recovery signed the other devices out', await sync(B));
+
+    for (const [n, p] of [['G', G], ['A', A], ['B', B], ['C', C], ['D', D], ['E', E], ['F', F]]) ok(p.errs.length === 0, n + ' no page errors', p.errs);
+  } catch (e) { fail++; console.log('ERROR', e.message); }
   // remove the test account so a run against production leaves nothing behind
-  const del = await F.evaluate(async pin => (await fetch('/api/account/delete', { method: 'POST', headers: { 'content-type': 'application/json', authorization: 'Bearer ' + JSON.parse(localStorage.getItem('mewfit.sync')).token }, body: JSON.stringify({ pin }) })).status, '274915');
-  ok(del === 200, 'test account deleted', del);
+  if (lastToken) {
+    const r = await fetch(BASE + '/api/account/delete', { method: 'POST', headers: { 'content-type': 'application/json', authorization: 'Bearer ' + lastToken }, body: JSON.stringify({ pin: PIN, confirm: 'ลบ' }) });
+    ok(r.status === 200, 'test account deleted', r.status);
+  }
   await browser.close();
   console.log(`${pass} passed, ${fail} failed`);
   process.exit(fail ? 1 : 0);
-})().catch(e => { console.error(e); process.exit(1); });
+})();

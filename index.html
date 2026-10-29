@@ -556,7 +556,7 @@ function calc(p = P()) {
 /* ---------- exercise library (progression ladders, easiest → hardest) ---------- */
 const X = (id, n, en, r, cues, mis, o = {}) => Object.assign({ id, n, en, r, cues, mis }, o);
 // home equipment; a move lists the keys it needs in eq (one key or an array, all required)
-const EQ = { db: 'ดัมเบล', kb: 'เคตเทิลเบล', band: 'ยางยืดแรงต้าน', bar: 'บาร์โหนติดประตู', abw: 'ล้อกลิ้งหน้าท้อง (Ab wheel)', abm: 'เครื่องบริหารหน้าท้อง (Ab Cutter / Ab Roller)',
+const EQ = { db: 'ดัมเบล', kb: 'เคตเทิลเบล', band: 'ยางยืดแรงต้าน', bar: 'บาร์โหนติดประตู', abw: 'ล้อกลิ้งหน้าท้อง (Ab wheel)', abm: 'เครื่องบริหารหน้าท้องแบบคุกเข่ายกเข่า (Ab Coaster)',
   bench: 'ม้านั่งยกน้ำหนัก', trx: 'สายแขวน TRX', dipbar: 'บาร์คู่ดิป / พาราเล็ตต์', bb: 'บาร์เบลกับแผ่นน้ำหนัก', ball: 'ลูกบอลโยคะ', rope: 'เชือกกระโดด' };
 const eqNeeds = e => e.eq ? [].concat(e.eq) : [];
 const eqLabel = e => eqNeeds(e).map(k => EQ[k]).join(' + ');
@@ -639,10 +639,10 @@ const LAD = {
   ],
   core2: [
     X('c_rev', 'รีเวิร์สครันช์', 'Reverse crunch', [10, 20], ['นอนหงาย ม้วนสะโพกขึ้นจากพื้น', 'ลงช้า'], 'เหวี่ยงขา'),
-    X('c_abmc', 'ครันช์บนเครื่องบริหารหน้าท้อง', 'Ab machine crunch', [12, 20], ['นอนหรือนั่งตามแบบเครื่อง จับด้ามจับ ศีรษะพิงที่รอง', 'ม้วนลำตัวขึ้นด้วยท้อง ไม่ใช่ดึงด้วยแขน', 'ลงช้า 2 วินาที'], 'ดึงคอด้วยมือหรือเหวี่ยงใช้แรงส่ง', { eq: 'abm' }),
+    X('c_abmc', 'ยกเข่าบนเครื่องบริหารหน้าท้อง', 'Ab coaster knee raise', [10, 20], ['คุกเข่าบนเบาะ มือจับด้ามจับด้านหน้า แขนเหยียด', 'ม้วนหลังเล็กน้อย ดึงเข่าขึ้นมาหาอกด้วยแรงท้อง ไม่ใช่ดึงด้วยแขน', 'ลดเข่าลงช้า 2 วินาที อย่าปล่อยตก'], 'เหวี่ยงตัวหรือใช้แขนดึงแทนท้อง', { eq: 'abm' }),
     X('c_side', 'ไซด์แพลงก์', 'Side plank', [15, 45], ['ศอกใต้ไหล่ ลำตัวตรงด้านข้าง', 'จับเวลาข้างละรอบ'], 'สะโพกห้อย', { t: 1 }),
     X('c_bike', 'ไบซิเคิลครันช์', 'Bicycle crunch', [12, 24], ['บิดศอกไปหาเข่าตรงข้ามช้าๆ'], 'ดึงคอด้วยมือ'),
-    X('c_abmo', 'ครันช์บิดเอวบนเครื่องบริหารหน้าท้อง', 'Ab machine oblique crunch', [10, 16], ['เอียงตัวเข้าหาเข่าทีละข้าง', 'ค้างด้านบน 1 วินาที เกร็งเอวด้านข้าง'], 'บิดเร็วจนเหวี่ยง', { eq: 'abm' }),
+    X('c_abmo', 'ยกเข่าบิดเอวบนเครื่องบริหารหน้าท้อง', 'Ab coaster oblique knee raise', [8, 16], ['หมุนเบาะหรือเอียงเข่าไปทางซ้ายหนึ่งรอบ แล้วทางขวาหนึ่งรอบ', 'ยกเข่าขึ้นหาไหล่ข้างเดียวกัน เกร็งเอวด้านข้าง'], 'บิดเร็วจนเหวี่ยง', { eq: 'abm' }),
     X('c_vup', 'วีอัพ', 'V-up', [8, 15], ['ยกแขนและขาพร้อมกันเป็นรูปตัว V'], 'เหวี่ยงตัวใช้แรงส่ง'),
     X('c_abw', 'ล้อกลิ้งหน้าท้อง คุกเข่า สุดระยะ', 'Ab wheel full rollout', [5, 12], ['กลิ้งออกจนลำตัวเกือบขนานพื้น', 'หลังล่างต้องไม่แอ่น ถ้าคุมไม่ได้กลับไประยะสั้น'], 'หลังแอ่นหรือกลั้นหายใจนานเกินไป', { eq: 'abw' })
   ],
@@ -979,7 +979,7 @@ const FIG = {
   trxrow: FG('166,106 150,104 150,88 150,72 98,114 68,121 40,127', '164,82 148,82 128,78 150,72 96,104 67,116 40,127', ['door:190', 'towel:190,-10']),
   trxcurl: FG('150,30 140,42 156,48 172,50 112,84 122,106 120,127', '146,24 136,36 152,32 160,20 112,80 122,104 120,127', ['door:190', 'towel:190,-10']),
   pbardip: FG('121,14 121,28 122,48 122,68 121,74 118,100 104,112', '121,36 121,50 104,56 122,68 121,96 118,118 104,122', ['pbar:100,142,68']),
-  abmcrunch: FG('42,110 58,116 52,96 46,76 100,125 124,96 146,100', '78,74 88,90 82,72 76,54 100,125 124,96 146,100', ['rocker']),
+  abmcrunch: FG('150,46 140,58 168,50 194,44 100,88 92,113 60,115', '148,52 138,64 166,54 194,44 116,78 134,94 104,106', ['coaster']),
   ballcurl: FG('42,118 58,122 80,124 100,125 104,104 140,108 176,112', '42,118 58,122 80,124 100,125 106,92 134,86 150,104', ['ball'])
 };
 const ANIM = {
@@ -1002,7 +1002,7 @@ function propsSVG(props) {
     if (k === 'door') return `<rect x="${n[0]}" y="-26" width="12" height="154" class="pf"/>`;
     if (k === 'box') return `<rect x="${n[0]}" y="${n[1]}" width="${n[2]}" height="${n[3]}" rx="4" class="pf"/>`;
     if (k === 'bar') return `<line x1="${n[0]}" x2="${n[1]}" y1="${n[2]}" y2="${n[2]}" class="ps" stroke-width="5"/>`;
-    if (k === 'rocker') return '<path d="M40 128 Q32 100 46 70" class="ps" stroke-width="4" fill="none"/><path d="M40 128 L130 128" class="ps" stroke-width="4"/>';
+    if (k === 'coaster') return '<path d="M36 126 Q110 132 146 100" class="ps" stroke-width="5" fill="none"/><line x1="204" x2="204" y1="40" y2="128" class="ps" stroke-width="5"/><line x1="186" x2="208" y1="42" y2="42" class="ps" stroke-width="5"/>';
     if (k === 'pbar') return `<line x1="${n[0]}" x2="${n[1]}" y1="${n[2]}" y2="${n[2]}" class="ps" stroke-width="5"/><line x1="${n[0] + 6}" x2="${n[0] + 6}" y1="${n[2]}" y2="128" class="ps" stroke-width="4"/><line x1="${n[1] - 6}" x2="${n[1] - 6}" y1="${n[2]}" y2="128" class="ps" stroke-width="4"/>`;
     if (k === 'table') return `<rect x="${n[0]}" y="${n[2] - 5}" width="${n[1] - n[0]}" height="8" rx="3" class="pf"/><line x1="${n[0] + 6}" x2="${n[0] + 6}" y1="${n[2]}" y2="128" class="ps" stroke-width="5"/><line x1="${n[1] - 6}" x2="${n[1] - 6}" y1="${n[2]}" y2="128" class="ps" stroke-width="5"/>`;
     return '';
@@ -1052,11 +1052,11 @@ const ui = { learnCat: 'all', planDay: new Date().getDay(), foodQ: '', resetAsk:
    copy dirty and a debounced PUT sends the whole state with the version it was based on; the server
    accepts it only if nobody else wrote since (409 otherwise), and the client merges and retries. */
 const SKEY = 'mewfit.sync';
-const blankSync = () => ({ token: null, user: null, google: false, pin: false, recovery: false, version: 0, dirty: false, rev: 0, at: 0 });
+const blankSync = () => ({ token: null, user: null, google: false, pin: false, recovery: false, rcPending: '', version: 0, dirty: false, rev: 0, at: 0 });
 function loadSync() { try { return Object.assign(blankSync(), JSON.parse(localStorage.getItem(SKEY) || '{}')); } catch (e) { return blankSync(); } }
 let SY = loadSync();
-const cloud = { busy: null, timer: 0, offline: false, again: false, google: false };
-const acctUi = () => ({ mode: 'signup', open: '', err: '', busy: false, name: '', rc: '', pair: null });
+const cloud = { busy: null, timer: 0, offline: false, again: false, google: false, anonBusy: false };
+const acctUi = () => ({ mode: 'pair', open: '', err: '', busy: false, name: '', pair: null });
 ui.acct = acctUi();
 function saveSync() { try { localStorage.setItem(SKEY, JSON.stringify(SY)); } catch (e) {} }
 const hasData = o => !!(o && (o.profile || (o.workouts || []).length || (o.weights || []).length || (o.body || []).length || Object.keys(o.food || {}).length));
@@ -1104,9 +1104,22 @@ function lostSession() {
   refreshView();
 }
 function cloudChanged() {
-  if (!SY.token) return;
+  if (!SY.token) { autoAccount(); return; }
   SY.dirty = true; SY.rev++; saveSync();
   clearTimeout(cloud.timer); cloud.timer = setTimeout(cloudSync, 1500);
+}
+// first real data on a device: make its cloud account without asking for a name or a PIN
+async function autoAccount() {
+  if (SY.token || cloud.anonBusy || !hasData(S) || !navigator.onLine) return;
+  cloud.anonBusy = true;
+  try {
+    const r = await api('/anon', 'POST', { data: S });
+    if (r.ok) {
+      Object.assign(SY, { token: r.body.token, user: null, google: false, pin: false, recovery: true, rcPending: r.body.recoveryCode, version: r.body.version, dirty: false, at: Date.now() });
+      saveSync(); refreshView();
+    }
+  } catch (e) { /* offline: tried again on reconnect */ }
+  cloud.anonBusy = false;
 }
 function refreshView() {
   const ae = document.activeElement;
@@ -1180,7 +1193,7 @@ async function acctLogout() {
   wipeLocal('ออกจากระบบแล้ว ข้อมูลยังอยู่ในบัญชีครบ');
 }
 function adoptAccount(b) {
-  Object.assign(SY, { token: b.token, user: b.username, google: !!b.google, pin: !!b.pin, recovery: !!b.recovery, version: b.version, at: Date.now() });
+  Object.assign(SY, { token: b.token, user: b.username, google: !!b.google, pin: !!b.pin, recovery: !!b.recovery, rcPending: b.recoveryCode || '', version: b.version, at: Date.now() });
   const remote = b.data;
   if (!hasData(remote)) SY.dirty = hasData(S);
   else if (!hasData(S)) { S = normalize(remote); SY.dirty = false; }
@@ -1237,7 +1250,7 @@ async function newRecovery() {
   try {
     const r = await api('/recovery/new', 'POST', {});
     if (!r.ok) throw new Error(r.body.error);
-    SY.recovery = true; saveSync(); ui.acct.rc = r.body.recoveryCode; ui.acct.open = ''; render();
+    SY.recovery = true; SY.rcPending = r.body.recoveryCode; saveSync(); ui.acct.open = ''; render();
   } catch (e) { toast(e.message); }
 }
 async function googleLink() {
@@ -1251,16 +1264,12 @@ async function acctSubmit(kind, form) {
   if (kind === 'pair') {
     if (!/^\d{6}$/.test(val('code').replace(/\D/g, ''))) a.err = 'ใส่รหัสจับคู่ 6 หลักจากเครื่องที่เข้าสู่ระบบอยู่';
   } else if (kind === 'recover') {
-    a.name = val('username');
-    if (a.name.length < 3) a.err = 'ใส่ชื่อผู้ใช้';
-    else if (val('code').replace(/[^A-Za-z0-9]/g, '').length !== 16) a.err = 'รหัสกู้คืนมี 16 ตัว (ไม่นับขีด)';
-    else if (!pinOk(val('newPin'))) a.err = 'รหัสใหม่ต้องเป็นตัวเลข 6 หลัก';
-    else if (val('newPin') !== val('pin2')) a.err = 'รหัสใหม่สองช่องไม่ตรงกัน';
-  } else if (kind === 'signup' || kind === 'login') {
+    if (val('code').replace(/[^A-Za-z0-9]/g, '').length !== 16) a.err = 'รหัสกู้คืนมี 16 ตัว (ไม่นับขีด)';
+  } else if (kind === 'login' || kind === 'name') {
     a.name = val('username');
     if (a.name.length < 3) a.err = 'ใส่ชื่อผู้ใช้อย่างน้อย 3 ตัว';
     else if (!pinOk(val('pin'))) a.err = 'รหัสต้องเป็นตัวเลข 6 หลัก';
-    else if (kind === 'signup' && val('pin') !== val('pin2')) a.err = 'รหัสสองช่องไม่ตรงกัน';
+    else if (kind === 'name' && val('pin') !== val('pin2')) a.err = 'รหัสสองช่องไม่ตรงกัน';
   } else if (kind === 'pin') {
     if (!pinOk(val('newPin'))) a.err = 'รหัสต้องเป็นตัวเลข 6 หลัก';
     else if (val('newPin') !== val('pin2')) a.err = 'รหัสใหม่สองช่องไม่ตรงกัน';
@@ -1268,30 +1277,20 @@ async function acctSubmit(kind, form) {
   if (a.err) { render(); return; }
   a.busy = true; render();
   try {
-    if (kind === 'pair') {
-      const r = await api('/pair/redeem', 'POST', { code: val('code') });
-      if (!r.ok) throw new Error(r.body.error);
-      adoptAccount(r.body); toast('เข้าสู่ระบบแล้ว');
-      if (S.profile) { location.hash = 'today'; return; }
-    } else if (kind === 'recover') {
-      const r = await api('/recover', 'POST', { username: a.name, code: val('code'), newPin: val('newPin') });
-      if (!r.ok) throw new Error(r.body.error);
-      adoptAccount(r.body); ui.acct.rc = r.body.recoveryCode;
-      toast('ตั้งรหัสใหม่และเข้าสู่ระบบแล้ว จดรหัสกู้คืนชุดใหม่ไว้ด้วย');
-      render(); return;
-    } else if (kind === 'signup') {
-      const r = await api('/signup', 'POST', { username: a.name, pin: val('pin'), data: hasData(S) ? S : null });
-      if (!r.ok) throw new Error(r.body.error);
-      a.rc = r.body.recoveryCode;
-      Object.assign(SY, { token: r.body.token, user: r.body.username, google: false, pin: true, recovery: true, version: r.body.version, dirty: false, at: Date.now() });
-      saveSync(); a.open = '';
-      toast('สร้างบัญชีแล้ว ข้อมูลจะซิงก์อัตโนมัติ');
-    } else if (kind === 'login') {
-      const r = await api('/login', 'POST', { username: a.name, pin: val('pin') });
+    if (kind === 'pair' || kind === 'recover' || kind === 'login') {
+      const r = kind === 'pair' ? await api('/pair/redeem', 'POST', { code: val('code') })
+        : kind === 'recover' ? await api('/recover', 'POST', { code: val('code') })
+        : await api('/login', 'POST', { username: a.name, pin: val('pin') });
       if (!r.ok) throw new Error(r.body.error);
       adoptAccount(r.body);
-      toast('เข้าสู่ระบบแล้ว');
-      if (S.profile) { a.busy = false; location.hash = 'today'; return; }
+      toast(kind === 'recover' ? 'กลับเข้าบัญชีแล้ว จดรหัสกู้คืนชุดใหม่ไว้ด้วย' : 'เข้าสู่ระบบแล้ว');
+      if (S.profile && kind !== 'recover') { location.hash = 'today'; return; }
+      render(); return;
+    } else if (kind === 'name') {
+      const r = await api('/name', 'POST', { username: a.name, pin: val('pin') });
+      if (!r.ok) throw new Error(r.body.error);
+      Object.assign(SY, { user: r.body.username, pin: true }); saveSync(); a.open = '';
+      toast('ตั้งชื่อผู้ใช้และรหัสแล้ว ใช้เข้าจากเครื่องไหนก็ได้');
     } else if (kind === 'pin') {
       const r = await api('/pin', 'POST', { newPin: val('newPin') });
       if (!r.ok) throw new Error(r.body.error);
@@ -1310,47 +1309,45 @@ const googleBtn = (label, act) => cloud.google ? (act ? `<button type="button" c
 function acctCard() {
   const a = ui.acct, err = a.err ? `<p class="note" role="alert">${esc(a.err)}</p>` : '';
   const go = (label, cls = 'btn hot big wide') => `<button class="${cls}"${a.busy ? ' disabled' : ''}>${a.busy ? 'กำลังส่ง…' : label}</button>`;
-  if (!SY.token) {
-    const su = a.mode === 'signup';
-    return `<article class="card" id="acct"><h2>บัญชี MewFit</h2>
-      <p class="small muted">${SY.user ? `เครื่องนี้ออกจากบัญชี @${esc(SY.user)} แล้ว เข้าสู่ระบบอีกครั้งเพื่อซิงก์ข้อมูลต่อ` : 'ตอนนี้ข้อมูลอยู่แค่ในเครื่องนี้ ล้างเบราว์เซอร์หรือเปลี่ยนเครื่องแล้วจะหาย สร้างบัญชีเพื่อเก็บไว้บนคลาวด์ และเปิดได้หลายเครื่อง'}</p>
-      ${cloud.google ? `${googleBtn('เข้าสู่ระบบด้วย Google')}<p class="small muted">ไม่ต้องจำรหัส ใช้บัญชี Google ที่มีอยู่แล้ว ครั้งแรกจะสร้างบัญชี MewFit ให้เอง ลืมรหัส Google ก็กู้ผ่าน Google ได้</p>
-      <p class="or"><span>หรือใช้ชื่อผู้ใช้ + รหัส 6 หลัก</span></p>` : ''}
-      <div class="chips" role="group" aria-label="บัญชี">${[['signup', 'สร้างบัญชีใหม่'], ['login', 'มีบัญชีแล้ว'], ['pair', 'ใช้รหัสจากเครื่องอื่น'], ['recover', 'ลืมรหัส']].map(([m, l]) => `<button type="button" class="chip" data-act="acct-mode" data-m="${m}" aria-pressed="${a.mode === m}">${l}</button>`).join('')}</div>
-      ${a.mode === 'pair' ? `<form class="stack" data-acct="pair" novalidate>
-        <p class="small muted">บนเครื่องที่เข้าสู่ระบบอยู่ ไปที่โปรไฟล์ แล้วกด "เพิ่มเครื่องใหม่" จะได้เลข 6 หลัก (หรือสแกน QR ด้วยกล้องมือถือ)</p>
-        <label class="f">รหัสจับคู่ 6 หลัก<input name="code" inputmode="numeric" pattern="[0-9]*" maxlength="7" autocomplete="one-time-code" required></label>
-        ${err}${go('เข้าสู่ระบบ')}</form>` : a.mode === 'recover' ? `<form class="stack" data-acct="recover" novalidate>
-        <p class="small muted">ใช้รหัสกู้คืนที่ได้ตอนสมัคร (เช่น K7QF-2MXP-9RTA-HD4C) ตั้งรหัสใหม่ได้เลย ถ้ายังเข้าสู่ระบบอยู่บนเครื่องไหน เปลี่ยนรหัสจากเครื่องนั้นได้โดยไม่ต้องใช้รหัสเดิม</p>
-        <label class="f">ชื่อผู้ใช้<input name="username" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="20" required value="${esc(a.name || SY.user || '')}"></label>
-        <label class="f">รหัสกู้คืน<input name="code" autocapitalize="characters" autocomplete="off" spellcheck="false" maxlength="24" required></label>
-        ${pinField('newPin', 'รหัสใหม่ 6 หลัก', 'new-password')}${pinField('pin2', 'รหัสใหม่อีกครั้ง', 'new-password')}
-        ${err}${go('ตั้งรหัสใหม่และเข้าสู่ระบบ')}</form>` : `<form class="stack" data-acct="${su ? 'signup' : 'login'}" novalidate>
-        <label class="f">ชื่อผู้ใช้<input name="username" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="20" required value="${esc(a.name || SY.user || '')}"></label>
-        ${pinField('pin', 'รหัสตัวเลข 6 หลัก', su ? 'new-password' : 'current-password')}
-        ${su ? pinField('pin2', 'ใส่รหัสอีกครั้ง', 'new-password') : ''}
-        ${err}${go(su ? 'สร้างบัญชี' : 'เข้าสู่ระบบ')}
-        <p class="small muted">${su ? 'ไม่ต้องใช้อีเมล ชื่อผู้ใช้ 3–20 ตัว หลังสมัครจะได้รหัสกู้คืนไว้ใช้ตอนลืมรหัส' + (hasData(S) ? ' ข้อมูลที่มีในเครื่องนี้จะย้ายขึ้นบัญชีให้เลย' : '') : 'ข้อมูลในเครื่องนี้ (ถ้ามี) จะรวมกับข้อมูลในบัญชี ไม่หายทั้งสองฝั่ง'}</p>
-      </form>`}</article>`;
-  }
   const cancel = '<button type="button" class="btn" data-act="acct-open" data-o="">ยกเลิก</button>';
+  if (!SY.token) {
+    const m = a.mode;
+    return `<article class="card" id="acct"><h2>มีบัญชีอยู่ในเครื่องอื่นแล้ว?</h2>
+      <p class="small muted">${SY.user ? `เครื่องนี้ออกจากบัญชี @${esc(SY.user)} แล้ว` : 'ใช้แอปได้เลยไม่ต้องสมัคร ระบบจะสำรองข้อมูลขึ้นคลาวด์ให้เองตั้งแต่เริ่มใช้'} ถ้าเคยใช้ในเครื่องอื่น เลือกวิธีกลับเข้าบัญชีเดิม:</p>
+      ${googleBtn('เข้าสู่ระบบด้วย Google')}
+      <div class="chips" role="group" aria-label="วิธีเข้าบัญชี">${[['pair', 'สแกน QR / รหัสจากเครื่องอื่น'], ['login', 'ชื่อผู้ใช้ + รหัส'], ['recover', 'รหัสกู้คืน']].map(([k, l]) => `<button type="button" class="chip" data-act="acct-mode" data-m="${k}" aria-pressed="${m === k}">${l}</button>`).join('')}</div>
+      ${m === 'pair' ? `<form class="stack" data-acct="pair" novalidate>
+        <p class="small muted">บนเครื่องที่ใช้อยู่ ไปที่โปรไฟล์ กด "เพิ่มเครื่องใหม่" แล้วสแกน QR ด้วยกล้องมือถือ หรือพิมพ์เลข 6 หลักตรงนี้</p>
+        <label class="f">รหัสจับคู่ 6 หลัก<input name="code" inputmode="numeric" pattern="[0-9]*" maxlength="7" autocomplete="one-time-code" required></label>
+        ${err}${go('เข้าบัญชี')}</form>`
+      : m === 'recover' ? `<form class="stack" data-acct="recover" novalidate>
+        <p class="small muted">รหัสกู้คืน 16 ตัวที่ได้ตอนเริ่มใช้ (เช่น K7QF-2MXP-9RTA-HD4C)</p>
+        <label class="f">รหัสกู้คืน<input name="code" autocapitalize="characters" autocomplete="off" spellcheck="false" maxlength="24" required></label>
+        ${err}${go('กลับเข้าบัญชี')}</form>`
+      : `<form class="stack" data-acct="login" novalidate>
+        <label class="f">ชื่อผู้ใช้<input name="username" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="20" required value="${esc(a.name || SY.user || '')}"></label>
+        ${pinField('pin', 'รหัสตัวเลข 6 หลัก', 'current-password')}
+        ${err}${go('เข้าสู่ระบบ')}<p class="small muted">ใช้ได้ถ้าเคยตั้งชื่อผู้ใช้และรหัสไว้ในหน้าโปรไฟล์ ข้อมูลในเครื่องนี้ (ถ้ามี) จะรวมกับบัญชี ไม่หาย</p></form>`}
+    </article>`;
+  }
   return `<article class="card" id="acct">
-    <div class="row between"><h2>บัญชี ${SY.google ? '' : '@'}${esc(SY.user)}</h2><button class="btn sm" data-act="acct-sync">ซิงก์ตอนนี้</button></div>
-    ${SY.google ? '<p class="small"><span class="chip good">เชื่อมกับ Google แล้ว</span> เข้าสู่ระบบด้วย Google ได้ทุกเครื่อง ไม่ต้องจำรหัส</p>' : (cloud.google ? `<div class="note ok stack"><b>กันลืมรหัส: เชื่อมบัญชีนี้กับ Google</b><span class="small">ต่อไปกดเข้าสู่ระบบด้วย Google ได้เลย ข้อมูลเดิมอยู่ครบ</span>${googleBtn('เชื่อมกับ Google', 'acct-glink')}</div>` : '')}
+    <div class="row between"><h2>บัญชีของคุณ</h2><button class="btn sm" data-act="acct-sync">ซิงก์ตอนนี้</button></div>
+    <p class="small"><span class="chip good">สำรองอัตโนมัติ</span> ${SY.user ? `เข้าจากเครื่องอื่นด้วยชื่อ <b>${esc(SY.user)}</b> ได้` : 'เครื่องนี้จำคุณไว้แล้ว ไม่ต้องใส่ชื่อหรือรหัส'}</p>
     <p class="small muted" id="acct-status" role="status">${syncLabel()}</p>
-    ${a.rc ? `<div class="note ok stack rc-box"><b>รหัสกู้คืนของคุณ (ใช้ตอนลืมรหัส)</b><code class="rc">${esc(a.rc)}</code><span class="small">จดใส่กระดาษหรือแคปหน้าจอเก็บไว้ ระบบจะไม่แสดงรหัสนี้อีก</span><div class="row"><button type="button" class="btn sm" data-act="acct-rc-copy">คัดลอก</button><button type="button" class="btn sm pri" data-act="acct-rc-done">จดไว้แล้ว</button></div></div>`
-      : !SY.recovery ? `<div class="note stack"><b>ยังไม่มีรหัสกู้คืน</b><span class="small">สร้างไว้กันลืมรหัส</span><div class="row"><button type="button" class="btn sm pri" data-act="acct-rc-new">สร้างรหัสกู้คืน</button></div></div>` : ''}
-    ${a.open === 'pair' && a.pair ? `<div class="note ok stack pair-box"><b>เพิ่มเครื่องใหม่</b><span class="small">บนเครื่องใหม่ เปิด MewFit แล้วกด "ใช้รหัสจากเครื่องอื่น" ใส่เลขนี้ หรือสแกน QR ด้วยกล้องมือถือ ใช้ได้ครั้งเดียว ภายใน 5 นาที</span><code class="rc pair-code">${a.pair.code.slice(0, 3)} ${a.pair.code.slice(3)}</code><div id="pair-qr" class="pair-qr" aria-label="QR สำหรับเพิ่มเครื่องใหม่"></div><div class="row"><button type="button" class="btn sm" data-act="acct-open" data-o="">ปิด</button></div></div>` : ''}
-    <p class="small muted">ใช้เครื่องอื่น: กด "เพิ่มเครื่องใหม่" แล้วสแกน QR หรือใส่เลข 6 หลักบนเครื่องนั้น หรือเข้าสู่ระบบด้วยชื่อและรหัสเดียวกัน ข้อมูลจะตรงกันเอง</p>
-    <div class="row"><button class="btn sm pri" data-act="acct-pair">เพิ่มเครื่องใหม่</button><button class="btn sm" data-act="acct-open" data-o="pin">${SY.pin ? 'เปลี่ยนรหัส' : 'ตั้งรหัส'}</button>${SY.recovery ? '<button class="btn sm" data-act="acct-rc-new">รหัสกู้คืนใหม่</button>' : ''}<button class="btn sm" data-act="acct-open" data-o="logout">ออกจากระบบ</button><button class="btn sm danger" data-act="acct-open" data-o="delete">ลบบัญชี</button></div>
-    ${a.open === 'pin' ? `<form class="stack" data-acct="pin" novalidate><p class="small muted">ไม่ต้องใช้รหัสเดิม เพราะเครื่องนี้เข้าสู่ระบบอยู่แล้ว เครื่องอื่นจะต้องเข้าสู่ระบบใหม่</p>${pinField('newPin', 'รหัสใหม่ 6 หลัก', 'new-password')}${pinField('pin2', 'รหัสใหม่อีกครั้ง', 'new-password')}${err}<div class="row">${go('บันทึกรหัสใหม่', 'btn pri')}${cancel}</div></form>` : ''}
-    ${a.open === 'logout' ? `<p>ข้อมูลในเครื่องนี้จะถูกล้าง แต่ยังอยู่ในบัญชีครบ เข้าสู่ระบบอีกครั้งเมื่อไหร่ก็ได้</p>${err}<div class="row"><button class="btn pri" data-act="acct-logout"${a.busy ? ' disabled' : ''}>${a.busy ? 'กำลังส่ง…' : 'ออกจากระบบ'}</button>${cancel}</div>` : ''}
-    ${a.open === 'delete' ? `<form class="stack" data-acct="delete" novalidate><p>ลบบัญชี ${esc(SY.user)} และข้อมูลทั้งหมดบนคลาวด์และในเครื่องนี้ กู้คืนไม่ได้</p>${SY.pin ? pinField('pin', 'ใส่รหัสเพื่อยืนยัน', 'current-password') : '<label class="f">พิมพ์คำว่า ลบ เพื่อยืนยัน<input name="confirm" autocomplete="off" required></label>'}${err}<div class="row">${go('ลบบัญชีถาวร', 'btn danger')}${cancel}</div></form>` : ''}
+    ${SY.rcPending ? `<div class="note ok stack rc-box"><b>รหัสกู้คืนของคุณ</b><code class="rc">${esc(SY.rcPending)}</code><span class="small">แคปหน้าจอหรือจดเก็บไว้ ใช้กลับเข้าบัญชีถ้าล้างเบราว์เซอร์หรือทำมือถือหาย</span><div class="row"><button type="button" class="btn sm" data-act="acct-rc-copy">คัดลอก</button><button type="button" class="btn sm pri" data-act="acct-rc-done">เก็บไว้แล้ว</button></div></div>` : ''}
+    ${a.open === 'pair' && a.pair ? `<div class="note ok stack pair-box"><b>เพิ่มเครื่องใหม่</b><span class="small">บนเครื่องใหม่ สแกน QR นี้ด้วยกล้องมือถือ หรือเปิด MewFit แล้วพิมพ์เลขนี้ ใช้ได้ครั้งเดียวภายใน 5 นาที</span><code class="rc pair-code">${a.pair.code.slice(0, 3)} ${a.pair.code.slice(3)}</code><div id="pair-qr" class="pair-qr" aria-label="QR สำหรับเพิ่มเครื่องใหม่"></div><div class="row"><button type="button" class="btn sm" data-act="acct-open" data-o="">ปิด</button></div></div>` : ''}
+    <div class="row"><button class="btn sm pri" data-act="acct-pair">เพิ่มเครื่องใหม่</button>${SY.pin ? '<button class="btn sm" data-act="acct-open" data-o="pin">เปลี่ยนรหัส</button>' : '<button class="btn sm" data-act="acct-open" data-o="name">ตั้งชื่อผู้ใช้ + รหัส</button>'}<button class="btn sm" data-act="acct-rc-new">รหัสกู้คืนใหม่</button><button class="btn sm" data-act="acct-open" data-o="logout">ออกจากระบบ</button><button class="btn sm danger" data-act="acct-open" data-o="delete">ลบบัญชี</button></div>
+    ${a.open === 'name' ? `<form class="stack" data-acct="name" novalidate><p class="small muted">ไม่บังคับ ตั้งไว้เผื่ออยากเข้าจากเครื่องอื่นด้วยการพิมพ์ (สแกน QR ง่ายกว่า)</p>
+      <label class="f">ชื่อผู้ใช้<input name="username" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="20" required value="${esc(a.name || '')}"></label>
+      ${pinField('pin', 'รหัสตัวเลข 6 หลัก', 'new-password')}${pinField('pin2', 'ใส่รหัสอีกครั้ง', 'new-password')}${err}<div class="row">${go('บันทึก', 'btn pri')}${cancel}</div></form>` : ''}
+    ${a.open === 'pin' ? `<form class="stack" data-acct="pin" novalidate><p class="small muted">ไม่ต้องใช้รหัสเดิม เพราะเครื่องนี้เข้าสู่ระบบอยู่แล้ว เครื่องอื่นจะต้องเข้าใหม่</p>${pinField('newPin', 'รหัสใหม่ 6 หลัก', 'new-password')}${pinField('pin2', 'รหัสใหม่อีกครั้ง', 'new-password')}${err}<div class="row">${go('บันทึกรหัสใหม่', 'btn pri')}${cancel}</div></form>` : ''}
+    ${a.open === 'logout' ? `<p>ข้อมูลในเครื่องนี้จะถูกล้าง แต่ยังอยู่ในบัญชีครบ ${SY.pin ? 'กลับเข้าได้ด้วยชื่อและรหัส' : 'กลับเข้าได้ด้วยรหัสกู้คืน หรือสแกน QR จากเครื่องอื่น'}</p>${err}<div class="row"><button class="btn pri" data-act="acct-logout"${a.busy ? ' disabled' : ''}>${a.busy ? 'กำลังส่ง…' : 'ออกจากระบบ'}</button>${cancel}</div>` : ''}
+    ${a.open === 'delete' ? `<form class="stack" data-acct="delete" novalidate><p>ลบบัญชีและข้อมูลทั้งหมดบนคลาวด์และในเครื่องนี้ กู้คืนไม่ได้</p>${SY.pin ? pinField('pin', 'ใส่รหัสเพื่อยืนยัน', 'current-password') : '<label class="f">พิมพ์คำว่า ลบ เพื่อยืนยัน<input name="confirm" autocomplete="off" required></label>'}${err}<div class="row">${go('ลบบัญชีถาวร', 'btn danger')}${cancel}</div></form>` : ''}
   </article>`;
 }
-const acctNudge = () => !SY.token && S.profile && !S.acctNudgeOff ? `<div class="banner"><span><b>ข้อมูลอยู่แค่ในเครื่องนี้</b> สร้างบัญชีกันข้อมูลหาย และเปิดได้หลายเครื่อง</span><div class="row"><a class="btn pri sm" href="#profile">สร้างบัญชี</a><button class="btn sm ghost" data-act="acct-nudge-off">ไว้ทีหลัง</button></div></div>` : '';
+const acctNudge = () => SY.token && SY.rcPending ? `<div class="banner"><span><b>เก็บรหัสกู้คืนไว้</b> ใช้กลับเข้าบัญชีถ้าล้างเบราว์เซอร์หรือทำมือถือหาย</span><div class="row"><a class="btn pri sm" href="#profile">ดูรหัสกู้คืน</a></div></div>` : '';
 var syncReady = true;   // save() may run before this module is reached; it only syncs from here on
-window.addEventListener('online', () => cloudSync());
+window.addEventListener('online', () => { if (SY.token) cloudSync(); else autoAccount(); });
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') cloudSync(); else if (SY.dirty) cloudSync(true); });
 window.addEventListener('storage', e => { if (e.key === KEY || e.key === SKEY) { S = load(); SY = loadSync(); refreshView(); } });
 document.addEventListener('submit', ev => { const f = ev.target.closest('form[data-acct]'); if (!f) return; ev.preventDefault(); if (!ui.acct.busy) acctSubmit(f.dataset.acct, f); });
@@ -1525,7 +1522,7 @@ function rStart() {
         <li><span>ทดสอบวิดพื้น สควอท แพลงก์</span><span>ไม่บังคับ · เลือกท่าแรก</span></li>
         <li><span>เวลาตื่น นอน ทำงาน</span><span>จำเป็น · ตารางชีวิต</span></li>
         <li><span>รอบเอว ชื่อเล่น</span><span>ไม่บังคับ</span></li></ul>
-        <p class="small muted">เริ่มได้เลยไม่ต้องสมัคร ข้อมูลอยู่ในเครื่องนี้ อยากใช้หลายเครื่องหรือกันข้อมูลหาย สร้างบัญชีได้ทีหลังในหน้าโปรไฟล์</p>${SY.token ? '' : '<div class="row"><button class="btn sm" data-act="acct-login">มีบัญชีแล้ว เข้าสู่ระบบ</button></div>'}</div>
+        <p class="small muted">เริ่มได้เลยไม่ต้องสมัคร ระบบสำรองข้อมูลขึ้นคลาวด์ให้เอง ใช้หลายเครื่องได้ด้วยการสแกน QR</p>${SY.token ? '' : '<div class="row"><button class="btn sm" data-act="acct-login">เคยใช้ในเครื่องอื่น กลับเข้าบัญชี</button></div>'}</div>
       <div class="ob-nav"><button class="btn pri big" data-act="ob-next">เริ่มตั้งค่า</button>${S.profile ? '<a class="btn big" href="#today">ยกเลิก</a>' : '<button class="btn big" data-act="ob-demo">ดูตัวอย่างก่อน</button>'}</div></div>`;
     return;
   }
@@ -2049,13 +2046,13 @@ document.addEventListener('click', ev => {
     case 'acct-open': ui.acct.open = ui.acct.open === el.dataset.o ? '' : el.dataset.o; ui.acct.err = ''; render(); break;
     case 'acct-sync': cloudSync().then(() => { toast(SY.dirty ? 'ยังส่งไม่ได้ ตรวจอินเทอร์เน็ตแล้วลองใหม่' : 'ซิงก์แล้ว'); render(); }); updateAcctStatus(); break;
     case 'acct-logout': if (!ui.acct.busy) acctLogout(); break;
-    case 'acct-login': ui.acct = acctUi(); ui.acct.mode = 'login'; location.hash = 'profile'; break;
+    case 'acct-login': ui.acct = acctUi(); location.hash = 'profile'; break;
     case 'acct-nudge-off': S.acctNudgeOff = true; save(); render(); break;
     case 'acct-glink': googleLink(); break;
     case 'acct-pair': pairStart(); break;
     case 'acct-rc-new': newRecovery(); break;
-    case 'acct-rc-copy': copyText(ui.acct.rc); break;
-    case 'acct-rc-done': ui.acct.rc = ''; render(); break;
+    case 'acct-rc-copy': copyText(SY.rcPending); break;
+    case 'acct-rc-done': SY.rcPending = ''; saveSync(); render(); break;
   }
 });
 // keyboard on a computer: Space pauses the interval timer, Escape leaves it
@@ -2239,7 +2236,7 @@ function rLearn() {
 
 render();
 api('/config').then(r => { if (r.ok && r.body.google !== cloud.google) { cloud.google = !!r.body.google; if (view() === 'profile') refreshView(); } }).catch(() => {});
-googleReturn().finally(() => cloudSync());
+googleReturn().finally(() => { if (SY.token) cloudSync(); else autoAccount(); });
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || /^localhost$|^127\./.test(location.hostname))) navigator.serviceWorker.register('sw.js').catch(() => {});
 })();
 </script>

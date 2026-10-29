@@ -1,0 +1,676 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-29T08:42:15+00:00",
+  "title": "Design System: MewFit",
+  "extensions": {
+    "colorMeta": {
+      "corner-red": {
+        "role": "primary",
+        "displayName": "Corner Red",
+        "canonical": "#FB4620",
+        "oklch": "oklch(65.5% 0.223 33.2)",
+        "dark": "#FB4620",
+        "cssVar": "--go / --hero",
+        "purpose": "Today's bout, top bar on the today view, raised train button, rest bar, go actions.",
+        "tonalRamp": [
+          "#2E0000",
+          "#590000",
+          "#870000",
+          "#B70F00",
+          "#E93304",
+          "#FF6C4C",
+          "#FF9C7E",
+          "#FFC9AF"
+        ]
+      },
+      "corner-red-ink": {
+        "role": "primary",
+        "displayName": "Corner Red Ink",
+        "canonical": "#170A05",
+        "oklch": "oklch(16.2% 0.026 45.3)",
+        "dark": "#170A05",
+        "cssVar": "--go-ink / --hero-fg",
+        "purpose": "Text and icons on corner-red; the start-bell fill on the hero.",
+        "tonalRamp": [
+          "#100907",
+          "#2C231E",
+          "#4C3F39",
+          "#6D5D56",
+          "#907E76",
+          "#B2A199",
+          "#D5C5BF",
+          "#F9EBE5"
+        ]
+      },
+      "corner-red-muted": {
+        "role": "primary",
+        "displayName": "Corner Red Muted",
+        "canonical": "#3D1608",
+        "oklch": "oklch(25.8% 0.066 39.6)",
+        "dark": "#3D1608",
+        "cssVar": "--hero-muted",
+        "purpose": "Secondary text on corner-red (about 4.6:1).",
+        "tonalRamp": [
+          "#170602",
+          "#371D14",
+          "#5A382D",
+          "#7E5648",
+          "#A57565",
+          "#C6998A",
+          "#E7BFB1",
+          "#FFE6DA"
+        ]
+      },
+      "ember": {
+        "role": "primary",
+        "displayName": "Ember",
+        "canonical": "#C2380F",
+        "oklch": "oklch(54.4% 0.181 35.3)",
+        "dark": "#FF8259",
+        "cssVar": "--hot",
+        "purpose": "Text-safe red for hot chips, feature numerals, figure props, sleep dot, third ring.",
+        "tonalRamp": [
+          "#280000",
+          "#500000",
+          "#7B1500",
+          "#A9310F",
+          "#D84E2B",
+          "#F87C5C",
+          "#FFA78A",
+          "#FFD2B8"
+        ]
+      },
+      "ember-soft": {
+        "role": "primary",
+        "displayName": "Ember Soft",
+        "canonical": "#FFE8DF",
+        "oklch": "oklch(94.7% 0.028 42.7)",
+        "dark": "#3B1A0F",
+        "cssVar": "--hot-soft",
+        "purpose": "Fill behind ember text; notes.",
+        "tonalRamp": [
+          "#110906",
+          "#2D221E",
+          "#4C3E39",
+          "#6E5D56",
+          "#927D75",
+          "#B3A099",
+          "#D6C5BE",
+          "#FAEBE5"
+        ]
+      },
+      "blue-corner": {
+        "role": "secondary",
+        "displayName": "Blue Corner",
+        "canonical": "#2343D8",
+        "oklch": "oklch(47.1% 0.228 266.7)",
+        "dark": "#8FA3FF",
+        "cssVar": "--accent",
+        "purpose": "Selection, progress, data marks, links, focus, primary buttons off-hero.",
+        "tonalRamp": [
+          "#03003F",
+          "#07126D",
+          "#18319E",
+          "#2D51D2",
+          "#4572FF",
+          "#6C9BFF",
+          "#95C3FF",
+          "#C1EBFF"
+        ]
+      },
+      "blue-corner-ink": {
+        "role": "secondary",
+        "displayName": "Blue Corner Ink",
+        "canonical": "#FFFFFF",
+        "oklch": "oklch(100.0% 0.000 89.9)",
+        "dark": "#0B1033",
+        "cssVar": "--accent-ink",
+        "purpose": "Text on blue-corner.",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#A5A5A5",
+          "#C9C9C9",
+          "#EEEEEE"
+        ]
+      },
+      "blue-corner-soft": {
+        "role": "secondary",
+        "displayName": "Blue Corner Soft",
+        "canonical": "#E6EBFF",
+        "oklch": "oklch(94.2% 0.028 274.7)",
+        "dark": "#1E2552",
+        "cssVar": "--accent-soft",
+        "purpose": "Training days, selected options, banners, list hover.",
+        "tonalRamp": [
+          "#090B12",
+          "#22242E",
+          "#3E414E",
+          "#5D6070",
+          "#7D8193",
+          "#A0A4B5",
+          "#C5C8D7",
+          "#EBEEFB"
+        ]
+      },
+      "rope": {
+        "role": "neutral",
+        "displayName": "Rope",
+        "canonical": "#15161B",
+        "oklch": "oklch(20.1% 0.010 276.5)",
+        "dark": "#000000",
+        "cssVar": "--rope",
+        "purpose": "Floating nav, rest timer, HIIT screen.",
+        "tonalRamp": [
+          "#0A0B0E",
+          "#242528",
+          "#414246",
+          "#606166",
+          "#808288",
+          "#A3A5AB",
+          "#C8C9CE",
+          "#EDEEF3"
+        ]
+      },
+      "rope-fg": {
+        "role": "neutral",
+        "displayName": "Rope Fg",
+        "canonical": "#9EA2AC",
+        "oklch": "oklch(71.2% 0.015 268.4)",
+        "dark": "#8C909A",
+        "cssVar": "--rope-fg",
+        "purpose": "Secondary text and inactive nav labels on rope.",
+        "tonalRamp": [
+          "#0A0B0F",
+          "#23252A",
+          "#3F4248",
+          "#5E6169",
+          "#7E828C",
+          "#A1A5AE",
+          "#C6C9D1",
+          "#ECEEF5"
+        ]
+      },
+      "canvas": {
+        "role": "neutral",
+        "displayName": "Canvas",
+        "canonical": "#F1F2F4",
+        "oklch": "oklch(96.1% 0.003 264.5)",
+        "dark": "#0C0D10",
+        "cssVar": "--bg",
+        "purpose": "Page ground; frosted top bar at 86%.",
+        "tonalRamp": [
+          "#0B0B0C",
+          "#252526",
+          "#414243",
+          "#606163",
+          "#818284",
+          "#A4A5A7",
+          "#C8C9CA",
+          "#EEEEF0"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface",
+        "canonical": "#FFFFFF",
+        "oklch": "oklch(100.0% 0.000 89.9)",
+        "dark": "#16171C",
+        "cssVar": "--surface",
+        "purpose": "Cards, tiles, inputs, default button, modal.",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#A5A5A5",
+          "#C9C9C9",
+          "#EEEEEE"
+        ]
+      },
+      "sunk": {
+        "role": "neutral",
+        "displayName": "Sunk",
+        "canonical": "#EBECEF",
+        "oklch": "oklch(94.3% 0.004 271.4)",
+        "dark": "#1E2026",
+        "cssVar": "--sunk",
+        "purpose": "Recessed tiles, chip fill, bar tracks.",
+        "tonalRamp": [
+          "#0B0B0C",
+          "#242526",
+          "#414244",
+          "#606163",
+          "#818285",
+          "#A4A5A7",
+          "#C8C9CB",
+          "#EEEEF0"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#121318",
+        "oklch": "oklch(18.8% 0.010 276.4)",
+        "dark": "#F2F3F6",
+        "cssVar": "--ink / --fig",
+        "purpose": "Text; toast fill.",
+        "tonalRamp": [
+          "#0A0B0E",
+          "#242528",
+          "#414246",
+          "#606167",
+          "#808289",
+          "#A3A5AB",
+          "#C8C9CE",
+          "#EDEEF3"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted",
+        "canonical": "#5B5F69",
+        "oklch": "oklch(48.6% 0.017 268.3)",
+        "dark": "#A3A7B2",
+        "cssVar": "--muted",
+        "purpose": "Secondary text.",
+        "tonalRamp": [
+          "#090B0F",
+          "#23252B",
+          "#3F4249",
+          "#5D616A",
+          "#7E828D",
+          "#A1A5AF",
+          "#C5C9D2",
+          "#EBEEF6"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Line",
+        "canonical": "#E0E2E7",
+        "oklch": "oklch(91.3% 0.007 268.5)",
+        "dark": "#2A2C34",
+        "cssVar": "--line",
+        "purpose": "Hairlines, input strokes, default button border.",
+        "tonalRamp": [
+          "#0A0B0D",
+          "#242527",
+          "#414245",
+          "#606165",
+          "#808287",
+          "#A3A5A9",
+          "#C7C9CD",
+          "#EDEEF2"
+        ]
+      },
+      "good": {
+        "role": "semantic",
+        "displayName": "Good",
+        "canonical": "#11774A",
+        "oklch": "oklch(50.4% 0.113 157.6)",
+        "dark": "#4FCB8E",
+        "cssVar": "--good",
+        "purpose": "Done sets, food, water, verdicts.",
+        "tonalRamp": [
+          "#001202",
+          "#002F16",
+          "#024F2F",
+          "#20724A",
+          "#3D9667",
+          "#6CB88D",
+          "#99DBB3",
+          "#C6FEDC"
+        ]
+      },
+      "warn": {
+        "role": "semantic",
+        "displayName": "Warn",
+        "canonical": "#975A00",
+        "oklch": "oklch(52.5% 0.117 65.8)",
+        "dark": "#EAAA4A",
+        "cssVar": "--warn",
+        "purpose": "Over-target bars, caution lines.",
+        "tonalRamp": [
+          "#1C0300",
+          "#3D1B00",
+          "#623600",
+          "#89530D",
+          "#B1722A",
+          "#D1985C",
+          "#F2BE8A",
+          "#FFE5B9"
+        ]
+      },
+      "bad": {
+        "role": "semantic",
+        "displayName": "Bad",
+        "canonical": "#BE2E39",
+        "oklch": "oklch(53.1% 0.180 22.1)",
+        "dark": "#F2737C",
+        "cssVar": "--bad",
+        "purpose": "Danger button, myth prefix.",
+        "tonalRamp": [
+          "#280000",
+          "#500006",
+          "#7C101D",
+          "#A92D35",
+          "#D84A4F",
+          "#F87877",
+          "#FFA3A0",
+          "#FFCFCB"
+        ]
+      },
+      "figure-prop": {
+        "role": "neutral",
+        "displayName": "Figure Prop",
+        "canonical": "#BDBFC6",
+        "oklch": "oklch(80.5% 0.010 273.3)",
+        "dark": "#464953",
+        "cssVar": "--prop",
+        "purpose": "Stick-figure props and ground line.",
+        "tonalRamp": [
+          "#0A0B0E",
+          "#242528",
+          "#404246",
+          "#5F6166",
+          "#808288",
+          "#A3A5AB",
+          "#C7C9CE",
+          "#EDEEF3"
+        ]
+      },
+      "figure-bg": {
+        "role": "neutral",
+        "displayName": "Figure Bg",
+        "canonical": "#F6F7F8",
+        "oklch": "oklch(97.6% 0.002 247.8)",
+        "dark": "#111216",
+        "cssVar": "--figbg",
+        "purpose": "Panel behind figure demos.",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#252526",
+          "#414243",
+          "#606162",
+          "#818283",
+          "#A4A5A6",
+          "#C8C9CA",
+          "#EEEEEF"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Session or day name inside the corner-red hero."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Page h1 on every other view."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Card and section h2."
+      },
+      "title-sm": {
+        "displayName": "Title Small",
+        "purpose": "h3, option titles, button labels."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "All reading text in IBM Plex Sans Thai."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Chips, nav labels, field labels, table heads; never uppercase."
+      },
+      "numeral": {
+        "displayName": "Numeral",
+        "purpose": "Metric values, legends, times; Kanit tabular."
+      },
+      "numeral-live": {
+        "displayName": "Live Numeral",
+        "purpose": "Rep stepper (3.2rem); rest timer steps to 4.2rem."
+      },
+      "numeral-clock": {
+        "displayName": "Clock",
+        "purpose": "Full-screen HIIT interval clock."
+      }
+    },
+    "shadows": [
+      {
+        "name": "ambient",
+        "value": "0 1px 2px rgba(18,19,24,.05), 0 10px 26px -14px rgba(18,19,24,.18)",
+        "darkValue": "0 10px 28px -16px rgba(0,0,0,.9)",
+        "purpose": "Cards, tool tiles, tips, active top tab."
+      },
+      {
+        "name": "hero-lift",
+        "value": "0 16px 32px -22px rgba(18,19,24,.35)",
+        "purpose": "Inset corner-red hero; removed when full-bleed."
+      },
+      {
+        "name": "floating-rope",
+        "value": "0 14px 34px -14px rgba(0,0,0,.55)",
+        "purpose": "Bottom nav bar."
+      },
+      {
+        "name": "rest-bar",
+        "value": "0 14px 30px -14px rgba(0,0,0,.5)",
+        "purpose": "Floating rest bar above the nav."
+      },
+      {
+        "name": "raised-go",
+        "value": "0 0 0 5px var(--bg), 0 10px 18px -10px rgba(0,0,0,.45)",
+        "purpose": "Centre train button, cut out of the rope bar."
+      }
+    ],
+    "motion": [
+      {
+        "name": "view-in",
+        "value": "320ms cubic-bezier(.16,1,.3,1), opacity .001→1, translateY 6px→0",
+        "purpose": "View entrance."
+      },
+      {
+        "name": "press",
+        "value": "scale(.97) over 120ms",
+        "purpose": "Button press."
+      },
+      {
+        "name": "press-raised",
+        "value": "scale(.94) over 150ms",
+        "purpose": "Raised train button press."
+      },
+      {
+        "name": "toast",
+        "value": "250ms, translateY 20px→0 with fade",
+        "purpose": "Toast in/out."
+      },
+      {
+        "name": "bar-fill",
+        "value": "width 300ms",
+        "purpose": "Progress bar fill."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "all transitions and animations off",
+        "purpose": "prefers-reduced-motion: reduce."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "tools-2up",
+        "value": "420px",
+        "purpose": "Below: tool grid 2-up."
+      },
+      {
+        "name": "hero-split",
+        "value": "640px",
+        "purpose": "Hero two-column; option grids 2-up."
+      },
+      {
+        "name": "grid",
+        "value": "740px",
+        "purpose": "Card grids 2/3-up, tips 2-up."
+      },
+      {
+        "name": "desktop",
+        "value": "880px",
+        "purpose": "Top pill tabs replace the floating nav."
+      }
+    ],
+    "themes": {
+      "light": "default",
+      "dark": "prefers-color-scheme: dark unless data-theme=light; or data-theme=dark. Corner-red, its ink and muted do not change."
+    },
+    "identityAssets": {
+      "files": [
+        "icon-192.png",
+        "icon-512.png",
+        "icon-maskable-512.png",
+        "apple-touch-icon.png",
+        "icon.svg"
+      ],
+      "concept": "A kettlebell whose handle forms a cat's ears, front view, off-white on orange-red #FB4620.",
+      "provenance": "Generated with ChatGPT image generation on 2026-10-29 at the owner's request, then resized into each size locally. icon.svg wraps the PNG in a 64x64 viewBox clipped to 15px radius.",
+      "usage": "icon-192.png renders as the 72px onboarding mark; manifest icons and apple-touch-icon for install."
+    }
+  },
+  "components": [
+    {
+      "name": "Default Button",
+      "kind": "button",
+      "refersTo": "button",
+      "description": "Secondary actions on canvas and cards.",
+      "html": "<button class=\"ds-btn\">ดูทั้งหมด</button>",
+      "css": ".ds-btn{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:14px;font-family:var(--fd);font-weight:600;letter-spacing:.005em;padding:10px 16px;min-height:44px;line-height:1.2;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:transform .12s,filter .12s,border-color .12s}.ds-btn:hover{border-color:var(--muted)}.ds-btn:active{transform:scale(.97)}.ds-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}"
+    },
+    {
+      "name": "Primary Button (blue corner)",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Save, log and confirm actions off the hero.",
+      "html": "<button class=\"ds-btn-pri\">บันทึก</button>",
+      "css": ".ds-btn-pri{appearance:none;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);border-radius:14px;font-family:var(--fd);font-weight:600;padding:10px 16px;min-height:44px;line-height:1.2;cursor:pointer;transition:transform .12s,filter .12s}.ds-btn-pri:hover{filter:brightness(1.08)}.ds-btn-pri:active{transform:scale(.97)}.ds-btn-pri:focus-visible{outline:2px solid var(--accent);outline-offset:2px}"
+    },
+    {
+      "name": "Go Button (corner red)",
+      "kind": "button",
+      "refersTo": "button-go",
+      "description": "The go action: start setup, onboarding next, primary action on rope surfaces.",
+      "html": "<button class=\"ds-btn-go\">เริ่มตั้งค่า</button>",
+      "css": ".ds-btn-go{appearance:none;border:1px solid var(--go);background:var(--go);color:var(--go-ink);border-radius:16px;font-family:var(--fd);font-weight:600;font-size:1.06rem;padding:14px 22px;min-height:54px;line-height:1.2;cursor:pointer;transition:transform .12s}.ds-btn-go:active{transform:scale(.97)}.ds-btn-go:focus-visible{outline:2px solid var(--accent);outline-offset:2px}"
+    },
+    {
+      "name": "Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Status and filter pills; pressed chips go blue.",
+      "html": "<span class=\"ds-chip\">20 นาที</span> <span class=\"ds-chip ds-chip-hot\">วันนี้</span> <button class=\"ds-chip ds-chip-btn\" aria-pressed=\"true\">ทั้งหมด</button>",
+      "css": ".ds-chip{display:inline-flex;align-items:center;gap:4px;font-size:.8rem;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--sunk);color:var(--muted);white-space:nowrap;font-family:var(--fb)}.ds-chip-hot{background:var(--hot-soft);color:var(--hot)}.ds-chip-btn{border:1px solid transparent;cursor:pointer;min-height:34px;padding:4px 12px}.ds-chip-btn[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}.ds-chip-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "The default container on canvas.",
+      "html": "<div class=\"ds-card\"><h2 class=\"ds-card-t\">น้ำหนัก</h2><p class=\"ds-card-p\">7 วันล่าสุด</p></div>",
+      "css": ".ds-card{background:var(--surface);border:1px solid var(--card-line);border-radius:22px;padding:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:14px;color:var(--ink)}.ds-card-t{margin:0;font-family:var(--fd);font-weight:700;font-size:1.25rem;line-height:1.2}.ds-card-p{margin:0;color:var(--muted);font-family:var(--fb)}"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "All text and number fields; 16px to stop iOS zoom.",
+      "html": "<label class=\"ds-f\">น้ำหนัก (กก.)<input class=\"ds-input\" type=\"number\" value=\"62.5\"></label>",
+      "css": ".ds-f{display:flex;flex-direction:column;gap:5px;font-size:.88rem;font-weight:500;font-family:var(--fb);color:var(--ink)}.ds-input{width:100%;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:14px;padding:11px 13px;min-height:46px;font-size:16px;font-family:var(--fb)}.ds-input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}"
+    },
+    {
+      "name": "Floating Rope Nav",
+      "kind": "nav",
+      "refersTo": "nav-rope",
+      "description": "Phone nav: ink bar, five items, raised corner-red train button.",
+      "html": "<nav class=\"ds-nav\"><a aria-current=\"page\"><svg viewBox=\"0 0 24 24\"><path d=\"M3 11l9-7 9 7v9H3z\"/></svg>วันนี้</a><a><svg viewBox=\"0 0 24 24\"><path d=\"M4 6h16M4 12h16M4 18h10\"/></svg>แผน</a><a class=\"ds-mid\"><span class=\"ds-ic\"><svg viewBox=\"0 0 24 24\"><path d=\"M7 5v14l12-7z\"/></svg></span>ฝึก</a><a><svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"8\"/></svg>กิน</a><a><svg viewBox=\"0 0 24 24\"><path d=\"M4 19l5-6 4 3 7-9\"/></svg>ผล</a></nav>",
+      "css": ".ds-nav{margin-top:36px;background:var(--rope);border-radius:24px;box-shadow:0 14px 34px -14px rgba(0,0,0,.55);display:grid;grid-template-columns:repeat(5,1fr);align-items:end;padding:0 4px;max-width:520px;font-family:var(--fb)}.ds-nav a{display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 0 8px;min-height:58px;justify-content:flex-end;color:var(--rope-fg);font-size:.72rem;font-weight:500;cursor:pointer}.ds-nav svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}.ds-nav a[aria-current=page]{color:#fff;font-weight:600}.ds-nav a[aria-current=page] svg{color:var(--go)}.ds-nav .ds-ic{width:56px;height:56px;margin-top:-28px;border-radius:19px;background:var(--go);color:var(--go-ink);display:grid;place-items:center;box-shadow:0 0 0 5px var(--bg),0 10px 18px -10px rgba(0,0,0,.45);transition:transform .15s}.ds-nav .ds-mid:active .ds-ic{transform:scale(.94)}.ds-nav .ds-mid svg{width:25px;height:25px}"
+    },
+    {
+      "name": "The Bout (today hero)",
+      "kind": "custom",
+      "refersTo": "hero-bout",
+      "description": "Signature: corner-red fight card with session name, round strip and the start bell.",
+      "html": "<section class=\"ds-bout\"><h1>ร่างกายส่วนบน A</h1><span class=\"ds-sub\">5 ท่า · 25 นาที</span><ol class=\"ds-rounds\"><li><b>1</b>วิดพื้น</li><li><b>2</b>สควอต</li><li><b>3</b>แพลงก์</li><li><b>4</b>ลันจ์</li></ol><button class=\"ds-bell\">เริ่มฝึก</button></section>",
+      "css": ".ds-bout{background:var(--go);color:var(--go-ink);border-radius:28px;padding:22px;display:flex;flex-direction:column;gap:10px;font-family:var(--fb)}.ds-bout h1{margin:0;font-family:var(--fd);font-weight:800;font-size:clamp(2rem,9vw,2.8rem);line-height:1.08;letter-spacing:-.01em}.ds-sub{color:var(--hero-muted);font-size:.9rem}.ds-rounds{list-style:none;margin:4px 0 0;padding:0;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent)}.ds-rounds li{flex:none;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.24);border-radius:999px;padding:5px 12px 5px 5px;font-size:.88rem;font-weight:500;white-space:nowrap}.ds-rounds b{width:26px;height:26px;border-radius:50%;background:var(--go-ink);color:var(--go);display:grid;place-items:center;font-family:var(--fd);font-size:.85rem;font-weight:700}.ds-bell{appearance:none;width:100%;border:1px solid var(--go-ink);background:var(--go-ink);color:#fff;border-radius:16px;font-family:var(--fd);font-weight:600;font-size:1.06rem;padding:14px 22px;min-height:54px;cursor:pointer;transition:transform .12s}.ds-bell:active{transform:scale(.97)}.ds-bell:focus-visible{outline:2px solid var(--accent);outline-offset:2px}"
+    },
+    {
+      "name": "Rest Timer",
+      "kind": "custom",
+      "refersTo": "rest-timer",
+      "description": "Signature: rope card with a huge tabular countdown and a corner-red go action.",
+      "html": "<div class=\"ds-rest\"><b>01:15</b><p>พักก่อนเซ็ตถัดไป</p><button class=\"ds-rest-go\">ข้ามการพัก</button></div>",
+      "css": ".ds-rest{background:var(--rope);color:#fff;border-radius:22px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;font-family:var(--fb)}.ds-rest b{font-family:var(--fm);font-weight:800;font-size:4.2rem;line-height:1;font-variant-numeric:tabular-nums}.ds-rest p{margin:0;color:var(--rope-fg)}.ds-rest-go{appearance:none;border:1px solid var(--go);background:var(--go);color:var(--go-ink);border-radius:14px;font-family:var(--fd);font-weight:600;padding:10px 16px;min-height:44px;cursor:pointer}.ds-rest-go:active{transform:scale(.97)}.ds-rest-go:focus-visible{outline:2px solid var(--accent);outline-offset:2px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Fight Card",
+    "overview": "MewFit is a Muay Thai camp (ค่ายมวย) rendered as a phone app. Today's session is the bout you are about to walk into: a full-bleed corner-red block carrying the session name in heavy upright Kanit, a strip of round pills (one per move), and one dark \"start bell\" button. Everything else (food, plan, progress) sits one thumb-reach below on a cool canvas of white cards, and the floating nav is an ink-black rope with a raised red go button at its centre.\n\nThe camp has three corners and each owns a job. Corner-red owns today and the go action. The blue corner owns information: selection, progress bars, data marks, links and focus. Ink rope owns the moments you are mid-fight: the nav, the rest timer, the full-screen interval clock. Colour is applied as solid fields that carry content, not as decoration; the only gradient in the build is a functional fade mask at the end of the round strip. Hierarchy comes from scale contrast: reps, rest and interval clocks are set as huge tabular numerals rather than made louder with colour or chrome.\n\nDensity is phone-first (390px design width, safe down to 360px) with 16px gutters, 14px rhythm between blocks, and touch targets of at least 44px (36px for small chips and secondary buttons). Light and dark themes follow the device, with a manual override; corner-red does not change between themes.\n\n**Identity asset.** The logo and every app icon (`icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, `apple-touch-icon.png`, `icon.svg` which wraps the PNG in a 15/64-radius clip) were generated with ChatGPT image generation on 2026-10-29 at the owner's request: a kettlebell whose handle forms a cat's ears, with negative-space eyes, nose and whiskers, off-white on orange-red #FB4620 (replaced a first leaping-cat mark the owner rejected as too close to Puma). They were then resized into these sizes locally. The icon's orange-red is the source of corner-red, and `theme-color` and the manifest `theme_color` both use it. In the shipped page the icon appears only as the 72px mark in the onboarding hero (10px radius at 34px). The top bar carries the \"Mew**Fit**\" wordmark in Kanit 800, with \"Fit\" in corner-red.",
+    "keyCharacteristics": [
+      "Full-bleed corner-red \"today\" block on phones, its bottom corners rounded 30px, flowing out of a red top bar.",
+      "Three-corner colour roles: red = today and go, blue = information, ink = in-session.",
+      "Kanit upright for display, buttons and all numerals (tabular); IBM Plex Sans Thai for reading.",
+      "Flat colour fields with one soft ambient shadow; no decorative gradients.",
+      "Animated stick-figure demos tinted by the current surface (ink on canvas, near-black on red, white on rope)."
+    ],
+    "rules": [
+      {
+        "name": "The Corner-Red Rule",
+        "body": "Corner-red marks only today's bout and the go action (start, next, the raised train button, the running rest bar, the today marker). It is never used for information, selection or decoration. If it isn't \"today\" or \"go\", it isn't red.",
+        "section": "colors"
+      },
+      {
+        "name": "The Blue Corner Rule",
+        "body": "Every selected, in-progress, measured or focused state is blue. Selection never borrows red.",
+        "section": "colors"
+      },
+      {
+        "name": "The Ink Ropes Rule",
+        "body": "Rope black is the in-fight surface: the floating nav, the rest timer and the full-screen interval clock. On rope, the only accent is corner-red.",
+        "section": "colors"
+      },
+      {
+        "name": "The Fight-Poster Numeral Rule",
+        "body": "Every number a user counts, logs or watches is Kanit with tabular figures. The number you are acting on now is the largest thing on screen (3.2rem or more, weight 800).",
+        "section": "typography"
+      },
+      {
+        "name": "The Two Voices Rule",
+        "body": "Kanit speaks (headings, buttons, numbers); Plex explains (sentences). Don't set paragraphs in Kanit or headings in Plex.",
+        "section": "typography"
+      },
+      {
+        "name": "The One Lift Rule",
+        "body": "Resting surfaces share one ambient shadow. Deeper shadows belong only to things that float over content (nav, rest bar, raised button). The modal scrim blurs instead of shadowing.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** keep corner-red (#FB4620) for today's bout and the go action only; route selection, progress and data through blue-corner.",
+      "**Do** set every counted or logged number in Kanit with tabular figures, and make the live number the largest element (3.2rem or more, weight 800).",
+      "**Do** let colour fields carry content (the red bout, the rope rest timer) instead of adding chrome to secondary actions.",
+      "**Do** keep touch targets at 44px or more (36px for small chips and buttons) and form inputs at 16px text.",
+      "**Do** keep the figure tinted by its surface by overriding `--fig` and `--prop` rather than adding new figure colours.",
+      "**Do** put every theme-dependent colour on the `:root` tokens so the dark-mode override covers it."
+    ],
+    "donts": [
+      "**Don't** use gradients as decoration. The only gradient in the system is the fade mask at the end of the round strip.",
+      "**Don't** put red on informational or selected states, or blue on the today/go action.",
+      "**Don't** set body copy in Kanit or headings in Plex Sans Thai.",
+      "**Don't** add deeper shadows to resting cards; only floating elements cast real shadows.",
+      "**Don't** recolour corner-red for dark mode; the brand red is the same in both themes."
+    ]
+  }
+}

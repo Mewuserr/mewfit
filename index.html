@@ -540,7 +540,7 @@ function calc(p = P()) {
 /* ---------- exercise library (progression ladders, easiest → hardest) ---------- */
 const X = (id, n, en, r, cues, mis, o = {}) => Object.assign({ id, n, en, r, cues, mis }, o);
 // home equipment; a move lists the keys it needs in eq (one key or an array, all required)
-const EQ = { db: 'ดัมเบล', kb: 'เคตเทิลเบล', band: 'ยางยืดแรงต้าน', bar: 'บาร์โหนติดประตู', abw: 'ล้อกลิ้งหน้าท้อง (Ab wheel)',
+const EQ = { db: 'ดัมเบล', kb: 'เคตเทิลเบล', band: 'ยางยืดแรงต้าน', bar: 'บาร์โหนติดประตู', abw: 'ล้อกลิ้งหน้าท้อง (Ab wheel)', abm: 'เครื่องบริหารหน้าท้อง (Ab Cutter / Ab Roller)',
   bench: 'ม้านั่งยกน้ำหนัก', trx: 'สายแขวน TRX', dipbar: 'บาร์คู่ดิป / พาราเล็ตต์', bb: 'บาร์เบลกับแผ่นน้ำหนัก', ball: 'ลูกบอลโยคะ', rope: 'เชือกกระโดด' };
 const eqNeeds = e => e.eq ? [].concat(e.eq) : [];
 const eqLabel = e => eqNeeds(e).map(k => EQ[k]).join(' + ');
@@ -623,8 +623,10 @@ const LAD = {
   ],
   core2: [
     X('c_rev', 'รีเวิร์สครันช์', 'Reverse crunch', [10, 20], ['นอนหงาย ม้วนสะโพกขึ้นจากพื้น', 'ลงช้า'], 'เหวี่ยงขา'),
+    X('c_abmc', 'ครันช์บนเครื่องบริหารหน้าท้อง', 'Ab machine crunch', [12, 20], ['นอนหรือนั่งตามแบบเครื่อง จับด้ามจับ ศีรษะพิงที่รอง', 'ม้วนลำตัวขึ้นด้วยท้อง ไม่ใช่ดึงด้วยแขน', 'ลงช้า 2 วินาที'], 'ดึงคอด้วยมือหรือเหวี่ยงใช้แรงส่ง', { eq: 'abm' }),
     X('c_side', 'ไซด์แพลงก์', 'Side plank', [15, 45], ['ศอกใต้ไหล่ ลำตัวตรงด้านข้าง', 'จับเวลาข้างละรอบ'], 'สะโพกห้อย', { t: 1 }),
     X('c_bike', 'ไบซิเคิลครันช์', 'Bicycle crunch', [12, 24], ['บิดศอกไปหาเข่าตรงข้ามช้าๆ'], 'ดึงคอด้วยมือ'),
+    X('c_abmo', 'ครันช์บิดเอวบนเครื่องบริหารหน้าท้อง', 'Ab machine oblique crunch', [10, 16], ['เอียงตัวเข้าหาเข่าทีละข้าง', 'ค้างด้านบน 1 วินาที เกร็งเอวด้านข้าง'], 'บิดเร็วจนเหวี่ยง', { eq: 'abm' }),
     X('c_vup', 'วีอัพ', 'V-up', [8, 15], ['ยกแขนและขาพร้อมกันเป็นรูปตัว V'], 'เหวี่ยงตัวใช้แรงส่ง'),
     X('c_abw', 'ล้อกลิ้งหน้าท้อง คุกเข่า สุดระยะ', 'Ab wheel full rollout', [5, 12], ['กลิ้งออกจนลำตัวเกือบขนานพื้น', 'หลังล่างต้องไม่แอ่น ถ้าคุมไม่ได้กลับไประยะสั้น'], 'หลังแอ่นหรือกลั้นหายใจนานเกินไป', { eq: 'abw' })
   ],
@@ -961,6 +963,7 @@ const FIG = {
   trxrow: FG('166,106 150,104 150,88 150,72 98,114 68,121 40,127', '164,82 148,82 128,78 150,72 96,104 67,116 40,127', ['door:190', 'towel:190,-10']),
   trxcurl: FG('150,30 140,42 156,48 172,50 112,84 122,106 120,127', '146,24 136,36 152,32 160,20 112,80 122,104 120,127', ['door:190', 'towel:190,-10']),
   pbardip: FG('121,14 121,28 122,48 122,68 121,74 118,100 104,112', '121,36 121,50 104,56 122,68 121,96 118,118 104,122', ['pbar:100,142,68']),
+  abmcrunch: FG('42,110 58,116 52,96 46,76 100,125 124,96 146,100', '78,74 88,90 82,72 76,54 100,125 124,96 146,100', ['rocker']),
   ballcurl: FG('42,118 58,122 80,124 100,125 104,104 140,108 176,112', '42,118 58,122 80,124 100,125 106,92 134,86 150,104', ['ball'])
 };
 const ANIM = {
@@ -974,7 +977,7 @@ const ANIM = {
   c_bug: 'deadbug', c_plank: 'plank', c_tap: 'plank', c_hollow: 'hollow', c_rev: 'crunch', c_side: 'sideplank', c_bike: 'crunch', c_vup: 'crunch',
   k_calf: 'calf', k_step: 'calf', k_single: 'calf', d_bent: 'dip', d_str: 'dip', d_elev: 'dip', b_towel: 'curl', b_band: 'curl', b_db: 'curl',
   p_dbbench: 'bench', v_kb: 'kbpress', r_trx: 'trxrow', r_kb: 'kbrow', r_bb: 'bbrow', s_kbgob: 'kbgoblet', h_kbdl: 'kbdl', h_swing: 'swing', h_bbrdl: 'bbrdl',
-  h_ball: 'ballcurl', c_abk: 'rollout', c_abw: 'rollout', k_rope: 'knees', d_bars: 'pbardip', b_trx: 'trxcurl', b_bb: 'bbcurl'
+  c_abmc: 'abmcrunch', c_abmo: 'abmcrunch', h_ball: 'ballcurl', c_abk: 'rollout', c_abw: 'rollout', k_rope: 'knees', d_bars: 'pbardip', b_trx: 'trxcurl', b_bb: 'bbcurl'
 };
 function propsSVG(props) {
   return props.map(pr => {
@@ -983,6 +986,7 @@ function propsSVG(props) {
     if (k === 'door') return `<rect x="${n[0]}" y="-26" width="12" height="154" class="pf"/>`;
     if (k === 'box') return `<rect x="${n[0]}" y="${n[1]}" width="${n[2]}" height="${n[3]}" rx="4" class="pf"/>`;
     if (k === 'bar') return `<line x1="${n[0]}" x2="${n[1]}" y1="${n[2]}" y2="${n[2]}" class="ps" stroke-width="5"/>`;
+    if (k === 'rocker') return '<path d="M40 128 Q32 100 46 70" class="ps" stroke-width="4" fill="none"/><path d="M40 128 L130 128" class="ps" stroke-width="4"/>';
     if (k === 'pbar') return `<line x1="${n[0]}" x2="${n[1]}" y1="${n[2]}" y2="${n[2]}" class="ps" stroke-width="5"/><line x1="${n[0] + 6}" x2="${n[0] + 6}" y1="${n[2]}" y2="128" class="ps" stroke-width="4"/><line x1="${n[1] - 6}" x2="${n[1] - 6}" y1="${n[2]}" y2="128" class="ps" stroke-width="4"/>`;
     if (k === 'table') return `<rect x="${n[0]}" y="${n[2] - 5}" width="${n[1] - n[0]}" height="8" rx="3" class="pf"/><line x1="${n[0] + 6}" x2="${n[0] + 6}" y1="${n[2]}" y2="128" class="ps" stroke-width="5"/><line x1="${n[1] - 6}" x2="${n[1] - 6}" y1="${n[2]}" y2="128" class="ps" stroke-width="5"/>`;
     return '';

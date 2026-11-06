@@ -18,6 +18,8 @@ const PAIR_MS = 5 * 60 * 1000;         // a pairing code shown on a signed-in de
 const RC_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no 0/O/1/I: easy to copy by hand
 
 const enc = new TextEncoder();
+import { PushError, pushSave, pushState, pushDelete, pushTest, runReminders } from './push.js';
+const IP_MAX_PUSH = 120;             // reminder-schedule saves per IP per hour
 
 export default {
   async fetch(req, env) {
@@ -26,10 +28,14 @@ export default {
     try {
       return await route(req, env, url);
     } catch (e) {
+      if (e instanceof PushError) return json(e.status, { error: e.message, code: e.code });
       if (e instanceof HttpError) return json(e.status, { error: e.message, code: e.code, ...e.extra });
       console.error(e);
       return json(500, { error: 'ระบบขัดข้อง ลองใหม่อีกครั้ง', code: 'server' });
     }
+  },
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(runReminders(env, event.scheduledTime).then(r => console.log('reminders', JSON.stringify(r))));
   },
 };
 
@@ -46,7 +52,8 @@ function json(status, body) {
 
 async function route(req, env, url) {
   const m = req.method, path = url.pathname;
-  if (path === '/api/config' && m === 'GET') return json(200, { google: googleOn(env) });
+  if (path === '/api/config' && m === 'GET') return json(200, { google: googleOn(env), vapid: env.VAPID_PUBLIC && env.VAPID_PRIVATE ? env.VAPID_PUBLIC : null });
+  if (path.startsWith('/api/push/') && m === 'POST') return pushRoute(req, env, path);
   if (path === '/api/auth/google/start' && m === 'GET') return googleStart(env, url);
   if (path === '/api/auth/google/link' && m === 'POST') return googleLink(req, env, url);
   if (path === '/api/auth/google/callback' && m === 'GET') return googleCallback(env, url);
@@ -68,6 +75,20 @@ async function route(req, env, url) {
 }
 
 /* ---------- input ---------- */
+async function pushRoute(req, env, path) {
+  if (!env.VAPID_PUBLIC || !env.VAPID_PRIVATE) throw new HttpError(503, 'push_off', 'ระบบแจ้งเตือนยังไม่เปิด');
+  const b = await body(req), now = Date.now();
+  if (path === '/api/push/save' || path === '/api/push/test') {
+    const key = 'push:' + clientIp(req);
+    if (await ipCount(env, key, now) >= IP_MAX_PUSH) throw new HttpError(429, 'ip_limit', 'ส่งบ่อยเกินไป รอสักครู่');
+    await ipBump(env, key, now);
+    return json(200, path === '/api/push/save' ? await pushSave(env, b, now) : await pushTest(env, b));
+  }
+  if (path === '/api/push/state') return json(200, await pushState(env, b));
+  if (path === '/api/push/delete') return json(200, await pushDelete(env, b));
+  throw new HttpError(404, 'not_found', 'ไม่พบ');
+}
+
 async function body(req) {
   if (!(req.headers.get('content-type') || '').includes('application/json')) throw new HttpError(415, 'bad_type', 'รูปแบบข้อมูลไม่ถูกต้อง');
   const text = await req.text();

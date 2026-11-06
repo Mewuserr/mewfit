@@ -705,7 +705,7 @@ function load() {
   } catch (e) {}
   return fresh();
 }
-function save(fromCloud) { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} if (!fromCloud && syncReady) cloudChanged(); }
+function save(fromCloud) { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} if (!fromCloud && syncReady) cloudChanged(); try { nState(); } catch (e) {} }
 const P = () => S.profile || DEMO;
 const isDemo = () => !S.profile;
 
@@ -720,8 +720,10 @@ const GOALS = {
   cut: { l: 'ลดไขมัน', d: 'ลีนลง เห็นกล้ามชัดขึ้น', adj: -0.20, prot: 2.0, rate: [-1.0, -0.5] },
   recomp: { l: 'ลดไขมัน + เพิ่มกล้าม', d: 'Recomp เหมาะกับมือใหม่', adj: -0.10, prot: 2.0, rate: [-0.5, 0] },
   bulk: { l: 'เพิ่มกล้าม', d: 'Lean bulk ตัวใหญ่ขึ้นแบบไขมันไม่พอก', adj: 0.10, prot: 1.8, rate: [0.25, 0.5] },
-  maintain: { l: 'รักษาหุ่น', d: 'แข็งแรง สุขภาพดี น้ำหนักคงที่', adj: 0, prot: 1.6, rate: [-0.25, 0.25] }
+  maintain: { l: 'รักษาหุ่น', d: 'แข็งแรง สุขภาพดี น้ำหนักคงที่', adj: 0, prot: 1.6, rate: [-0.25, 0.25] },
+  belly: { l: 'ลดพุง', d: 'รอบเอวเล็กลง ไม่ต้องคุมอาหารเข้ม', adj: -0.10, prot: 1.8, rate: [-0.75, -0.25] }
 };
+const LEAN = g => g === 'cut' || g === 'recomp' || g === 'belly';   // goals that get extra steps and the cardio finisher
 const LEVELS = { beginner: 'มือใหม่ (0–6 เดือน)', intermediate: 'เคยฝึกต่อเนื่อง (6 เดือน–2 ปี)', advanced: 'ฝึกจริงจังมา 2 ปีขึ้นไป' };
 
 function calc(p = P()) {
@@ -739,7 +741,7 @@ function calc(p = P()) {
   const water = Math.round(p.weight * 35 / 50) * 50;
   return { bmr: r0(bmr), tdee: r0(tdee), kcal, protein, fat, carb, bmi: r1(bmi), refW: r1(refW), water,
     glasses: Math.ceil(water / 250), fiber: Math.max(25, r0(kcal / 1000 * 14)),
-    steps: (p.goal === 'cut' || p.goal === 'recomp') ? 9000 : 7500, perMeal: r0(0.4 * refW), adj, floor,
+    steps: p.goal === 'belly' ? 10000 : LEAN(p.goal) ? 9000 : 7500, perMeal: r0(0.4 * refW), adj, floor,
     rateKg: g.rate.map(x => r1(p.weight * x / 100)) };
 }
 
@@ -892,10 +894,16 @@ function setsFor(p) { let n = p.level === 'advanced' ? 4 : (p.level === 'beginne
 function buildSession(tid) {
   const p = P(), t = TPL[tid], sets = setsFor(p);
   const n = clamp(Math.floor((p.minutes - 6) / (sets * 2)), 3, t.s.length);
-  return { date: iso(), tid, start: Date.now(), cur: { i: 0, s: 0 }, ex: t.s.slice(0, n).map(pt => ({ pt, id: curEx(pt, p).e.id, sets, reps: Array(sets).fill('') })),
-    fin: !!p.finisher && !p.caution && (p.goal === 'cut' || p.goal === 'recomp') };
+  let pts = t.s.slice(0, n);
+  // belly goal: always keep one core move even in a short session (strength for the abs; the fat itself goes from the whole body)
+  if (p.goal === 'belly' && !pts.some(x => x.startsWith('core'))) { const cp = t.s.find(x => x.startsWith('core')); if (cp) pts[pts.length - 1] = cp; }
+  return { date: iso(), tid, start: Date.now(), cur: { i: 0, s: 0 }, ex: pts.map(pt => ({ pt, id: curEx(pt, p).e.id, sets, reps: Array(sets).fill('') })),
+    fin: (!!p.finisher || p.goal === 'belly') && !p.caution && LEAN(p.goal) };
 }
-function estMin(tid) { const p = P(), sets = setsFor(p), n = clamp(Math.floor((p.minutes - 6) / (sets * 2)), 3, TPL[tid].s.length); return 6 + n * sets * 2 + (p.finisher && (p.goal === 'cut' || p.goal === 'recomp') ? 4 : 0); }
+function estMin(tid) { const p = P(), sets = setsFor(p), n = clamp(Math.floor((p.minutes - 6) / (sets * 2)), 3, TPL[tid].s.length); return 6 + n * sets * 2 + (p.caution ? 0 : p.goal === 'belly' ? finMin(p) : p.finisher && LEAN(p.goal) ? 4 : 0); }
+// belly finisher: 30 s work / 30 s easy, swings and rope if owned (Maillard 2018: intervals cut abdominal + visceral fat)
+const finMin = p => p.level === 'beginner' ? 6 : 10;
+const finLabel = p => p.goal === 'belly' ? `เบิร์นพุง ${finMin(p)} นาที` : 'คาร์ดิโอ 4 นาที';
 
 /* ---------- Thai food database (per serving; approximate, from Thai food tables & USDA) ---------- */
 const F = (id, n, k, p, c, f, cat) => ({ id, n, k, p, c, f, cat });
@@ -1043,6 +1051,11 @@ function coachAdvice(tr) {
     if (pct < 0.1) return say(`น้ำหนักแทบไม่ขึ้น (${r1(pct)}%) เพิ่มอาหาร 150 kcal ต่อวัน เช่น ข้าวอีก 2 ทัพพี`, 150, 'warn');
     if (pct > 0.6) return say(`ขึ้นเร็วไป (${r1(pct)}% ต่อสัปดาห์) ส่วนเกินมักเป็นไขมัน ลดลง 150 kcal ต่อวัน`, -150, 'warn');
     return say(`ขึ้น ${r1(pct)}% ต่อสัปดาห์ กำลังดีสำหรับ lean bulk`, 0, 'good');
+  }
+  if (g === 'belly') {
+    if (pct > 0.15) return say('น้ำหนักขึ้นเล็กน้อย ลองตัดเครื่องดื่มหวานวันละแก้ว (ราว 150 kcal) หรือเดินเพิ่มวันละ 2,000 ก้าว', -150, 'warn');
+    if (pct < -1.0) return say(`ลดเร็วไป (${r1(-pct)}% ต่อสัปดาห์) เพิ่มอาหาร 150 kcal ต่อวัน ลดพุงช้าๆ แต่ไม่เด้งกลับดีกว่า`, 150, 'warn');
+    return say('กำลังดี ให้ดูรอบเอว (วัดระดับสะดือ ตอนเช้า) ทุก 2 สัปดาห์ เป็นตัวชี้หลัก มากกว่าน้ำหนัก', 0, 'good');
   }
   if (g === 'recomp') {
     if (pct < -0.6) return say('ลดเร็วกว่าที่ recomp ต้องการ เพิ่มอาหาร 100 kcal ต่อวัน', 100, 'warn');
@@ -1245,7 +1258,7 @@ const rankOf = lv => RANKS.reduce((a, r) => lv >= r.lv ? r : a, RANKS[0]);
 const CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
 function questsFor(d) {
   const p = P(), c = calc(p), tid = weekMap(p, d)[parseISO(d).getDay()];
-  const h = (S.habits || {})[d] || {}, tot = dayTotals(d), trained = S.workouts.some(w => w.date === d), cardio = (S.cardio || {})[d] || 0;
+  const h = (S.habits || {})[d] || {}, tot = dayTotals(d), trained = S.workouts.some(w => w.date === d) || kb30DoneOn(d), cardio = (S.cardio || {})[d] || 0;
   const q = [tid ? { k: 'train', t: 'ภารกิจหลัก: ' + TPL[tid].n, v: trained ? 1 : 0, max: 1, xp: 100 }
     : { k: 'recover', t: 'ฟื้นฟู: ยืดเหยียด 8 นาที หรือวงจร 7 นาที', v: Math.min(cardio, 1) || (trained ? 1 : 0), max: 1, xp: 60 },
     { k: 'water', t: `ดื่มน้ำ ${c.glasses} แก้ว`, v: +h.water || 0, max: c.glasses, xp: 30 },
@@ -1553,6 +1566,8 @@ function mergeState(server, local) {
   out.habits = Object.assign({}, a.habits, b.habits);
   out.levels = Object.assign({}, a.levels, b.levels);
   out.cardio = Object.assign({}, a.cardio, b.cardio);
+  out.kb30 = b.kb30 || a.kb30 || null;
+  if (a.kb30 && b.kb30 && a.kb30.start === b.kb30.start) out.kb30 = { start: b.kb30.start, done: Object.assign({}, a.kb30.done, b.kb30.done) };
   out.ready = Object.assign({}, a.ready, b.ready);
   Object.keys(a.cardio || {}).forEach(d => { out.cardio[d] = Math.max(a.cardio[d] || 0, (b.cardio || {})[d] || 0); });
   out.seenLv = Math.max(a.seenLv || 0, b.seenLv || 0) || null;
@@ -1974,7 +1989,7 @@ function finishOb() {
     S.weights = S.weights.filter(w => w.d !== iso()); S.weights.push({ d: iso(), kg: prof.weight });
     if (prof.waist) S.body.push({ d: iso(), waist: prof.waist, neck: null, hip: null });
   }
-  save(); ui.ob = null; location.hash = 'today'; render();
+  save(); ui.ob = null; location.hash = 'today'; render(); nSync();
   toast(wasNew ? 'เริ่มกันเลย! โค้ชมิวจัดแผนให้แล้ว' : 'บันทึกแล้ว คำนวณใหม่ให้แล้ว');
 }
 const optCard = (name, val, cur, title, desc, tag = '') => `<label class="opt"><input type="radio" name="${name}" value="${val}" ${String(cur) === String(val) ? 'checked' : ''}><div>${tag}<b>${title}</b>${desc ? `<span>${desc}</span>` : ''}</div></label>`;
@@ -2022,7 +2037,7 @@ function rStart() {
       <p class="small muted" id="ob-live">${bmi ? `BMI ${r1(bmi)} · ${bmi < 18.5 ? 'ผอม' : bmi < 23 ? 'ปกติ (เกณฑ์เอเชีย)' : bmi < 25 ? 'ท้วม' : 'เกิน'}` : 'ชั่งน้ำหนักตอนเช้าหลังเข้าห้องน้ำจะแม่นที่สุด'}</p>`;
   } else if (st.k === 'goal') {
     const rec = bmi >= 25 ? 'cut' : bmi && bmi < 18.5 ? 'bulk' : '';
-    const g = { cut: 'ลดไขมันโดยรักษากล้าม เห็นกล้ามชัดขึ้น ลด 0.5–1% ของน้ำหนักต่อสัปดาห์', recomp: 'เหมาะกับมือใหม่ ไขมันลดช้าๆ กล้ามเพิ่มไปพร้อมกัน น้ำหนักแทบไม่เปลี่ยน', bulk: 'อยากตัวใหญ่ขึ้น แขนอกหลังใหญ่ขึ้น กินเกินเล็กน้อยให้ไขมันพอกน้อยที่สุด', maintain: 'พอใจน้ำหนักแล้ว อยากแข็งแรง ฟิต สุขภาพดี' };
+    const g = { cut: 'ลดไขมันโดยรักษากล้าม เห็นกล้ามชัดขึ้น ลด 0.5–1% ของน้ำหนักต่อสัปดาห์', recomp: 'เหมาะกับมือใหม่ ไขมันลดช้าๆ กล้ามเพิ่มไปพร้อมกัน น้ำหนักแทบไม่เปลี่ยน', bulk: 'อยากตัวใหญ่ขึ้น แขนอกหลังใหญ่ขึ้น กินเกินเล็กน้อยให้ไขมันพอกน้อยที่สุด', maintain: 'พอใจน้ำหนักแล้ว อยากแข็งแรง ฟิต สุขภาพดี', belly: 'มีพุงนิดหน่อย อยากให้รอบเอวลด กินลดลงแค่เล็กน้อย เน้นขยับเยอะ ท่าเผาผลาญสูง (เคตเทิลเบลสวิง เชือกกระโดด) ปิดท้ายทุกครั้ง' };
     body = `<div class="opts">${Object.entries(GOALS).map(([k, v]) => optCard('goal', k, d.goal, v.l, g[k], k === rec ? '<span class="chip hot tag">แนะนำจาก BMI ของคุณ</span>' : '')).join('')}</div>`;
   } else if (st.k === 'life') {
     const ex = { sedentary: 'ทำงานออฟฟิศ ขับรถ เดินน้อยกว่า 5,000 ก้าว', light: 'ออฟฟิศแต่เดินบ้าง หรือออกกำลัง 1–3 วัน ราว 5,000–7,500 ก้าว', moderate: 'ยืนหรือเดินทั้งวัน เช่น พนักงานขาย ครู พยาบาล ราว 7,500–10,000 ก้าว', high: 'งานใช้แรง เช่น ก่อสร้าง ขนของ หรือเดินเกิน 12,000 ก้าว' };
@@ -2163,6 +2178,7 @@ function rTrain() {
   $('#v-train').innerHTML = `
   ${demoBanner()}
   <div class="view-head"><h1>ฝึก</h1><span class="eyebrow">ฝึกที่บ้าน · ${p.days.length} วันต่อสัปดาห์ · ${p.minutes} นาที${isDeload() ? ' · สัปดาห์ผ่อน' : ''}</span></div>
+  ${S.profile ? kb30Card() : ''}
   ${tid ? `<section class="hero">
     <div class="hero-txt"><h1>${esc(TPL[tid].n)}</h1><span class="eyebrow">วันนี้${doneToday ? ' · ฝึกแล้ว' : ''}</span>
       <p>${sess.ex.length} ท่า × ${sess.ex[0].sets} เซต · ราว ${estMin(tid)} นาที รวมวอร์มอัพ ${sess.fin ? '· มีคาร์ดิโอท้าย 4 นาที' : ''}</p>
@@ -2202,7 +2218,7 @@ function rPlayer() {
   if (done) {
     main = `<article class="card" style="align-items:flex-start"><span class="chip good">ครบทุกท่าแล้ว</span><h2>เยี่ยมมาก เหลืออีกนิดเดียว</h2>
       <p class="muted">${s.fin ? 'ถ้ายังไหว ทำคาร์ดิโอ 4 นาที แล้ว' : ''}ยืดเหยียด 3 นาที จากนั้นกดจบการฝึกเพื่อบันทึกและดูว่าท่าไหนได้เลื่อนขั้น</p>${rirBox(s)}
-      <div class="row">${s.fin ? '<button class="btn" data-act="finisher">คาร์ดิโอ 4 นาที</button>' : ''}<button class="btn" data-act="cool">ยืดเหยียดหลังฝึก</button><button class="btn pri big" data-act="finish">จบการฝึกและบันทึก</button></div></article>`;
+      <div class="row">${s.fin ? `<button class="btn${P().goal === 'belly' ? ' pri' : ''}" data-act="finisher">${finLabel(P())}</button>` : ''}<button class="btn" data-act="cool">ยืดเหยียดหลังฝึก</button><button class="btn pri big" data-act="finish">จบการฝึกและบันทึก</button></div></article>`;
   } else {
     const x = s.ex[c.i], e = EXM[x.id], L = ladder(x.pt), k = L.findIndex(y => y.id === x.id), prev = lastPerf(x.id), unit = e.t ? 'วินาที' : 'ครั้ง';
     const side = /ข้างละ|สลับ/.test(e.cues.join(' ')) ? ' ต่อข้าง' : '';
@@ -2272,6 +2288,7 @@ function rProfile() {
     <div class="setrow"><div><b>เสียงพากย์ไทยในตัวจับเวลา</b><br><span class="small muted">ใช้เสียงของเครื่อง ถ้าเครื่องไม่มีเสียงไทยจะใช้เสียงบี๊บแทน</span></div><button class="btn sm ${S.voice ? 'pri' : ''}" data-act="voice">${S.voice ? 'เปิดอยู่' : 'ปิดอยู่'}</button></div>
     <div class="setrow"><div><b>คู่มือการใช้งานหน้าแรก</b><br><span class="small muted">แสดงวิธีใช้ MewFit ในแต่ละวันอีกครั้ง</span></div><button class="btn sm" data-act="guide-show">แสดงอีกครั้ง</button></div>
   </article>
+  ${notifCard()}
   ${shareCard()}
   <article class="card"><h2>ลบข้อมูล</h2>
     ${ui.resetAsk ? `<p>ลบโปรไฟล์ บันทึกการฝึก อาหาร และน้ำหนักทั้งหมด${SY.token ? ' ทั้งในเครื่องนี้และในบัญชี (บัญชียังอยู่ แต่ข้อมูลว่างเปล่า)' : 'ในเครื่องนี้'} กู้คืนไม่ได้ ยกเว้นคุณคัดลอกข้อมูลสำรองไว้แล้วในหน้าความคืบหน้า</p><div class="row"><button class="btn danger" data-act="reset-yes">ยืนยัน ลบทั้งหมด</button><button class="btn" data-act="reset-no">ยกเลิก</button></div>`
@@ -2283,6 +2300,190 @@ const shareCard = () => `<article class="card"><h2>ชวนเพื่อน�
   <p class="muted small">ส่งลิงก์นี้ให้ใครก็ได้ แต่ละคนตอบคำถามตั้งค่าของตัวเอง และสร้างบัญชีของตัวเองได้ ข้อมูลของแต่ละคนแยกกัน ไม่มีใครเห็นของคนอื่น ไม่มีค่าใช้จ่าย</p>
   <div class="row"><input type="text" id="share-url" readonly value="${APP_URL}" style="flex:1 1 220px" aria-label="ลิงก์ MewFit"><button class="btn pri" data-act="copy-link">คัดลอกลิงก์</button></div>
   <ol class="small" style="margin:0;padding-left:20px;display:grid;gap:4px"><li>เปิดลิงก์ในมือถือ ตอบคำถาม 7 ขั้น ราว 3 นาที</li><li>iPhone: กดปุ่มแชร์ใน Safari แล้วเลือก "เพิ่มไปยังหน้าจอโฮม" · Android: เมนู ⋮ ใน Chrome แล้วเลือก "เพิ่มลงในหน้าจอหลัก"</li><li>เปิดจากไอคอน MewFit ได้เหมือนแอป ใช้ได้แม้ไม่มีเน็ต</li></ol></article>`;
+
+/* ---------- phone reminders (Web Push) ----------
+   The phone subscribes once; the app sends a weekly table of reminder times built from the daily schedule,
+   and the Worker's 5-minute cron delivers them even when the app is closed. Settings live on this device only. */
+const NKEY = 'mewfit.notif';
+const N_KINDS = { train: ['เวลาฝึก', 'ตอนถึงเวลาภารกิจหลักในวันฝึก (ฝึกแล้วไม่เตือน)'], water: ['ดื่มน้ำ + ลุกเดิน', 'ทุก 2 ชั่วโมงระหว่างวัน'],
+  food: ['เวลากิน', 'มื้อเช้า กลางวัน ของว่าง มื้อเย็น ตามตาราง'], sleep: ['เตรียมนอน', '45 นาทีก่อนเวลานอน'], quest: ['เควสใกล้หมดวัน', '2 ชั่วโมงครึ่งก่อนนอน ถ้ายังทำไม่ครบ'] };
+const NT_DEF = () => ({ on: false, kinds: { train: true, water: true, food: true, sleep: true, quest: true }, sig: '', at: 0, st: '' });
+let NT = (() => { try { return Object.assign(NT_DEF(), JSON.parse(localStorage.getItem(NKEY) || '{}')); } catch (e) { return NT_DEF(); } })();
+const saveNT = () => { try { localStorage.setItem(NKEY, JSON.stringify(NT)); } catch (e) {} };
+const nIOS = () => /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const nStandalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+const nSupported = () => 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+const u8 = s => { const b = atob(s.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((s.length + 3) % 4)); return Uint8Array.from(b, c => c.charCodeAt(0)); };
+function nextDateOfWeekday(wd) { let d = iso(); for (let i = 0; i < 7; i++) { if (parseISO(d).getDay() === wd) return d; d = addDays(d, 1); } return iso(); }
+// one row per reminder: [minute of day, kind, title, body]
+function buildReminders(p = P()) {
+  const d = {}, w = toMin(p.wake), b = toMin(p.bed), c = calc(p);
+  for (let wd = 0; wd < 7; wd++) {
+    const tid = weekMap(p, nextDateOfWeekday(wd))[wd], rows = [];
+    const add = (m, k, t, body) => { if (NT.kinds[k]) rows.push([((Math.round(m) % 1440) + 1440) % 1440, k, t, body]); };
+    timeline(p, tid).forEach(x => {
+      if (x.k === 'train') add(x.t, 'train', `ถึงเวลาภารกิจหลัก: ${TPL[tid].n}`, `~${p.minutes} นาที · ${x.note} · ฝึกแล้วระบบจะไม่เตือนซ้ำ`);
+      if (x.k === 'food') add(x.t, 'food', x.title, x.note);
+    });
+    add(b - 45, 'sleep', 'อีก 45 นาทีถึงเวลานอน', 'ปิดจอ หรี่ไฟ ห้องเย็นๆ นอนพอช่วยให้หิวน้อยลง');
+    add(b - 150, 'quest', 'เควสวันนี้ยังไม่ครบ', `เปิดดูว่ายังขาดอะไร เคลียร์ครบรับโบนัส +${QBONUS} XP`);
+    const span = (b - w + 1440) % 1440 || 960;
+    for (let m = 120; m <= span - 120; m += 120) {
+      const t = (w + m) % 1440;
+      if (rows.some(r => Math.abs(r[0] - t) < 25 || Math.abs(r[0] - t) > 1415)) continue;   // don't stack on another reminder
+      add(t, 'water', 'ดื่มน้ำ 1 แก้ว + ลุกเดิน 2 นาที', `เป้าวันนี้ ${c.glasses} แก้ว · ${fmt(c.steps)} ก้าว`);
+    }
+    d[wd] = rows.sort((x, y) => x[0] - y[0]);
+  }
+  return { tz: -new Date().getTimezoneOffset(), d };
+}
+function nDayState() { const t = iso(); let q = false; try { q = questsFor(t).every(x => x.done); } catch (e) {} return { trained: S.workouts.some(w => w.date === t) || kb30DoneOn(t) ? t : '', quests: q ? t : '' }; }
+async function nSub(create) {
+  const reg = await navigator.serviceWorker.ready;
+  let sub = await reg.pushManager.getSubscription();
+  if (!sub && create) sub = await Promise.race([reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: u8(cloud.vapid) }),
+    new Promise((_, no) => setTimeout(() => no(new Error('เบราว์เซอร์นี้ไม่ตอบรับการแจ้งเตือน ลองเปิดด้วย Chrome หรือ Safari บนมือถือ')), 20000))]);
+  return sub;
+}
+async function nSync(force) {
+  if (!NT.on || !S.profile || !cloud.vapid || !nSupported() || Notification.permission !== 'granted') return;
+  try {
+    const sub = await nSub(true), sched = buildReminders(), state = nDayState();
+    const sig = JSON.stringify([sub.endpoint, sched]);
+    if (force || sig !== NT.sig || Date.now() - NT.at > 864e5) {
+      const r = await api('/push/save', 'POST', { sub: sub.toJSON(), sched, state });
+      if (!r.ok) throw new Error(r.body.error);
+      NT.sig = sig; NT.at = Date.now(); NT.st = JSON.stringify(state); saveNT();
+    } else nState();
+  } catch (e) { if (force) throw e; }
+}
+let nStateT = 0;
+function nState() {   // tell the server today's workout/quests are done so it skips those reminders
+  if (!NT.on || !cloud.vapid || !S.profile) return;
+  clearTimeout(nStateT);
+  nStateT = setTimeout(async () => {
+    const st = JSON.stringify(nDayState()); if (st === NT.st) return;
+    try { const sub = await nSub(false); if (!sub) return; const r = await api('/push/state', 'POST', { endpoint: sub.endpoint, state: JSON.parse(st) }); if (r.ok) { NT.st = st; saveNT(); if (!r.body.found) nSync(true).catch(() => {}); } } catch (e) {}
+  }, 1500);
+}
+async function nEnable() {
+  if (!nSupported()) { toast(nIOS() ? 'iPhone: เพิ่ม MewFit ลงหน้าจอโฮมก่อน แล้วเปิดจากไอคอน (iOS 16.4 ขึ้นไป)' : 'เบราว์เซอร์นี้ไม่รองรับการแจ้งเตือน ลองเปิดด้วย Chrome'); return; }
+  if (!cloud.vapid) { toast('ระบบแจ้งเตือนยังไม่พร้อม ต่ออินเทอร์เน็ตแล้วลองใหม่'); return; }
+  const perm = await Notification.requestPermission();
+  if (perm !== 'granted') { toast(perm === 'denied' ? 'เครื่องปิดการแจ้งเตือนของเว็บนี้ไว้ เปิดได้ในการตั้งค่าของเบราว์เซอร์/แอป' : 'ยังไม่ได้อนุญาตการแจ้งเตือน'); render(); return; }
+  NT.on = true; NT.sig = ''; saveNT();
+  try { await nSync(true); await nTest(); toast('เปิดแจ้งเตือนแล้ว ส่งข้อความทดสอบไปที่เครื่องแล้ว'); }
+  catch (e) { NT.on = false; saveNT(); toast(e.message || 'เปิดแจ้งเตือนไม่สำเร็จ ลองใหม่อีกครั้ง'); }
+  render();
+}
+async function nTest() { const sub = await nSub(false); if (!sub) throw new Error('ยังไม่ได้เปิดแจ้งเตือน'); const r = await api('/push/test', 'POST', { sub: sub.toJSON() }); if (!r.ok) throw new Error(r.body.error); }
+async function nDisable() {
+  NT.on = false; NT.sig = ''; saveNT();
+  try { const sub = await nSub(false); if (sub) { await api('/push/delete', 'POST', { endpoint: sub.endpoint }).catch(() => {}); await sub.unsubscribe(); } } catch (e) {}
+  toast('ปิดแจ้งเตือนแล้ว'); render();
+}
+const hhmm = m => String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
+function notifCard() {
+  const ok = nSupported(), perm = ok ? Notification.permission : 'unsupported', on = NT.on && perm === 'granted';
+  let note = '';
+  if (!ok) note = nIOS() && !nStandalone() ? 'iPhone/iPad: กดปุ่มแชร์ใน Safari → "เพิ่มไปยังหน้าจอโฮม" แล้วเปิด MewFit จากไอคอน ถึงจะเปิดแจ้งเตือนได้ (iOS 16.4 ขึ้นไป)' : 'เบราว์เซอร์นี้ไม่รองรับ ลองเปิดด้วย Chrome หรือเพิ่มลงหน้าจอโฮม';
+  else if (perm === 'denied') note = 'เครื่องบล็อกการแจ้งเตือนของ MewFit ไว้ เปิดได้ที่ การตั้งค่า → การแจ้งเตือน (หรือรูปกุญแจข้างลิงก์ใน Chrome)';
+  else if (nIOS() && !nStandalone()) note = 'iPhone/iPad: ต้องเปิดจากไอคอนบนหน้าจอโฮม แจ้งเตือนถึงจะขึ้น';
+  const today = on ? buildReminders().d[new Date().getDay()] : [];
+  return `<article class="card" id="notif"><div class="row between"><h2>แจ้งเตือนบนมือถือ</h2><span class="chip ${on ? 'good' : ''}">${on ? 'เปิดอยู่' : 'ปิดอยู่'}</span></div>
+    <p class="muted small">ระบบเรียกคุณตามตารางเวลาของคุณ แม้ปิดแอปอยู่ แก้เวลาตื่น นอน งาน ได้ที่ "เวลา" ด้านบน แล้วแจ้งเตือนจะเปลี่ยนตาม</p>
+    ${note ? `<p class="small">${note}</p>` : ''}
+    ${Object.entries(N_KINDS).map(([k, [t, d]]) => `<label class="setrow" style="cursor:pointer"><div><b>${t}</b><br><span class="small muted">${d}</span></div><input type="checkbox" data-act="notif-kind" data-k="${k}" ${NT.kinds[k] ? 'checked' : ''} style="width:22px;height:22px;flex:none"></label>`).join('')}
+    ${on && today.length ? `<details><summary class="small">วันนี้จะเตือน ${today.length} ครั้ง</summary><ul class="small" style="margin:6px 0 0;padding-left:18px">${today.map(r => `<li>${hhmm(r[0])} · ${esc(r[2])}</li>`).join('')}</ul></details>` : ''}
+    <div class="row">${on ? `<button class="btn" data-act="notif-test">ส่งทดสอบ</button><button class="btn" data-act="notif-off">ปิดแจ้งเตือน</button>` : ok && perm !== 'denied' ? `<button class="btn pri" data-act="notif-on">เปิดแจ้งเตือน</button>` : ''}</div></article>`;
+}
+
+const bellyCard = () => `<article class="card"><h2>ลดพุงแบบไม่ต้องคุมอาหารเข้ม</h2>
+  <p class="small muted">ไขมันหน้าท้องลดได้ แต่ลดแบบ "เฉพาะจุด" ไม่ได้ ร่างกายดึงไขมันจากทั้งตัว ท่าหน้าท้องสร้างความแข็งแรงและรูปทรง ส่วนพุงยุบเพราะเผาผลาญรวมมากขึ้น</p>
+  <ol class="small" style="margin:0;padding-left:20px;display:grid;gap:4px">
+    <li><b>เลิกน้ำหวาน/ชานมเป็นน้ำเปล่าหรือกาแฟดำ</b> สิ่งเดียวที่ควรเปลี่ยนจริงจัง น้ำหวานวันละลิตร 6 เดือน เพิ่มไขมันรอบอวัยวะและที่ตับชัดเจน</li>
+    <li><b>นอนให้พอ 7–9 ชั่วโมง</b> คนนอนน้อยที่นอนเพิ่มราว 1 ชั่วโมงกินน้อยลงเองราว 270 kcal ต่อวัน</li>
+    <li><b>โปรตีนทุกมื้อ</b> อิ่มนาน ไม่หิวจุบจิบ (เป้าอยู่ด้านล่าง)</li>
+    <li><b>เดิน ${fmt(calc().steps)} ก้าว</b> + ปิดท้ายการฝึกด้วย "เบิร์นพุง" (สวิง/เชือก 30 วิ สลับพัก 30 วิ)</li>
+    <li><b>เหล้า เบียร์ ลดลงครึ่งหนึ่ง</b> ถ้าดื่มอยู่</li>
+  </ol>
+  <details><summary class="small">ที่มาของข้อมูล</summary><ul class="small muted" style="margin:6px 0 0;padding-left:18px">
+    <li>Vispute 2011 (JSCR): ครันช์ 6 สัปดาห์ ไขมันหน้าท้องไม่ลด · Ramírez-Campillo 2013: ฝึกขาข้างเดียว ไขมันลดทั้งตัว ไม่ใช่ขาที่ฝึก</li>
+    <li>Maillard 2018 (Sports Med, 39 งานวิจัย): ฝึกแบบ interval ลดไขมันหน้าท้องและไขมันรอบอวัยวะ</li>
+    <li>Govindasamy 2024 (BMC): เคตเทิลเบล 3 วัน/สัปดาห์ 12 สัปดาห์ ไม่คุมอาหาร ไขมันร่างกาย 39.8% → 35.7%</li>
+    <li>Maersk 2012 (AJCN): น้ำอัดลมหวาน · Tasali 2022 (JAMA Intern Med): นอนเพิ่ม กินน้อยลง</li></ul></details></article>`;
+
+/* ---------- 30-day kettlebell-only belly programme ----------
+   Guided by the interval timer. 4 kettlebell days a week (A swing burn, B full body, C legs + core), walking days between.
+   Built on: Govindasamy 2024 (kettlebell 3x/wk, fat 39.8% → 35.7% without diet), Maillard 2018 (intervals cut abdominal fat),
+   Jay 2011 (swings: stronger back extensors). Fat leaves the whole body; the core moves are for strength and shape. */
+const KB_CYCLE = ['A', 'walk', 'B', 'walk', 'C', 'A', 'rest'];
+const KB_T = { A: 'สวิงเผาผลาญ', B: 'ทั้งตัว', C: 'ขา + แกนกลาง', walk: 'วันเดิน', rest: 'วันพัก' };
+const KB_MEASURE = [1, 8, 15, 22, 29];
+const KB_MOVES = [
+  ['เคตเทิลเบลสวิงสองมือ', 'ท่าหลัก เผาผลาญสูงสุด: พับสะโพกส่งลูกลอดขา ดีดสะโพกไปหน้าแรงๆ ลูกขึ้นแค่ระดับอก แขนเป็นแค่เชือก หลังตรงตลอด'],
+  ['กอบเล็ตสควอท', 'ถือลูกชิดอก ย่อลงให้ศอกอยู่ในเข่า อกตั้ง ส้นเท้าไม่ลอย'],
+  ['เคตเทิลเบลเดดลิฟต์', 'ฝึกท่าพับสะโพกก่อนสวิง: ลูกอยู่ระหว่างเท้า ดันก้นไปหลัง หลังตรง ยืนขึ้นด้วยก้น'],
+  ['โรว์แขนเดียว', 'มือหนึ่งยันเข่าหรือโต๊ะ ดึงลูกขึ้นหาสะโพก ไม่ใช่หาไหล่'],
+  ['เพรสแขนเดียว', 'เกร็งก้นและท้อง ดันลูกขึ้นเหนือหัว ไม่แอ่นหลัง'],
+  ['กอบเล็ตลันจ์ถอยหลัง', 'ถือลูกชิดอก ก้าวถอยหลังลงเข่าเกือบแตะพื้น'],
+  ['ถือค้างข้างเดียว (Suitcase hold)', 'ถือลูกข้างเดียวยืนตรง ห้ามเอียงตัวตามลูก แกนกลางทำงานเต็มที่'],
+  ['รัสเซียนทวิสต์', 'นั่งเอนหลัง ถือลูกชิดอก บิดซ้ายขวาช้าๆ เท้าวางพื้นได้'],
+  ['แพลงก์ลากลูก (Pull-through)', 'ท่าแพลงก์แขนตรง มือหนึ่งลากลูกจากข้างหนึ่งไปอีกข้าง สะโพกไม่บิด'],
+  ['เดดบักถือลูก', 'นอนหงาย ถือลูกเหนืออก ยืดขาสลับช้าๆ หลังล่างแนบพื้น'],
+  ['เฮโล (หมุนรอบศีรษะ)', 'วอร์มไหล่: ถือที่หูจับหมุนรอบศีรษะช้าๆ สลับทิศ']];
+function kbDayNo(d = iso()) { return S.kb30 ? dayDiff(S.kb30.start, d) + 1 : 0; }
+function kbType(n) { return KB_CYCLE[(n - 1) % 7]; }
+function kbParams(n) {
+  const w = clamp(Math.floor((n - 1) / 7), 0, 3), easy = P().level === 'beginner' || P().caution;
+  return { w, emom: [8, 10, 12, 14][w], rounds: [2, 3, 3, 4][w], swings: [10, 12, 15, 15][w] - (easy ? 2 : 0), work: [30, 35, 40, 40][w], rest: [30, 25, 20, 20][w] };
+}
+// timer items: { n, s, k: prep|work|rest, f(figure), next }
+function kbProg(n) {
+  const t = kbType(n), q = kbParams(n), it = [];
+  const work = (name, s, f) => it.push({ n: name, s, k: 'work', f });
+  const rest = (s, next) => { if (s > 0) it.push({ n: 'พัก', s, k: 'rest' }); };
+  const circuit = (moves, rounds) => { for (let r = 1; r <= rounds; r++) moves.forEach(([m, f], i) => { work(`รอบ ${r}/${rounds} · ${m}`, q.work, f); if (!(r === rounds && i === moves.length - 1)) rest(q.rest); }); };
+  const emom = mins => { for (let m = 1; m <= mins; m++) work(`นาที ${m}/${mins} · สวิง ${q.swings} ครั้ง แล้วพักจนครบนาที`, 60, 'swing'); };
+  const gap = () => it.push({ n: 'พักเปลี่ยนช่วง ดื่มน้ำ', s: 40, k: 'rest' });
+  it.push({ n: 'เตรียมตัว', s: 10, k: 'prep', f: 'kbpress' });
+  [['เฮโล หมุนรอบศีรษะ', 30, 'kbpress'], ['เคตเทิลเบลเดดลิฟต์ ช้าๆ', 40, 'kbdl'], ['กอบเล็ตสควอท ช้าๆ', 40, 'kbgoblet']].forEach(([m, s, f], i) => { work('วอร์มอัพ · ' + m, s, f); if (i < 2) rest(10); });
+  gap();
+  if (t === 'A') { emom(q.emom); gap(); circuit([['รัสเซียนทวิสต์', 'crunch'], ['แพลงก์ลากลูก', 'plank']], q.rounds); }
+  if (t === 'B') circuit([['กอบเล็ตสควอท', 'kbgoblet'], ['โรว์แขนซ้าย', 'kbrow'], ['โรว์แขนขวา', 'kbrow'], ['สวิงสองมือ', 'swing'], ['เพรสแขนซ้าย', 'kbpress'], ['เพรสแขนขวา', 'kbpress'], ['เดดบักถือลูก', 'deadbug']], q.rounds);
+  if (t === 'C') { circuit([['กอบเล็ตลันจ์ถอยหลัง', 'split'], ['เคตเทิลเบลเดดลิฟต์', 'kbdl'], ['สวิงสองมือ', 'swing'], ['ถือค้างมือซ้าย ห้ามเอียง', 'kbdl'], ['ถือค้างมือขวา ห้ามเอียง', 'kbdl'], ['รัสเซียนทวิสต์', 'crunch']], q.rounds); gap(); emom(Math.round(q.emom / 2)); }
+  for (let i = 0; i < it.length - 1; i++) if (it[i].k === 'rest') { it[i].next = it[i + 1].n; it[i].f = it[i + 1].f; }
+  it.title = `เคตเทิลเบล วันที่ ${n} · ${KB_T[t]}`; it.kb30 = n;
+  return it;
+}
+const kbMin = n => Math.round(kbProg(n).reduce((a, x) => a + x.s, 0) / 60);
+function kb30Card() {
+  const d = iso(), n = kbDayNo(d), has = P().eq && P().eq.kb;
+  const intro = `<p class="small muted">ใช้เคตเทิลเบลลูกเดียว 4 วันต่อสัปดาห์ ตัวจับเวลานำทำทีละท่า วันอื่นเป็นวันเดิน ความหนักเพิ่มทุกสัปดาห์ วัดรอบเอววันที่ 1 · 8 · 15 · 22 · 29</p>`;
+  const form = `<details><summary class="small">ท่าทั้งหมดในโปรแกรม + จุดที่ต้องระวัง</summary><ul class="small" style="margin:6px 0 0;padding-left:18px;display:grid;gap:4px">${KB_MOVES.map(([m, c]) => `<li><b>${m}</b> · ${c}</li>`).join('')}</ul>
+    <p class="small muted">น้ำหนักลูก: ผู้ชายเริ่ม 12–16 กก. ผู้หญิง 8–12 กก. · ปวดหลังล่าง (ไม่ใช่เมื่อยกล้าม) ให้หยุดทันที · ลดเฉพาะพุงไม่ได้ ไขมันลดทั้งตัว ท่าแกนกลางช่วยให้ท้องแน่นและแข็งแรง</p></details>`;
+  if (!S.kb30) return `<article class="card"><div class="row between"><h2>เคตเทิลเบลลดพุง 30 วัน</h2><span class="chip hot">ใหม่</span></div>${intro}
+    ${has ? '' : '<p class="small">ยังไม่ได้ติ๊กเคตเทิลเบลในอุปกรณ์ (โปรไฟล์ → การฝึก) แต่เริ่มโปรแกรมนี้ได้เลย</p>'}${form}
+    <div class="row"><button class="btn hot" data-act="kb30-begin">เริ่มวันที่ 1 วันนี้</button></div></article>`;
+  const done = S.kb30.done || {}, nDone = Object.keys(done).length;
+  if (n > 30) return `<article class="card"><h2>จบเคตเทิลเบล 30 วันแล้ว</h2><p>ทำครบ ${nDone} ครั้ง จาก ${Array.from({ length: 30 }, (_, i) => kbType(i + 1)).filter(x => x.length === 1).length} ครั้ง · เทียบรอบเอววันที่ 1 กับวันนี้ที่หน้าสถานะ</p>
+    <div class="row"><a class="btn" href="#progress">ดูรอบเอว</a><button class="btn hot" data-act="kb30-begin">เริ่มรอบใหม่ (หนักต่อจากเดิม)</button><button class="btn" data-act="kb30-stop">ปิดโปรแกรม</button></div></article>`;
+  const t = kbType(n), q = kbParams(n), isKb = t.length === 1, did = !!done[d];
+  const dots = Array.from({ length: 30 }, (_, i) => { const day = i + 1, dd = addDays(S.kb30.start, i), ty = kbType(day);
+    return `<i title="วันที่ ${day}" style="display:block;height:10px;border-radius:3px;background:${done[dd] ? 'var(--go)' : day === n ? 'var(--hot)' : ty.length === 1 ? 'rgba(255,255,255,.18)' : 'rgba(255,255,255,.06)'}"></i>`; }).join('');
+  return `<article class="card"><div class="row between"><h2>เคตเทิลเบลลดพุง · วันที่ ${n}/30</h2><span class="chip ${did ? 'good' : 'hot'}">${did ? 'วันนี้เสร็จแล้ว' : 'สัปดาห์ ' + (q.w + 1)}</span></div>
+    <div style="display:grid;grid-template-columns:repeat(15,1fr);gap:4px">${dots}</div>
+    ${KB_MEASURE.includes(n) ? `<p class="small"><b>วันนี้วัดรอบเอว</b> ระดับสะดือ ตอนเช้าก่อนกิน แล้วถ่ายรูปด้านข้าง · <a href="#progress">บันทึกรอบเอว</a></p>` : ''}
+    ${isKb ? `<h3 style="margin:0">${KB_T[t]} · ราว ${kbMin(n)} นาที</h3>
+      <p class="small muted">${t === 'A' ? `สวิงทุกต้นนาที ${q.emom} นาที (นาทีละ ${q.swings} ครั้ง) + แกนกลาง ${q.rounds} รอบ` : t === 'B' ? `วงจร 7 ท่า × ${q.rounds} รอบ · ทำ ${q.work} วิ พัก ${q.rest} วิ` : `ขา + แกนกลาง 6 ท่า × ${q.rounds} รอบ + สวิงปิดท้าย ${Math.round(q.emom / 2)} นาที`}</p>
+      <div class="row"><button class="btn ${did ? '' : 'hot big'}" data-act="kb30-go">${did ? 'ทำซ้ำอีกรอบ' : 'เริ่มเซสชันวันนี้'}</button></div>`
+    : `<h3 style="margin:0">${KB_T[t]}</h3><p class="small muted">${t === 'walk' ? 'เดินเร็ว 30–45 นาที (ให้หายใจแรงแต่ยังพูดได้) ช่วยเผาไขมันโดยไม่ล้า วันพรุ่งนี้กลับมาสวิง' : 'พักเต็มวัน ยืดเหยียดเบาๆ กล้ามเนื้อซ่อมแซมตอนพัก'}</p>
+      <div class="row"><button class="btn" data-act="stretch">ยืดเหยียด 8 นาที</button></div>`}
+    ${form}
+    <p class="small muted">ใช้ได้ดีที่สุดคู่กับ: เลิกน้ำหวาน · นอน 7–9 ชม. · โปรตีนทุกมื้อ · เดินให้ถึงเป้าก้าว</p>
+    <div class="row"><button class="btn sm" data-act="kb30-stop">${ui.kbStopAsk ? 'แตะอีกครั้งเพื่อยืนยันปิด' : 'ปิดโปรแกรม'}</button></div></article>`;
+}
+const kb30DoneOn = d => !!(S.kb30 && S.kb30.done && S.kb30.done[d]);
 
 /* ---------- workout actions ---------- */
 let wakeLock = null;
@@ -2387,7 +2588,15 @@ const PROGS = {
   cool: () => seqProg('ยืดเหยียดหลังฝึก', [['ยืดสะโพกด้านหน้า ข้างซ้าย', 30, 'split'], ['ยืดสะโพกด้านหน้า ข้างขวา', 30, 'split'], ['ก้มยืดต้นขาด้านหลัง', 40, 'rdl'], ['ยืดอกที่ขอบประตู', 40, null], ['ท่าเด็ก หายใจลึกๆ', 50, null]], 5),
   stretch: () => seqProg('ยืดเหยียด 8 นาที', [['ท่าแมว-วัว คลายหลัง', 45, null], ['ยืดอกที่ขอบประตู', 45, null], ['ยืดสะโพกด้านหน้า ข้างซ้าย', 45, 'split'], ['ยืดสะโพกด้านหน้า ข้างขวา', 45, 'split'], ['ก้มยืดต้นขาด้านหลัง', 45, 'rdl'], ['ยกสะโพกค้างไว้', 40, 'bridge'], ['นอนบิดลำตัว ข้างละ 20 วินาที', 45, null], ['ท่าเด็ก หายใจลึกๆ', 60, null]], 8),
   finisher: () => {
-    const easy = P().level === 'beginner' || P().caution;
+    const p = P(), easy = p.level === 'beginner' || p.caution;
+    if (p.goal === 'belly') {
+      const mv = [];
+      if (p.eq.kb) mv.push(['เคตเทิลเบลสวิง (ดีดสะโพก หลังตรง)', 'swing']);
+      if (p.eq.rope) mv.push(['กระโดดเชือก', 'knees']);
+      if (!mv.length) mv.push(['กระโดดตบ', 'jack'], ['วิ่งยกเข่าอยู่กับที่', 'knees']);
+      if (mv.length < 2) mv.push(easy ? ['ย่ำเท้ากางแขน', 'jack'] : ['เมาท์เทนไคลม์เบอร์', 'climber']);
+      return seqProg(finLabel(p), Array.from({ length: finMin(p) }, (_, i) => [mv[i % mv.length][0], 30, mv[i % mv.length][1]]), 30);
+    }
     const mv = easy ? [['ย่ำเท้ากางแขน', 'jack'], ['ยกเข่าสลับช้าๆ', 'knees'], ['สควอท', 'squat'], ['แพลงก์', 'plank']] : [['กระโดดตบ', 'jack'], ['เมาท์เทนไคลม์เบอร์', 'climber'], ['วิ่งยกเข่าสูง', 'knees'], ['สควอทกระโดด', 'squat']];
     return seqProg('คาร์ดิโอ 4 นาที', Array.from({ length: 8 }, (_, i) => [mv[i % 4][0], 20, mv[i % 4][1]]), 10);
   }
@@ -2425,7 +2634,7 @@ function hNext() { H.i++; if (H.i >= H.prog.length) { hStop(true); return; } hPh
 function hStop(done) {
   clearInterval(H.iv); $('#hiit').hidden = true; $('#h-figbox').innerHTML = ''; try { speechSynthesis.cancel(); } catch (e) {}
   if (!S.session) unlockScreen();
-  if (done) { beep(990, .2); setTimeout(() => beep(1320, .3), 250); speak('เสร็จแล้ว เยี่ยมมาก'); const d = iso(); S.cardio = S.cardio || {}; S.cardio[d] = (S.cardio[d] || 0) + 1; save(); toast('จบแล้ว เควสฟื้นฟูสำเร็จ'); render(); }
+  if (done) { beep(990, .2); setTimeout(() => beep(1320, .3), 250); speak('เสร็จแล้ว เยี่ยมมาก'); const d = iso(); S.cardio = S.cardio || {}; S.cardio[d] = (S.cardio[d] || 0) + 1; if (H.prog.kb30 && S.kb30) { S.kb30.done = S.kb30.done || {}; S.kb30.done[d] = H.prog.kb30; } save(); toast(H.prog.kb30 ? `จบเคตเทิลเบลวันที่ ${H.prog.kb30} แล้ว นับเป็นภารกิจฝึกของวันนี้` : 'จบแล้ว เควสฟื้นฟูสำเร็จ'); render(); }
 }
 
 /* ---------- modal + clipboard ---------- */
@@ -2443,6 +2652,15 @@ document.addEventListener('click', ev => {
   switch (a) {
     /* onboarding */
     case 'ob-next': obGo(1); break;
+    /* 30-day kettlebell programme */
+    case 'kb30-begin': S.kb30 = { start: d, done: {} }; ui.kbStopAsk = false; save(); render(); toast('เริ่มเคตเทิลเบล 30 วันแล้ว วันนี้วันที่ 1 อย่าลืมวัดรอบเอว'); break;
+    case 'kb30-go': if (S.kb30) hStart(kbProg(kbDayNo(d))); break;
+    case 'kb30-stop': if (!ui.kbStopAsk) { ui.kbStopAsk = true; render(); break; } S.kb30 = null; ui.kbStopAsk = false; save(); render(); toast('ปิดโปรแกรมเคตเทิลเบลแล้ว'); break;
+    /* phone reminders */
+    case 'notif-on': nEnable(); break;
+    case 'notif-off': nDisable(); break;
+    case 'notif-test': nTest().then(() => toast('ส่งแล้ว รอสักครู่ แจ้งเตือนจะขึ้นที่เครื่อง'), e => toast(e.message)); break;
+    case 'notif-kind': { NT.kinds[el.dataset.k] = el.checked; saveNT(); nSync(true).catch(e => toast(e.message)); const y = window.scrollY; render(); window.scrollTo(0, y); break; }
     case 'ob-back': if (ui.ob.step === 0 || (ui.ob.edit && ui.ob.step <= 1)) { ui.ob = null; location.hash = S.profile ? 'profile' : 'start'; render(); } else obGo(-1); break;
     case 'ob-finish': finishOb(); break;
     case 'ob-demo': S.seenDemo = true; save(); ui.ob = null; location.hash = 'today'; render(); break;
@@ -2564,6 +2782,7 @@ function rEat() {
   $('#v-eat').innerHTML = `
   ${demoBanner()}
   <div class="view-head"><h1>กิน</h1><span class="eyebrow">${GOALS[p.goal].l} · ${GOALS[p.goal].d}</span></div>
+  ${p.goal === 'belly' ? bellyCard() : ''}
   <article class="card">
     <h2>เป้าหมายต่อวัน</h2>
     <div class="kpis">
@@ -2741,7 +2960,7 @@ function rLearn() {
 })();
 document.querySelectorAll('svg[data-gi]').forEach(el => { el.innerHTML = giSvg(el.dataset.gi); });
 render();
-api('/config').then(r => { if (r.ok && r.body.google !== cloud.google) { cloud.google = !!r.body.google; if (view() === 'profile') refreshView(); } }).catch(() => {});
+api('/config').then(r => { if (!r.ok) return; cloud.vapid = r.body.vapid || null; nSync(); if (r.body.google !== cloud.google) { cloud.google = !!r.body.google; if (view() === 'profile') refreshView(); } }).catch(() => {});
 googleReturn().finally(() => { if (SY.token) cloudSync(); else autoAccount(); });
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || /^localhost$|^127\./.test(location.hostname))) navigator.serviceWorker.register('sw.js').catch(() => {});
 })();

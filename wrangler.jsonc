@@ -14,5 +14,8 @@
   "d1_databases": [
     { "binding": "DB", "database_name": "mewfit", "database_id": "efc71c8d-5694-4b0d-8872-f0abe968baf3", "migrations_dir": "migrations" }
   ],
+  // แจ้งเตือนบนมือถือ: ตรวจตารางทุก 5 นาที · คีย์ลับ VAPID_PRIVATE ตั้งด้วย `npx wrangler secret put VAPID_PRIVATE`
+  "triggers": { "crons": ["*/5 * * * *"] },
+  "vars": { "VAPID_PUBLIC": "BJHrvKL0vH-kkQ3dRKgR0HZkF23wb-53V4IlUXsvpd07a0XChw5uCQrE9Bo3J_NsD3DGktaY3z7o0ZEHgS46icY" },
   "observability": { "enabled": true }
 }

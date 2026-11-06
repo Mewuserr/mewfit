@@ -17,3 +17,4 @@ package.json
 package-lock.json
 .dev.vars
 ภาพหน้าจอ
+push.js

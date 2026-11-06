@@ -1567,7 +1567,7 @@ function mergeState(server, local) {
   out.levels = Object.assign({}, a.levels, b.levels);
   out.cardio = Object.assign({}, a.cardio, b.cardio);
   out.kb30 = b.kb30 || a.kb30 || null;
-  if (a.kb30 && b.kb30 && a.kb30.start === b.kb30.start) out.kb30 = { start: b.kb30.start, done: Object.assign({}, a.kb30.done, b.kb30.done), feel: Object.assign({}, a.kb30.feel, b.kb30.feel), adj: b.kb30.adj != null ? b.kb30.adj : a.kb30.adj };
+  if (a.kb30 && b.kb30 && a.kb30.start === b.kb30.start) out.kb30 = { start: b.kb30.start, done: Object.assign({}, a.kb30.done, b.kb30.done) };
   out.ready = Object.assign({}, a.ready, b.ready);
   Object.keys(a.cardio || {}).forEach(d => { out.cardio[d] = Math.max(a.cardio[d] || 0, (b.cardio || {})[d] || 0); });
   out.seenLv = Math.max(a.seenLv || 0, b.seenLv || 0) || null;
@@ -2446,13 +2446,10 @@ const KB_CORE = [
   [['ซิตอัพดันลูก', 'crunch'], ['แพลงก์ลากลูก', 'plank'], ['ส่งลูกรอบตัว ห้ามบิดสะโพก', 'kbgoblet'], ['เดดบักถือลูก', 'deadbug']]];
 function kbDayNo(d = iso()) { return S.kb30 ? dayDiff(S.kb30.start, d) + 1 : 0; }
 function kbType(n) { return KB_CYCLE[(n - 1) % 7]; }
-// smart load: week of the plan + personal level (each "easy" tap +1, "hard" -1) + today's readiness check
-const kbAdj = () => (S.kb30 && S.kb30.adj) || 0;
-function kbReadyMod(d = iso()) { const r = readyOf(d); return !r ? 0 : r.score < 25 ? -2 : r.score < 50 ? -1 : r.score >= 84 ? 1 : 0; }
-function kbParams(n, d = iso()) {
-  const w = clamp(Math.floor((n - 1) / 7), 0, 3), easy = P().level === 'beginner' || P().caution, lv = kbAdj() + kbReadyMod(d);
-  return { w, lv, emom: clamp([8, 10, 12, 14][w] + lv, 5, 18), rounds: clamp([2, 3, 3, 4][w] + (lv <= -2 ? -1 : 0), 1, 5), swings: clamp([10, 12, 15, 15][w] - (easy ? 2 : 0) + lv * 2, 6, 25),
-    work: clamp([30, 35, 40, 40][w] + lv * 5, 20, 50), rest: clamp([30, 25, 20, 20][w] - lv * 5, 10, 45) };
+// the plan decides the load: heavier every week, a little lighter for beginners (no questions to answer)
+function kbParams(n) {
+  const w = clamp(Math.floor((n - 1) / 7), 0, 3), easy = P().level === 'beginner' || P().caution;
+  return { w, emom: [8, 10, 12, 14][w], rounds: [2, 3, 3, 4][w], swings: [10, 12, 15, 15][w] - (easy ? 2 : 0), work: [30, 35, 40, 40][w], rest: [30, 25, 20, 20][w] };
 }
 const KB_DAYS = Array.from({ length: 30 }, (_, i) => i + 1).filter(k => KB_CYCLE[(k - 1) % 7].length === 1);
 // a training day skipped in the last 2 days and not made up since -> offer it on today's walk/rest day
@@ -2507,37 +2504,33 @@ function kb30Card() {
   const done = S.kb30.done || {}, nDone = Object.keys(done).length;
   if (n > 30) return `<article class="card"><h2>จบเคตเทิลเบล 30 วันแล้ว</h2><p>ทำครบ ${nDone} ครั้ง จาก ${Array.from({ length: 30 }, (_, i) => kbType(i + 1)).filter(x => x.length === 1).length} ครั้ง · เทียบรอบเอววันที่ 1 กับวันนี้ที่หน้าสถานะ</p>
     <div class="row"><a class="btn" href="#progress">ดูรอบเอว</a><button class="btn hot" data-act="kb30-begin">เริ่มรอบใหม่ (หนักต่อจากเดิม)</button><button class="btn" data-act="kb30-stop">ปิดโปรแกรม</button></div></article>`;
-  const t = kbType(n), q = kbParams(n), isKb = t.length === 1, did = !!done[d], miss = kbMissed(n), feel = (S.kb30.feel || {})[d];
+  const t = kbType(n), q = kbParams(n), isKb = t.length === 1, did = !!done[d], miss = kbMissed(n);
   const dots = Array.from({ length: 30 }, (_, i) => { const day = i + 1, dd = addDays(S.kb30.start, i), ty = kbType(day);
     return `<i title="วันที่ ${day}" style="display:block;height:10px;border-radius:3px;background:${done[dd] ? 'var(--go)' : day === n ? 'var(--hot)' : ty.length === 1 ? 'rgba(255,255,255,.18)' : 'rgba(255,255,255,.06)'}"></i>`; }).join('');
   const sessions = Object.keys(done).length, dueSoFar = KB_DAYS.filter(k => k < n || (k === n && did)).length;
   const go = (k, label) => `<div class="row"><button class="btn hot big" data-act="kb30-go" data-n="${k}">${label}</button></div>`;
   const movesOf = k => [...new Set(kbProg(k).filter(x => x.k === 'work' && !x.n.startsWith('วอร์มอัพ')).map(x => x.n.replace(/^(รอบ|นาที) \d+\/\d+ · /, '').replace(/ \d+ ครั้ง แล้วพักจนครบนาที$/, '')))];
   const sum = (k, qq) => { const ty = kbType(k); return ty === 'A' ? `สวิงทุกต้นนาที ${qq.emom} นาที (นาทีละ ${qq.swings} ครั้ง) + หน้าท้อง ${qq.rounds} รอบ` : ty === 'B' ? `วงจร 8 ท่า × ${qq.rounds} รอบ · ทำ ${qq.work} วิ พัก ${qq.rest} วิ` : `ขา + แกนกลาง 6 ท่า × ${qq.rounds} รอบ + สวิงปิดท้าย ${Math.round(qq.emom / 2)} นาที`; };
-  const lvTxt = q.lv > 0 ? ` <span class="chip good">หนักขึ้น +${q.lv}</span>` : q.lv < 0 ? ` <span class="chip">เบาลง ${q.lv}</span>` : '';
   let now = '';
-  if (isKb && !did) now = `<h3 style="margin:0">วันนี้: ${KB_T[t]} · ราว ${kbMin(n)} นาที${lvTxt}</h3>
-      <p class="small muted">${sum(n, q)}</p>${readyBox(d)}
+  if (isKb && !did) now = `<h3 style="margin:0">วันนี้: ${KB_T[t]} · ราว ${kbMin(n)} นาที</h3>
+      <p class="small muted">${sum(n, q)}</p>
       <p class="small" style="margin:4px 0"><b>ท่าวันนี้:</b> ${movesOf(n).join(' · ')}</p>${go(n, 'เริ่มเซสชันวันนี้')}`;
-  else if (isKb && did && feel == null) now = `<div class="ready"><h3>เซสชันวันนี้เป็นยังไง?</h3><p class="small muted" style="margin:0">ระบบจะปรับความหนักครั้งหน้าให้เอง</p>
-      <div class="seg3">${[[1, 'ง่ายไป'], [0, 'พอดี'], [-1, 'หนักไป']].map(([v, l]) => `<button class="btn" data-act="kb30-feel" data-v="${v}">${l}</button>`).join('')}</div></div>`;
-  else if (did) now = `<h3 style="margin:0">วันนี้เสร็จแล้ว</h3><p class="small muted">${feel > 0 ? 'ครั้งหน้าระบบเพิ่มความหนักให้แล้ว' : feel < 0 ? 'ครั้งหน้าระบบลดความหนักให้แล้ว' : 'ครั้งหน้าคงความหนักเดิม'} · ที่เหลือวันนี้: เดินให้ถึง ${fmt(calc().steps)} ก้าว ดื่มน้ำ นอนให้พอ</p>
+  else if (did) now = `<h3 style="margin:0">วันนี้เสร็จแล้ว</h3><p class="small muted">ที่เหลือวันนี้: เดินให้ถึง ${fmt(calc().steps)} ก้าว ดื่มน้ำ นอนให้พอ${n < 30 ? ` · พรุ่งนี้: ${KB_T[kbType(n + 1)]}` : ''}</p>
       <div class="row"><button class="btn sm" data-act="kb30-go" data-n="${done[d]}">ทำซ้ำอีกรอบ</button></div>`;
   else if (miss) now = `<h3 style="margin:0">ชดเชยวันที่ ${miss} ที่พลาดไป</h3><p class="small muted">วันนี้ตามแผนเป็น${KB_T[t]} แต่ยังไม่ได้ฝึกเซสชันล่าสุด ทำเซสชันที่พลาดวันนี้แทน (${KB_T[kbType(miss)]} ราว ${kbMin(miss)} นาที) ระบบนับให้</p>
-      ${readyBox(d)}${go(miss, 'ทำเซสชันชดเชย')}`;
+      ${go(miss, 'ทำเซสชันชดเชย')}`;
   else now = `<h3 style="margin:0">วันนี้: ${KB_T[t]}</h3><p class="small muted">${t === 'walk' ? 'เดินเร็ว 30–45 นาที (หายใจแรงแต่ยังพูดได้) ช่วยเผาไขมันโดยไม่ล้า' : 'พักเต็มวัน กล้ามเนื้อซ่อมแซมตอนพัก'}${KB_DAYS.includes(n + 1) ? ` · พรุ่งนี้: ${KB_T[kbType(n + 1)]}` : ''}</p>
       <div class="row"><button class="btn" data-act="stretch">ยืดเหยียด 8 นาที</button></div>`;
-  const bell = kbAdj() >= 3 && feel > 0 ? `<p class="small"><b>ลูกเบาไปแล้ว</b> ลองลูกที่หนักขึ้น 4 กก. ถ้ามี <button class="btn sm" data-act="kb30-bell">เปลี่ยนลูกแล้ว</button></p>` : '';
   const wv = kbWaist();
   let waist = '';
   if (wv && n >= 8 && wv.days >= 6) { const per = wv.diff / (wv.days / 7);
-    waist = `<p class="small"><b>รอบเอว: ${wv.first} → ${wv.last} ซม. (${wv.diff > 0 ? '+' : ''}${wv.diff})</b> · ${wv.diff <= -1 ? (per <= -1.5 ? 'ลดเร็วมาก มาถูกทาง ทำต่อแบบนี้' : 'กำลังลด มาถูกทาง') : n >= 15 ? 'ยังไม่ค่อยลด เช็ก 3 อย่าง: ยังกินน้ำหวาน/ชาเย็นอยู่ไหม · เดินถึงเป้าก้าวไหม · นอนถึง 7 ชม.ไหม ถ้าฝึกแล้วสบาย กด "ง่ายไป" หลังฝึกให้ระบบเพิ่มความหนัก' : 'ช่วงแรกตัวเลขอาจยังนิ่ง เป็นปกติ ทำต่อ'}</p>`; }
+    waist = `<p class="small"><b>รอบเอว: ${wv.first} → ${wv.last} ซม. (${wv.diff > 0 ? '+' : ''}${wv.diff})</b> · ${wv.diff <= -1 ? (per <= -1.5 ? 'ลดเร็วมาก มาถูกทาง ทำต่อแบบนี้' : 'กำลังลด มาถูกทาง') : n >= 15 ? 'ยังไม่ค่อยลด เช็ก 3 อย่าง: ยังกินน้ำหวาน/ชาเย็นอยู่ไหม · เดินถึงเป้าก้าวไหม · นอนถึง 7 ชม.ไหม' : 'ช่วงแรกตัวเลขอาจยังนิ่ง เป็นปกติ ทำต่อ'}</p>`; }
   const wIn = KB_MEASURE.includes(n) && !(wv && wv.today) ? `<div class="row" style="align-items:center;gap:6px"><span class="small"><b>วันนี้วัดรอบเอว</b> ระดับสะดือ ตอนเช้าก่อนกิน</span>
       <input id="kb-waist" type="number" inputmode="decimal" step="0.5" placeholder="ซม." style="width:80px"><button class="btn sm" data-act="kb30-waist">บันทึก</button></div>` : '';
   return `<article class="card"><div class="row between"><h2>เคตเทิลเบลลดพุง · วันที่ ${n}/30</h2><span class="chip ${did ? 'good' : 'hot'}">ฝึกแล้ว ${sessions}/${KB_DAYS.length}</span></div>
     <div style="display:grid;grid-template-columns:repeat(15,1fr);gap:4px">${dots}</div>
     ${dueSoFar > sessions + 1 ? `<p class="small muted">พลาดไป ${dueSoFar - sessions} ครั้ง ไม่เป็นไร ทำต่อจากวันนี้ได้เลย ไม่ต้องย้อนทำทั้งหมด</p>` : ''}
-    ${wIn}${waist}${now}${bell}
+    ${wIn}${waist}${now}
     ${form}
     <p class="small muted">ใช้ได้ดีที่สุดคู่กับ: เลิกน้ำหวาน · นอน 7–9 ชม. · โปรตีนทุกมื้อ · เดินให้ถึงเป้าก้าว</p>
     <div class="row"><button class="btn sm" data-act="kb30-stop">${ui.kbStopAsk ? 'แตะอีกครั้งเพื่อยืนยันปิด' : 'ปิดโปรแกรม'}</button></div></article>`;
@@ -2693,7 +2686,7 @@ function hNext() { H.i++; if (H.i >= H.prog.length) { hStop(true); return; } hPh
 function hStop(done) {
   clearInterval(H.iv); $('#hiit').hidden = true; $('#h-figbox').innerHTML = ''; try { speechSynthesis.cancel(); } catch (e) {}
   if (!S.session) unlockScreen();
-  if (done) { beep(990, .2); setTimeout(() => beep(1320, .3), 250); speak('เสร็จแล้ว เยี่ยมมาก'); const d = iso(); S.cardio = S.cardio || {}; S.cardio[d] = (S.cardio[d] || 0) + 1; if (H.prog.kb30 && S.kb30) { S.kb30.done = S.kb30.done || {}; S.kb30.done[d] = H.prog.kb30; if (S.kb30.feel) delete S.kb30.feel[d]; } save(); toast(H.prog.kb30 ? `จบเคตเทิลเบลวันที่ ${H.prog.kb30} แล้ว นับเป็นภารกิจฝึกของวันนี้` : 'จบแล้ว เควสฟื้นฟูสำเร็จ'); render(); }
+  if (done) { beep(990, .2); setTimeout(() => beep(1320, .3), 250); speak('เสร็จแล้ว เยี่ยมมาก'); const d = iso(); S.cardio = S.cardio || {}; S.cardio[d] = (S.cardio[d] || 0) + 1; if (H.prog.kb30 && S.kb30) { S.kb30.done = S.kb30.done || {}; S.kb30.done[d] = H.prog.kb30; } save(); toast(H.prog.kb30 ? `จบเคตเทิลเบลวันที่ ${H.prog.kb30} แล้ว นับเป็นภารกิจฝึกของวันนี้` : 'จบแล้ว เควสฟื้นฟูสำเร็จ'); render(); }
 }
 
 /* ---------- modal + clipboard ---------- */
@@ -2714,9 +2707,6 @@ document.addEventListener('click', ev => {
     /* 30-day kettlebell programme */
     case 'kb30-begin': S.kb30 = { start: d, done: {} }; ui.kbStopAsk = false; save(); render(); toast('เริ่มเคตเทิลเบล 30 วันแล้ว วันนี้วันที่ 1 อย่าลืมวัดรอบเอว'); break;
     case 'kb30-go': if (S.kb30) hStart(kbProg(+el.dataset.n || kbDayNo(d))); break;
-    case 'kb30-feel': { const v = +el.dataset.v; S.kb30.feel = S.kb30.feel || {}; S.kb30.feel[d] = v; S.kb30.adj = clamp(kbAdj() + v, -3, 3); save(); render();
-      toast(v > 0 ? 'ครั้งหน้าหนักขึ้นอีกนิด' : v < 0 ? 'ครั้งหน้าเบาลงให้ ฟอร์มสวยสำคัญกว่า' : 'โอเค คงความหนักเดิม'); break; }
-    case 'kb30-bell': S.kb30.adj = -1; save(); render(); toast('เปลี่ยนลูกแล้ว ระบบลดจำนวนครั้งลงให้ก่อน'); break;
     case 'kb30-waist': { const waist = +$('#kb-waist').value; if (!(waist > 30 && waist < 250)) { toast('ใส่รอบเอวเป็นเซนติเมตร'); break; }
       const old = S.body.find(b => b.d === d) || {}; S.body = S.body.filter(b => b.d !== d); S.body.push({ d, waist, neck: old.neck || null, hip: old.hip || null }); save(); render(); toast('บันทึกรอบเอวแล้ว'); break; }
     case 'kb30-stop': if (!ui.kbStopAsk) { ui.kbStopAsk = true; render(); break; } S.kb30 = null; ui.kbStopAsk = false; save(); render(); toast('ปิดโปรแกรมเคตเทิลเบลแล้ว'); break;
